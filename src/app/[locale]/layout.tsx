@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { redirect, routing } from "@/modules/translations/i18n/routing";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import "../../styles/globals.css";
 import { geistMono, geistSans } from "@/config/fonts.config";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClientWrapper } from "@/modules/core/components/ClientWrapper";
+import "../../styles/globals.css";
 
 export const metadata: Metadata = {
   title: "Verdata | Home",
@@ -28,13 +28,13 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
       >
-        <ClerkProvider>
+        <ClientWrapper>
           <NextIntlClientProvider messages={messages}>
             {children}
           </NextIntlClientProvider>
-        </ClerkProvider>
+        </ClientWrapper>
       </body>
     </html>
   );

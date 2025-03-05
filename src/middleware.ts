@@ -1,25 +1,15 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "@/modules/translations/i18n/routing";
-import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
+import { NextFetchEvent, NextRequest } from "next/server";
 
-const isProtectedRoute = createRouteMatcher(["/app(.*)"]);
+const isProtectedRoute = createRouteMatcher(["/(en|es)/app(.*)", "/app(.*)"]);
 
 const intl = createMiddleware(routing);
 
 export default function middleware(req: NextRequest, event: NextFetchEvent) {
   return clerkMiddleware(async (auth, req) => {
-    if (isProtectedRoute(req)) {
-      const { userId } = await auth();
-      if (!userId) {
-        return new NextResponse(null, {
-          status: 302,
-          headers: {
-            Location: `/sign-in?redirect_url=${encodeURIComponent(req.url)}`,
-          },
-        });
-      }
-    }
+    if (isProtectedRoute(req)) await auth.protect();
 
     return intl(req);
   })(req, event);
