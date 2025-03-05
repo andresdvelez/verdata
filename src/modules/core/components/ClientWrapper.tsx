@@ -9,7 +9,10 @@ import { SchematicWrapped } from "./SchematicWrapped";
 export const ClientWrapper = ({ children }: { children: ReactNode }) => {
   return (
     <HeroUIProvider>
-      <ClerkProvider afterSignOutUrl={"/sign-in"} waitlistUrl="/auth/whitelist">
+      <ClerkProvider
+        afterSignOutUrl={"/auth/sign-in"}
+        waitlistUrl="/auth/whitelist"
+      >
         <SchematicProvider
           publishableKey={process.env.NEXT_PUBLIC_SCHEMATIC_PUBLISHABLE_KEY!}
         >

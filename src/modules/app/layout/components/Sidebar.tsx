@@ -60,7 +60,7 @@ export const Sidebar: React.FC = () => {
             />
           }
           text="Historial"
-          to="/app/historial"
+          to="/app/records"
           isActive={activeItem === "historial"}
           onClick={() => setActiveItem("historial")}
         />
