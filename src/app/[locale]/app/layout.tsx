@@ -1,4 +1,5 @@
-import { Header } from "@/modules/app/components/Header";
+import { Header } from "@/modules/app/layout/components/Header";
+import { Sidebar } from "@/modules/app/layout/components/Sidebar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,7 +14,7 @@ export default async function LocaleLayout({
 }) {
   return (
     <main className="h-screen w-screen flex">
-      <aside className="h-full w-[320px] border-r border-primary"></aside>
+      <Sidebar />
       <section className="w-full">
         <Header />
         {children}
