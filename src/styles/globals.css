@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+    /* SIDEBAR */
+    .sidebar-item {
+        @apply flex items-center gap-3 px-4 py-4 rounded-md transition-all duration-200 text-primary/30;
+    }
+
+    .sidebar-item.active {
+        @apply text-primary font-medium;
+    }
+
+    .sidebar-item-icon {
+        @apply w-5 h-5;
+    }
+
+    .sidebar-item-text {
+        @apply text-sm;
+    }
+
+    .purple-shape {
+        clip-path: polygon(100% 0, 100% 100%, 20% 100%, 0 85%, 0 50%, 20% 30%, 0 15%, 0 0);
+    }
+
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .floating-tag {
+        animation: float 6s ease-in-out infinite;
+    }
+
+}

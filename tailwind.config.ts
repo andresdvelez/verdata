@@ -12,5 +12,30 @@ export default {
       colors: {},
     },
   },
-  plugins: [heroui(), addDynamicIconSelectors()],
+  plugins: [
+    heroui({
+      prefix: "heroui",
+      addCommonColors: false,
+      defaultTheme: "light",
+      defaultExtendTheme: "light",
+      themes: {
+        light: {
+          colors: {
+            background: "#f9f9fb",
+            primary: {
+              DEFAULT: "#030303",
+              foreground: "#f9f9fb",
+            },
+          },
+        },
+        dark: {
+          colors: {
+            background: "#030303",
+            primary: "#f9f9fb",
+          },
+        },
+      },
+    }),
+    addDynamicIconSelectors(),
+  ],
 } satisfies Config;
