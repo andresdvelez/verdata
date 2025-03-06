@@ -24,6 +24,22 @@ export async function createUser(data: User) {
   }
 }
 
+export async function getUserByClerkId(id: string) {
+  return await prisma.user.findUnique({
+    where: {
+      clerk_id: id,
+    },
+    include: {
+      searched_reports: {
+        orderBy: {
+          created_at: "asc",
+        },
+      },
+      referred_users: true,
+      referred_by: true,
+    },
+  });
+}
 export async function getUserById(id: string) {
   return await prisma.user.findUnique({
     where: {

@@ -20,10 +20,10 @@ model User {
   firstName        String?
   lastName         String?
   imageUrl         String?
-  balance_id       String
+  balance_id       String?
   balance          Balance?
   referral_code    String   @unique
-  referred_by_id   String?  @default("")
+  referred_by_id   String?
   referred_by      User?    @relation("Referrals", fields: [referred_by_id], references: [id])
   referred_users   User[]   @relation("Referrals")
   created_at       DateTime @updatedAt
