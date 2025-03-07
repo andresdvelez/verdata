@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 const AuthLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="min-h-screen flex flex-col md:flex-row overflow-hidden">
+    <div className="h-screen flex flex-col md:flex-row overflow-auto">
       {/* Left section - Sign In Form */}
       <div className="w-full md:w-1/2 p-4 md:p-8 lg:p-12 flex flex-col animate-slide-up">
         <Link
@@ -24,7 +24,9 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
           />
           Volver al home
         </Link>
-        <div className="my-auto max-w-md mx-auto w-full">{children}</div>
+        <div className="my-auto max-w-md mx-auto w-full flex items-center justify-center">
+          {children}
+        </div>
       </div>
       {/* Right section - Purple Background with Floating Elements */}
       <ClientSideRightSection />
