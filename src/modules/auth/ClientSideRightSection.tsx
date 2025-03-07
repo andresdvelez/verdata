@@ -2,6 +2,7 @@
 
 import { RoundedButton } from "../common/components/RoundedButton";
 import { usePathname } from "../translations/i18n/routing";
+import { AnimatedCurveSvg } from "../common/components/AnimatedCurveSvg";
 
 export const ClientSideRightSection = () => {
   const pathname = usePathname();
@@ -28,15 +29,16 @@ export const ClientSideRightSection = () => {
         </div>
 
         {/* Conditional content based on page */}
-        {isSignIn ? (
+        {isSignIn || isWhitelist ? (
           <div className="absolute inset-0 -inset-y-[3rem] inset-x-[4rem] w-full h-full flex flex-col justify-center items-center text-white p-12">
             <div className="max-w-lg text-left">
               <h2 className="text-5xl font-bold mb-6 leading-tight">
                 Consultas{" "}
                 <span className="relative inline-block">
                   diseñadas
-                  <span className="absolute -top-1 left-0 right-0 mx-auto w-full h-[1.5px] bg-white/70 rounded-full"></span>
-                  <span className="absolute -bottom-1 left-0 right-0 mx-auto w-full h-[1.5px] bg-white/70 rounded-full"></span>
+                  <div className="absolute -bottom-2 left-0 right-0">
+                    <AnimatedCurveSvg />
+                  </div>
                 </span>
                 <br /> con base en tus <br />
                 necesidades***
