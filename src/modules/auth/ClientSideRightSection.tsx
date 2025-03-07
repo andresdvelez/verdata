@@ -88,7 +88,7 @@ export const ClientSideRightSection = () => {
 
         {/* Floating elements */}
         <div
-          className="absolute bottom-36 left-52 floating-tag z-20"
+          className="absolute bottom-40 left-40 floating-tag z-20"
           style={
             {
               "--index": "0",
@@ -97,18 +97,18 @@ export const ClientSideRightSection = () => {
             } as any
           }
         >
-          <div className="-rotate-[20deg] bg-black text-white px-6 py-3 rounded-full">
+          <div className="-rotate-[20deg] bg-black text-white px-10 py-6 rounded-full">
             <span className="text-5xl font-semibold">verdata.co</span>
           </div>
         </div>
 
         <div
-          className="absolute bottom-32 left-[28rem]  text-purple-400 floating-tag z-10"
+          className="absolute bottom-24 left-[26rem] floating-tag z-10"
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           style={{ "--index": "1" } as any}
         >
-          <div className="rotate-[20deg] px-10 py-6 rounded-3xl bg-white">
-            <span className="text-2xl font-medium">Conoce a tu cliente</span>
+          <div className="rotate-[22deg] px-10 py-6 rounded-3xl text-white bg-purple-400">
+            <span className="text-3xl font-medium">Conoce a tu cliente</span>
           </div>
         </div>
 
@@ -117,7 +117,7 @@ export const ClientSideRightSection = () => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           style={{ "--index": "2" } as any}
         >
-          <div className="-rotate-[6deg] px-5 py-3 rounded-3xl bg-yellow-300 max-w-72">
+          <div className="px-10 py-6 rounded-3xl bg-[#E6FD70] max-w-72">
             <span className="text-3xl font-medium">
               Una solución integral para tí
             </span>
@@ -125,11 +125,11 @@ export const ClientSideRightSection = () => {
         </div>
 
         <div
-          className="absolute bottom-10 left-[32rem] z-20  text-center text-black  floating-tag"
+          className="absolute bottom-28 left-[39rem] z-20  text-center text-black  floating-tag"
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           style={{ "--index": "3" } as any}
         >
-          <div className="-rotate-[6deg] px-5 py-3 bg-white border border-primary rounded-full">
+          <div className="rotate-[15deg] px-5 py-4 bg-white border border-primary rounded-full">
             <span className="text-xl font-medium">Reportes en WhatsApp</span>
           </div>
         </div>
