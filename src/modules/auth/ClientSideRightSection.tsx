@@ -15,13 +15,13 @@ export const ClientSideRightSection = () => {
 
   return (
     <div className="purple-shape-container w-1/2 relative  hidden lg:block">
-      <div className="purple-shape-border -translate-x-[1px]"></div>
+      <div className="purple-shape-border -translate-x-[1.5px]"></div>
       <div
         className={`purple-shape ${bgColorClass} flex-col items-center justify-center h-full relative overflow-hidden`}
       >
         <div className="absolute top-8 right-8 text-white z-10">
           <RoundedButton
-            className="border  border-primary"
+            className="border-2 border-primary"
             onClick={() => window.open("https://verdata.co/inicio/", "_blank")}
           >
             <span className="text-sm opacity-80">verdata.co</span>
@@ -46,27 +46,11 @@ export const ClientSideRightSection = () => {
             </div>
           </div>
         ) : isSignUp ? (
-          <div className="max-w-md text-center px-8">
-            <h2 className="text-3xl font-bold mb-6">
-              Empieza tu viaje con Verdata
-            </h2>
-            <p className="mb-8 text-lg opacity-90">
-              Crea una cuenta para acceder a todas nuestras herramientas y
-              soluciones
-            </p>
-            <div className="grid grid-cols-2 gap-4 mt-8">
-              <div className="bg-white/10 p-4 rounded-lg">
-                <p className="font-medium">Conoce a tu cliente</p>
-              </div>
-              <div className="bg-white/10 p-4 rounded-lg">
-                <p className="font-medium">Gestión de riesgos</p>
-              </div>
-              <div className="bg-white/10 p-4 rounded-lg">
-                <p className="font-medium">Análisis avanzado</p>
-              </div>
-              <div className="bg-white/10 p-4 rounded-lg">
-                <p className="font-medium">Soporte 24/7</p>
-              </div>
+          <div className="absolute inset-0 -inset-y-[3rem] inset-x-[4rem] w-full h-full flex flex-col justify-center items-center text-white">
+            <div className="max-w-lg text-center text-primary">
+              <p className="font-bold text-9xl">+130</p>
+              <span className=" text-6xl font-bold">millones</span>
+              <p className="text-xl"> de datos consultados.</p>
             </div>
           </div>
         ) : (
