@@ -14,18 +14,20 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(cuid())
-  email          String   @unique
-  name           String?
-  clerk_id       String   @unique
-  balance_id     String
-  balance        Balance? @relation
-  referral_code  String   @unique
-  referred_by_id String?  @default("")
-  referred_by    User?    @relation("Referrals", fields: [referred_by_id], references: [id])
-  referred_users User[]   @relation("Referrals")
-  created_at     DateTime @default(now())
-  report         Report[]
+  id               String   @id @default(cuid())
+  email            String   @unique
+  clerk_id         String   @unique
+  firstName        String?
+  lastName         String?
+  imageUrl         String?
+  balance_id       String?
+  balance          Balance?
+  referral_code    String   @unique
+  referred_by_id   String?
+  referred_by      User?    @relation("Referrals", fields: [referred_by_id], references: [id])
+  referred_users   User[]   @relation("Referrals")
+  created_at       DateTime @updatedAt
+  searched_reports Report[]
 }
 
 model Balance {

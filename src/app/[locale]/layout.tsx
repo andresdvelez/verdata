@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect, routing } from "@/modules/translations/i18n/routing";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { geistMono, geistSans } from "@/config/fonts.config";
+import { bricolageGrotesque } from "@/config/fonts.config";
 import { ClientWrapper } from "@/modules/core/components/ClientWrapper";
 import "../../styles/globals.css";
 
@@ -28,7 +28,7 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
+        className={`${bricolageGrotesque.variable} font-bricolage antialiased bg-background`}
       >
         <ClientWrapper>
           <NextIntlClientProvider messages={messages}>

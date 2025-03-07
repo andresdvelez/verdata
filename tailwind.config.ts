@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        bricolage: "var(--font-bricolage)",
+      },
       colors: {},
     },
   },

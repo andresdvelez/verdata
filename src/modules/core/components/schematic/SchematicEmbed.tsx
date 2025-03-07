@@ -1,6 +1,14 @@
 "use client";
 
-import { SchematicEmbed as SchematicEmbedComponent } from "@schematichq/schematic-components";
+import dynamic from "next/dynamic";
+
+const SchematicEmbedComponent = dynamic(
+  () =>
+    import("@schematichq/schematic-components").then(
+      (mod) => mod.SchematicEmbed
+    ),
+  { ssr: false }
+);
 
 export const SchematicEmbed = ({
   accessToken,

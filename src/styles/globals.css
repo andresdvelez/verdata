@@ -21,24 +21,46 @@
         @apply text-sm;
     }
 
+    .purple-shape-container {
+        position: relative;
+    }
+
+    .purple-shape-border {
+        position: absolute;
+        inset: 0;
+        background: black;
+        /* Border color */
+        clip-path: polygon(10.2% 0%, 100% 0%, 100% 100%, 2.4% 100%, 12.3% 90.3%, 12% 66.3%, 16.2% 40.3%, 16.1% 28%, 0% 16.3%);
+        /* Makes it slightly larger to create border effect */
+        z-index: 1;
+    }
+
     .purple-shape {
-        clip-path: polygon(100% 0, 100% 100%, 20% 100%, 0 85%, 0 50%, 20% 30%, 0 15%, 0 0);
+        position: relative;
+        background-color: theme('colors.purple.500');
+        clip-path: polygon(10.2% 0%, 100% 0%, 100% 100%, 2.4% 100%, 12.3% 90.3%, 12% 66.3%, 16.2% 40.3%, 16.1% 28%, 0% 16.3%);
+        z-index: 2;
     }
 
-    @keyframes float {
 
-        0%,
-        100% {
-            transform: translateY(0);
-        }
 
-        50% {
-            transform: translateY(-10px);
-        }
+
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
     }
 
-    .floating-tag {
-        animation: float 6s ease-in-out infinite;
+    50% {
+        transform: translateY(-6px);
     }
+}
 
+
+.floating-tag {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: calc(var(--index) * 0.5s);
 }
