@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/localizations": "^3.11.1",
     "@clerk/nextjs": "^6.12.2",
     "@heroui/react": "^2.7.4",
     "@prisma/client": "^6.4.1",
@@ -16,6 +17,7 @@
     "@schematichq/schematic-react": "^1.2.4",
     "@schematichq/schematic-typescript-node": "^1.1.9",
     "framer-motion": "^12.4.10",
+    "gsap": "^3.12.7",
     "next": "^15.2.1",
     "next-intl": "^3.26.5",
     "react": "^19.0.0",
