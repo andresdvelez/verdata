@@ -5,18 +5,32 @@ import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 
 const isProtectedRoute = createRouteMatcher(["/(en|es)/app(.*)", "/app(.*)"]);
 
-const intl = createMiddleware(routing);
+const intl = createMiddleware({
+  ...routing,
+  localeDetection: true,
+  localePrefix: "always",
+});
 
 export default function middleware(req: NextRequest, event: NextFetchEvent) {
   return clerkMiddleware(async (auth, req) => {
     const { nextUrl } = req;
     const pathname = nextUrl.pathname;
 
-    // Extract locale from the request
     const localeMatch = pathname.match(/^\/(en|es)\//);
-    const locale = localeMatch ? localeMatch[1] : "en"; // Default to 'en' if no locale found
+    const locale = localeMatch ? localeMatch[1] : "en";
 
-    // Redirect "/" or "/en" or "/es" to "/en/app" or "/es/app"
+    const userAgent = req.headers.get("user-agent") || "";
+    const isBot = /bot|crawler|spider|linkedin|facebook|twitter|whatsapp/i.test(
+      userAgent
+    );
+
+    if (
+      isBot &&
+      (pathname === "/" || pathname === "/en" || pathname === "/es")
+    ) {
+      return intl(req);
+    }
+
     if (pathname === "/" || pathname === "/en" || pathname === "/es") {
       const redirectUrl = nextUrl.clone();
       redirectUrl.pathname = `/${locale}/app`;
@@ -35,7 +49,6 @@ export const config = {
   matcher: [
     "/(en|es)/:path*",
     "/",
-
     "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
     "/(api|trpc)(.*)",
   ],
