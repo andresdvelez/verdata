@@ -7,14 +7,14 @@ import { ClientWrapper } from "@/modules/core/components/ClientWrapper";
 import "../../styles/globals.css";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-const OPEN_GRAPH_IMAGE_URL = `${BASE_URL}/brand/logo.jpg`;
+const OPEN_GRAPH_IMAGE_URL = `${BASE_URL}/brand/thumbnail.jpg`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: "Verdata | Inicio",
   description: "Inicio - Verifica y valida antecedentes penales | Verdata",
   alternates: {
-    canonical: "https://app.verdata.co",
+    canonical: "https://app.verdata.co/en",
   },
   openGraph: {
     title: "Verdata | Inicio",
