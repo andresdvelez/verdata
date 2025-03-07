@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: "Verdata | Inicio",
   description: "Inicio - Verifica y valida antecedentes penales | Verdata",
   alternates: {
-    canonical: "https://app.verdata.co",
+    canonical: "https://app.verdata.co/en",
   },
   openGraph: {
     title: "Verdata | Inicio",
