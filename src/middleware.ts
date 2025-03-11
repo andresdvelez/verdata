@@ -1,7 +1,7 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "@/modules/translations/i18n/routing";
-import { NextFetchEvent, NextRequest } from "next/server";
+import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 
 const isProtectedRoute = createRouteMatcher(["/(en|es)/app(.*)", "/app(.*)"]);
 
@@ -16,8 +16,8 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
     const { nextUrl } = req;
     const pathname = nextUrl.pathname;
 
-    // const localeMatch = pathname.match(/^\/(en|es)\//);
-    // const locale = localeMatch ? localeMatch[1] : "en";
+    const localeMatch = pathname.match(/^\/(en|es)\//);
+    const locale = localeMatch ? localeMatch[1] : "en";
 
     const userAgent = req.headers.get("user-agent") || "";
     const isBot = /bot|crawler|spider|linkedin|facebook|twitter|whatsapp/i.test(
@@ -31,11 +31,11 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
       return intl(req);
     }
 
-    // if (pathname === "/en" || pathname === "/es") {
-    //   const redirectUrl = nextUrl.clone();
-    //   redirectUrl.pathname = `/${locale}/app`;
-    //   return NextResponse.redirect(redirectUrl);
-    // }
+    if (pathname === "/" || pathname === "/en" || pathname === "/es") {
+      const redirectUrl = nextUrl.clone();
+      redirectUrl.pathname = `/${locale}/app`;
+      return NextResponse.redirect(redirectUrl);
+    }
 
     if (isProtectedRoute(req)) {
       await auth.protect();
