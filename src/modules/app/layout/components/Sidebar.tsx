@@ -2,7 +2,7 @@
 
 import { Link } from "@/modules/translations/i18n/routing";
 import { SignOutButton } from "@clerk/nextjs";
-import { Button } from "@heroui/react";
+import { Button, Image } from "@heroui/react";
 import { useState } from "react";
 import { SidebarItem } from "./SidebarLink";
 
@@ -10,25 +10,27 @@ export const Sidebar: React.FC = () => {
   const [activeItem, setActiveItem] = useState("general");
 
   return (
-    <aside className="h-screen w-72 border-r border-primary flex flex-col bg-background">
+    <aside className="h-screen w-[283px] px-16 border-r border-primary flex flex-col bg-background">
       <div className="h-[89px] flex items-center justify-center mb-4">
         <Link href="/app" className="flex items-center gap-2 px-2">
-          <i
-            className="icon-[streamline--startup-solid] size-5 text-foreground"
-            role="img"
-            aria-hidden="true"
+          <Image
+            src="/brand/logotype.png"
+            alt="Verdata logotipo"
+            classNames={{
+              wrapper: "size-11",
+            }}
           />
-          <span className="text-xl font-medium text-sidebar-primary">
+          <span className="text-3xl font-medium text-sidebar-primary">
             Verdata
           </span>
         </Link>
       </div>
 
-      <nav className="flex-1 px-8">
+      <nav className="flex-1">
         <SidebarItem
           icon={
             <i
-              className="icon-[el--home] size-5"
+              className="icon-[topcoat--home] size-5"
               role="img"
               aria-hidden="true"
             />
@@ -92,7 +94,7 @@ export const Sidebar: React.FC = () => {
         />
       </nav>
 
-      <div className="mt-auto px-8 py-3">
+      <div className="mt-auto py-3">
         <SignOutButton redirectUrl={`/auth/sign-in`}>
           <Button
             variant="light"
