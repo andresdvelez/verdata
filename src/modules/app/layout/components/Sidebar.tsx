@@ -88,7 +88,7 @@ export const Sidebar: React.FC = () => {
             />
           }
           text="Perfil"
-          to="/app/perfil"
+          to="/app/profile"
           isActive={activeItem === "perfil"}
           onClick={() => setActiveItem("perfil")}
         />
