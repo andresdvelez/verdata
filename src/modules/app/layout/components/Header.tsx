@@ -6,7 +6,7 @@ import { Button, Input } from "@heroui/react";
 export const Header = () => {
   return (
     <header className=" bg-background border-b border-primary py-6 w-full backdrop-blur-md relative">
-      <div className="container mx-auto w-full flex items-center justify-between">
+      <div className="container 2xl:mx-auto w-full flex items-center justify-between">
         <form className="flex items-center justify-center gap-x-8 flex-1">
           <div className="flex items-center *:border-r border-black/35">
             <Input

@@ -1,7 +1,10 @@
 "use server";
 
+import { RecordsTable } from "@/modules/app/common/components/RecordsTable";
+import { createReport } from "@/modules/prisma/lib/reports";
 import { currentUser } from "@clerk/nextjs/server";
 import { Spinner } from "@heroui/react";
+import { Report } from "@prisma/client";
 import React from "react";
 
 const AppPage = async () => {
@@ -26,6 +29,7 @@ const AppPage = async () => {
           <h2 className="text-5xl font-semibold">Historial</h2>
           <p className="text-lg font-medium">Últimas búsquedas</p>
         </div>
+        <RecordsTable />
       </aside>
     </main>
   );

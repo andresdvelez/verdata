@@ -1,18 +1,29 @@
 "use client";
 
-import { Link } from "@/modules/translations/i18n/routing";
+import { Link, usePathname } from "@/modules/translations/i18n/routing";
 import { SignOutButton } from "@clerk/nextjs";
 import { Button, Image } from "@heroui/react";
-import { useState } from "react";
 import { SidebarItem } from "./SidebarLink";
+import { useUserStore } from "@/modules/store/user-store";
 
 export const Sidebar: React.FC = () => {
-  const [activeItem, setActiveItem] = useState("general");
+
+
+
+  const pathname = usePathname();
+
+  // Function to check if a path is active
+  const isActive = (path: string) => {
+    if (path === "/app") {
+      return pathname === "/app";
+    }
+    return pathname.startsWith(path);
+  };
 
   return (
-    <aside className="h-screen w-[283px] px-16 border-r border-primary flex flex-col bg-background">
+    <aside className="h-screen w-[260px] 2xl:w-[283px] px-10 2xl:px-16 border-r border-primary flex flex-col bg-background">
       <div className="h-[89px] flex items-center justify-center mb-4">
-        <Link href="/app" className="flex items-center gap-2 px-2">
+        <Link href="/app" className="flex items-center gap-2">
           <Image
             src="/brand/logotype.png"
             alt="Verdata logotipo"
@@ -28,69 +39,34 @@ export const Sidebar: React.FC = () => {
 
       <nav className="flex-1">
         <SidebarItem
-          icon={
-            <i
-              className="icon-[topcoat--home] size-5"
-              role="img"
-              aria-hidden="true"
-            />
-          }
+          icon={<i className="icon-[topcoat--home] size-5" role="img" aria-hidden="true" />}
           text="General"
           to="/app"
-          isActive={activeItem === "general"}
-          onClick={() => setActiveItem("general")}
+          isActive={isActive("/app")}
         />
         <SidebarItem
-          icon={
-            <i
-              className="icon-[tdesign--search] size-5"
-              role="img"
-              aria-hidden="true"
-            />
-          }
+          icon={<i className="icon-[tdesign--search] size-5" role="img" aria-hidden="true" />}
           text="Búsqueda"
           to="/app/busqueda"
-          isActive={activeItem === "busqueda"}
-          onClick={() => setActiveItem("busqueda")}
+          isActive={isActive("/app/busqueda")}
         />
         <SidebarItem
-          icon={
-            <i
-              className="icon-[gg--file-document] size-5"
-              role="img"
-              aria-hidden="true"
-            />
-          }
+          icon={<i className="icon-[gg--file-document] size-5" role="img" aria-hidden="true" />}
           text="Historial"
           to="/app/records"
-          isActive={activeItem === "historial"}
-          onClick={() => setActiveItem("historial")}
+          isActive={isActive("/app/records")}
         />
         <SidebarItem
-          icon={
-            <i
-              className="icon-[uil--wallet] size-5"
-              role="img"
-              aria-hidden="true"
-            />
-          }
+          icon={<i className="icon-[uil--wallet] size-5" role="img" aria-hidden="true" />}
           text="Créditos"
           to="/app/credits"
-          isActive={activeItem === "creditos"}
-          onClick={() => setActiveItem("creditos")}
+          isActive={isActive("/app/credits")}
         />
         <SidebarItem
-          icon={
-            <i
-              className="icon-[heroicons-solid--user] size-5"
-              role="img"
-              aria-hidden="true"
-            />
-          }
+          icon={<i className="icon-[heroicons-solid--user] size-5" role="img" aria-hidden="true" />}
           text="Perfil"
           to="/app/profile"
-          isActive={activeItem === "perfil"}
-          onClick={() => setActiveItem("perfil")}
+          isActive={isActive("/app/profile")}
         />
       </nav>
 
@@ -99,11 +75,7 @@ export const Sidebar: React.FC = () => {
           <Button
             variant="light"
             startContent={
-              <i
-                className="icon-[mynaui--logout-solid] size-5"
-                role="img"
-                aria-hidden="true"
-              />
+              <i className="icon-[mynaui--logout-solid] size-5" role="img" aria-hidden="true" />
             }
           >
             Cerrar sesión
