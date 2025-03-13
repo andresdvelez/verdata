@@ -57,7 +57,8 @@ export const RecordsTable = () => {
       >
         {(item) => (
           <TableRow key={`${item.id}`}>
-            {(columnKey) => <TableCell>{cell(item, columnKey)}</TableCell>}
+            <TableCell>{item.id}</TableCell>
+            {/* {(columnKey) => <TableCell>{cell(item, columnKey)}</TableCell>} */}
           </TableRow>
         )}
       </TableBody>

@@ -11,6 +11,7 @@ import { UserSearchByName } from "@/types/app/users";
 import { listNames } from "../app/services/listNames";
 import { UserIdentity, UserNotFound } from "@/types/app/user-identity";
 import { getIdentityByDocument } from "../app/services/identityValidation";
+import { useUserStore } from "./user-store";
 
 interface SearchReportState {
   isLoading: boolean;
@@ -31,14 +32,22 @@ interface SearchReportState {
   setLocalSearchType: (value: string) => void;
   setSearchWarning: (value: string | null) => void;
   searchByName: (countryCode: string, searchName: string) => Promise<void>;
-  getNationalEndpoints: (countryCode: string) => Promise<
-    {
+  getNationalEndpoints: (countryCode: string) => Promise<// {
+  //   url: string;
+  //   source: string;
+  //   source_en?: string;
+  //   source_pt?: string;
+  // }[]
+  void>;
+  handleSearch: (
+    user: UserIdentity,
+    nationalEndpoints: {
       url: string;
       source: string;
       source_en?: string;
       source_pt?: string;
     }[]
-  >;
+  ) => Promise<void>;
   searchById: (countryCode: string, searchId: string) => Promise<void>;
 }
 
@@ -66,7 +75,7 @@ export const useSearchReportStore = create<SearchReportState>()(
         setSearchDocumentLabel: (value) => {
           set({ searchDocumentLabel: value });
         },
-        searchByName: async (countryCo¶de: string, searchName: string) => {
+        searchByName: async (countryCode: string, searchName: string) => {
           set({
             isLoading: true,
             isPresearch: true,
@@ -86,14 +95,93 @@ export const useSearchReportStore = create<SearchReportState>()(
         },
         getNationalEndpoints: async (countryCode: string) => {
           try {
-            const nationalEndpoints = await getEndpoints({
-              scope: "national",
-              country: countryCode,
-            });
-            return nationalEndpoints;
+            // TODO
+            // const nationalEndpoints = await getEndpoints({
+            //   scope: "national",
+            //   country: countryCode,
+            // });
+            // return nationalEndpoints;
           } catch (error) {
             console.log("error getting national data.");
           }
+        },
+        handleSearch: async (
+          userIdentity: UserIdentity,
+          nationalEndpoints: {
+            url: string;
+            source: string;
+            source_en?: string;
+            source_pt?: string;
+          }[]
+        ) => {
+          set({
+            isEmpty: false,
+            warningLabel: null,
+          });
+          const user = useUserStore.getState().user;
+          if (!user) return;
+          // TODO: Make the search functionality
+          // const internationalEndpoints = get().internationalEndpoints;
+          const localSearchType = get().localSearchType;
+
+          // await updateDoc(doc(db, "users", `${user.id}`), {
+          //   checks: user.checks - 1,
+          // });
+          useUserStore.setState({
+            user: {
+              ...user,
+            },
+          });
+
+          // const internationalData = await getBackgroundData({
+          //   endpoints: internationalEndpoints,
+          //   searchType: SEARCH_TYPE_NAME,
+          //   userData: userIdentity,
+          // });
+          // const nationalData = await getBackgroundData({
+          //   endpoints: nationalEndpoints,
+          //   searchType: localSearchType,
+          //   userData: userIdentity,
+          // });
+
+          // set({
+          //   isSearchVideoActive: false,
+          //   loading: false,
+          //   nationalData: nationalData as FetchData[],
+          //   internationalData: internationalData as FetchData[],
+          //   matchedNationals:
+          //     (
+          //       nationalData as {
+          //         data: any;
+          //         name: string;
+          //       }[]
+          //     ).filter(
+          //       ({ data }) =>
+          //         (data?.DATA && data?.DATA !== "no matches") ||
+          //         Array.isArray(data)
+          //     ).length > 0,
+          //   matchedInternationals:
+          //     (
+          //       internationalData as {
+          //         data: any;
+          //         name: string;
+          //       }[]
+          //     ).filter(
+          //       ({ data }) =>
+          //         (data?.DATA && data.DATA !== "no matches") ||
+          //         Array.isArray(data)
+          //     ).length > 0,
+          // });
+
+          // await createUpdateReport({
+          //   user,
+          //   countryCode: userIdentity?.Nacionalidad,
+          //   internationalData: internationalData as FetchData[],
+          //   nationalData: nationalData as FetchData[],
+          //   isSearchName: localSearchType === SEARCH_TYPE_NAME,
+          //   searchType: localSearchType,
+          //   userIdentity,
+          // });
         },
         searchById: async (countryCode: string, searchId: string) => {
           set({
