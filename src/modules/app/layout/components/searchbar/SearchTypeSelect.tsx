@@ -5,7 +5,6 @@ import {
 import { useSearchReportStore } from "@/modules/store/search-report-store";
 import { SearchFormInterface } from "@/types/app/search";
 import { Select, SelectItem } from "@heroui/react";
-import { useTranslations } from "next-intl";
 import { Control, Controller } from "react-hook-form";
 
 export const SearchTypeSelect = ({
@@ -13,7 +12,7 @@ export const SearchTypeSelect = ({
 }: {
   control: Control<SearchFormInterface>;
 }) => {
-  const t = useTranslations();
+  // const t = useTranslations();
 
   const searchDocumentLabel = useSearchReportStore(
     (state) => state.searchDocumentLabel
@@ -40,6 +39,7 @@ export const SearchTypeSelect = ({
             trigger:
               "py-0 min-h-2 bg-transparent shadow-none data-[hover=true]:bg-transparent mr-4",
             listbox: "max-h-60 overflow-y-auto",
+            errorMessage: "absolute bottom-0",
           }}
           onChange={(event) => {
             onChange(event);

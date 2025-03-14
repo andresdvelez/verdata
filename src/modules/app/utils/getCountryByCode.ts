@@ -1,3 +1,4 @@
+import { COUNTRIES } from "../data/countries";
 import { parseCountry } from "./parseCountry";
 
 export const getCountryByCode = (countryCode: string) => {

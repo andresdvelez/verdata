@@ -11,14 +11,17 @@ import {
 } from "@heroui/react";
 import { RECORDS_TABLE_COLUMNS } from "../data/reports-table-columns";
 import { Report } from "@prisma/client";
+import { RenderCell } from "./RecordsTableCell";
 
 export const RecordsTable = () => {
   const user = useUserStore((state) => state.user);
   const isLoading = useUserStore((state) => state.isLoading);
 
+  const { cell } = RenderCell();
+
   const reports = user?.searched_reports;
 
-  console.log(reports);
+  if (!reports) return;
 
   return (
     <Table
@@ -57,8 +60,7 @@ export const RecordsTable = () => {
       >
         {(item) => (
           <TableRow key={`${item.id}`}>
-            <TableCell>{item.id}</TableCell>
-            {/* {(columnKey) => <TableCell>{cell(item, columnKey)}</TableCell>} */}
+            {(columnKey) => <TableCell>{cell(item, columnKey)}</TableCell>}
           </TableRow>
         )}
       </TableBody>

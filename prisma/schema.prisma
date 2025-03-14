@@ -43,6 +43,7 @@ model Report {
   user        User     @relation(fields: [user_id], references: [id])
   data        String
   nationality String
-  searchType String
+  searchData  String
+  searchType  String
   created_at  DateTime @default(now())
 }

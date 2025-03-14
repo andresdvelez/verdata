@@ -2,7 +2,6 @@ import { COUNTRIES } from "@/modules/app/data/countries";
 import { useSearchReportStore } from "@/modules/store/search-report-store";
 import { SearchFormInterface } from "@/types/app/search";
 import { Select, SelectItem } from "@heroui/react";
-import { useTranslations } from "next-intl";
 import { Control, Controller } from "react-hook-form";
 
 export const NationalitySelect = ({
@@ -10,7 +9,7 @@ export const NationalitySelect = ({
 }: {
   control: Control<SearchFormInterface>;
 }) => {
-  const t = useTranslations();
+  // const t = useTranslations();
 
   const setSearchDocumentLabel = useSearchReportStore(
     (state) => state.setSearchDocumentLabel
@@ -37,6 +36,7 @@ export const NationalitySelect = ({
             trigger:
               "py-0 min-h-2 bg-transparent shadow-none data-[hover=true]:bg-transparent",
             listbox: "max-h-60 overflow-y-auto",
+            errorMessage: "absolute bottom-0",
           }}
           {...field}
         >

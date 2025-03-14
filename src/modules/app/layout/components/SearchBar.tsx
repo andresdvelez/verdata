@@ -3,7 +3,6 @@
 import { Button } from "@heroui/react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
 import { searchSchema } from "../../lib/search-schema";
 import { NationalitySelect } from "./searchbar/NationalitySelect";
 import { SearchFormInterface } from "@/types/app/search";
@@ -14,19 +13,14 @@ import { useRouter } from "@/modules/translations/i18n/routing";
 import { useSearchReportStore } from "@/modules/store/search-report-store";
 
 export const SearchBar = () => {
-  const t = useTranslations();
+  // const t = useTranslations("searchbar");
 
   const router = useRouter();
 
   const searchByName = useSearchReportStore((state) => state.searchByName);
   const searchById = useSearchReportStore((state) => state.searchById);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<SearchFormInterface>({
+  const { control, handleSubmit, reset } = useForm<SearchFormInterface>({
     resolver: zodResolver(searchSchema),
     mode: "onBlur",
   });
@@ -51,7 +45,7 @@ export const SearchBar = () => {
       className="flex items-center justify-center gap-x-8 flex-1"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex items-center *:border-r border-black/35">
+      <div className="flex items-center *:border-r border-black/35 *:px-1">
         <NationalitySelect control={control} />
         <SearchTypeSelect control={control} />
         <SearchInput control={control} />

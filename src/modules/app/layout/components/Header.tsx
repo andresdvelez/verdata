@@ -3,7 +3,7 @@ import { SearchBar } from "./SearchBar";
 
 export const Header = () => {
   return (
-    <header className="bg-background border-b border-primary py-6 w-full backdrop-blur-md relative">
+    <header className="bg-background border-b border-primary py-6 h-[102px] w-full backdrop-blur-md relative">
       <div className="container mx-auto w-full flex items-center justify-between">
         <SearchBar />
         <SignedIn>

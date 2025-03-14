@@ -28,11 +28,11 @@ export const SearchInput = ({
           isInvalid={!!error}
           errorMessage={error?.message}
           isRequired
-          radius="full"
-          className="bg-transparent shadow-none min-w-[235px]"
+          className="bg-transparent shadow-none min-w-[235px] border-none"
           classNames={{
             inputWrapper:
               "bg-transparent shadow-none data-[hover=true]:bg-transparent group-data-[focus=true]:bg-transparent",
+            errorMessage: "absolute bottom-0",
           }}
           type="text"
           label={

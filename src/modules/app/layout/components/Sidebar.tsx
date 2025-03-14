@@ -4,15 +4,10 @@ import { Link, usePathname } from "@/modules/translations/i18n/routing";
 import { SignOutButton } from "@clerk/nextjs";
 import { Button, Image } from "@heroui/react";
 import { SidebarItem } from "./SidebarLink";
-import { useUserStore } from "@/modules/store/user-store";
 
 export const Sidebar: React.FC = () => {
-
-
-
   const pathname = usePathname();
 
-  // Function to check if a path is active
   const isActive = (path: string) => {
     if (path === "/app") {
       return pathname === "/app";
@@ -39,31 +34,61 @@ export const Sidebar: React.FC = () => {
 
       <nav className="flex-1">
         <SidebarItem
-          icon={<i className="icon-[topcoat--home] size-5" role="img" aria-hidden="true" />}
+          icon={
+            <i
+              className="icon-[topcoat--home] size-5"
+              role="img"
+              aria-hidden="true"
+            />
+          }
           text="General"
           to="/app"
           isActive={isActive("/app")}
         />
         <SidebarItem
-          icon={<i className="icon-[tdesign--search] size-5" role="img" aria-hidden="true" />}
+          icon={
+            <i
+              className="icon-[tdesign--search] size-5"
+              role="img"
+              aria-hidden="true"
+            />
+          }
           text="Búsqueda"
           to="/app/busqueda"
           isActive={isActive("/app/busqueda")}
         />
         <SidebarItem
-          icon={<i className="icon-[gg--file-document] size-5" role="img" aria-hidden="true" />}
+          icon={
+            <i
+              className="icon-[gg--file-document] size-5"
+              role="img"
+              aria-hidden="true"
+            />
+          }
           text="Historial"
           to="/app/records"
           isActive={isActive("/app/records")}
         />
         <SidebarItem
-          icon={<i className="icon-[uil--wallet] size-5" role="img" aria-hidden="true" />}
+          icon={
+            <i
+              className="icon-[uil--wallet] size-5"
+              role="img"
+              aria-hidden="true"
+            />
+          }
           text="Créditos"
           to="/app/credits"
           isActive={isActive("/app/credits")}
         />
         <SidebarItem
-          icon={<i className="icon-[heroicons-solid--user] size-5" role="img" aria-hidden="true" />}
+          icon={
+            <i
+              className="icon-[heroicons-solid--user] size-5"
+              role="img"
+              aria-hidden="true"
+            />
+          }
           text="Perfil"
           to="/app/profile"
           isActive={isActive("/app/profile")}
@@ -75,7 +100,11 @@ export const Sidebar: React.FC = () => {
           <Button
             variant="light"
             startContent={
-              <i className="icon-[mynaui--logout-solid] size-5" role="img" aria-hidden="true" />
+              <i
+                className="icon-[mynaui--logout-solid] size-5"
+                role="img"
+                aria-hidden="true"
+              />
             }
           >
             Cerrar sesión
