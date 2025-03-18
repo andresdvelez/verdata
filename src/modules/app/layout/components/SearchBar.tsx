@@ -3,7 +3,7 @@
 import { Button } from "@heroui/react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { searchSchema } from "../../lib/search-schema";
+import { createSearchSchema } from "../../lib/search-schema";
 import { NationalitySelect } from "./searchbar/NationalitySelect";
 import { SearchFormInterface } from "@/types/app/search";
 import { SearchTypeSelect } from "./searchbar/SearchTypeSelect";
@@ -16,8 +16,10 @@ import { useTranslations } from "next-intl";
 export const SearchBar = () => {
   const t = useTranslations("searchbar");
 
-  const router = useRouter();
+  // Create the schema with translations
+  const searchSchema = createSearchSchema(t);
 
+  const router = useRouter();
   const searchByName = useSearchReportStore((state) => state.searchByName);
   const searchById = useSearchReportStore((state) => state.searchById);
 
