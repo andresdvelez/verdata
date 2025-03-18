@@ -11,9 +11,10 @@ import { SearchInput } from "./searchbar/SearchInput";
 import { SEARCH_TYPE_ID, SEARCH_TYPE_NAME } from "../../constants/search";
 import { useRouter } from "@/modules/translations/i18n/routing";
 import { useSearchReportStore } from "@/modules/store/search-report-store";
+import { useTranslations } from "next-intl";
 
 export const SearchBar = () => {
-  // const t = useTranslations("searchbar");
+  const t = useTranslations("searchbar");
 
   const router = useRouter();
 
@@ -64,7 +65,7 @@ export const SearchBar = () => {
           />
         }
       >
-        Buscar
+        {t("search")}
       </Button>
     </form>
   );

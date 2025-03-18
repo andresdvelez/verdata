@@ -1,5 +1,6 @@
 import { Header } from "@/modules/app/layout/components/Header";
 import { Sidebar } from "@/modules/app/layout/components/Sidebar";
+import SentryFeedbackWidget from "@/modules/common/components/SentryFeedbackWidget";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -17,7 +18,10 @@ export default async function LocaleLayout({
       <Sidebar />
       <section className="w-full">
         <Header />
-        {children}
+        <main className="bg-white overflow-auto w-full h-[calc(100vh-102px)] p-8">
+          {children}
+          <SentryFeedbackWidget />
+        </main>
       </section>
     </main>
   );

@@ -4,8 +4,10 @@ import { Link, usePathname } from "@/modules/translations/i18n/routing";
 import { SignOutButton } from "@clerk/nextjs";
 import { Button, Image } from "@heroui/react";
 import { SidebarItem } from "./SidebarLink";
+import { useTranslations } from "next-intl";
 
 export const Sidebar: React.FC = () => {
+  const t = useTranslations("sidebar");
   const pathname = usePathname();
 
   const isActive = (path: string) => {
@@ -41,7 +43,7 @@ export const Sidebar: React.FC = () => {
               aria-hidden="true"
             />
           }
-          text="General"
+          text={t("general")}
           to="/app"
           isActive={isActive("/app")}
         />
@@ -53,7 +55,7 @@ export const Sidebar: React.FC = () => {
               aria-hidden="true"
             />
           }
-          text="Búsqueda"
+          text={t("search")}
           to="/app/busqueda"
           isActive={isActive("/app/busqueda")}
         />
@@ -65,7 +67,7 @@ export const Sidebar: React.FC = () => {
               aria-hidden="true"
             />
           }
-          text="Historial"
+          text={t("record")}
           to="/app/records"
           isActive={isActive("/app/records")}
         />
@@ -77,7 +79,7 @@ export const Sidebar: React.FC = () => {
               aria-hidden="true"
             />
           }
-          text="Créditos"
+          text={t("credits")}
           to="/app/credits"
           isActive={isActive("/app/credits")}
         />
@@ -89,7 +91,7 @@ export const Sidebar: React.FC = () => {
               aria-hidden="true"
             />
           }
-          text="Perfil"
+          text={t("profile")}
           to="/app/profile"
           isActive={isActive("/app/profile")}
         />
@@ -107,7 +109,7 @@ export const Sidebar: React.FC = () => {
               />
             }
           >
-            Cerrar sesión
+            {t("sign-out")}
           </Button>
         </SignOutButton>
       </div>

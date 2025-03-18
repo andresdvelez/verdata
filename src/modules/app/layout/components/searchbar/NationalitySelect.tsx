@@ -2,6 +2,7 @@ import { COUNTRIES } from "@/modules/app/data/countries";
 import { useSearchReportStore } from "@/modules/store/search-report-store";
 import { SearchFormInterface } from "@/types/app/search";
 import { Select, SelectItem } from "@heroui/react";
+import { useTranslations } from "next-intl";
 import { Control, Controller } from "react-hook-form";
 
 export const NationalitySelect = ({
@@ -9,7 +10,7 @@ export const NationalitySelect = ({
 }: {
   control: Control<SearchFormInterface>;
 }) => {
-  // const t = useTranslations();
+  const t = useTranslations("nationality-select");
 
   const setSearchDocumentLabel = useSearchReportStore(
     (state) => state.setSearchDocumentLabel
@@ -29,7 +30,7 @@ export const NationalitySelect = ({
           isInvalid={!!error}
           errorMessage={error?.message}
           radius="full"
-          label="nationality"
+          label={t("label")}
           variant="flat"
           className="bg-transparent min-w-[235px]"
           classNames={{

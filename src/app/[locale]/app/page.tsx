@@ -16,7 +16,7 @@ const AppPage = async () => {
     );
 
   return (
-    <main className="py-12 px-8 w-full h-[calc(100vh-89px)] flex flex-col gap-10 bg-white overflow-auto">
+    <div className="flex flex-col gap-10 ">
       <aside className="flex gap-4 w-full">
         <div className="border border-primary w-1/3 h-60"></div>
         <div className="border border-primary w-1/3 h-60"></div>
@@ -29,7 +29,7 @@ const AppPage = async () => {
         </div>
         <RecordsTable />
       </aside>
-    </main>
+    </div>
   );
 };
 

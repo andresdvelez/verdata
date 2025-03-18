@@ -5,6 +5,7 @@ import {
 import { useSearchReportStore } from "@/modules/store/search-report-store";
 import { SearchFormInterface } from "@/types/app/search";
 import { Select, SelectItem } from "@heroui/react";
+import { useTranslations } from "next-intl";
 import { Control, Controller } from "react-hook-form";
 
 export const SearchTypeSelect = ({
@@ -12,7 +13,7 @@ export const SearchTypeSelect = ({
 }: {
   control: Control<SearchFormInterface>;
 }) => {
-  // const t = useTranslations();
+  const t = useTranslations("search-type-select");
 
   const searchDocumentLabel = useSearchReportStore(
     (state) => state.searchDocumentLabel
@@ -32,7 +33,7 @@ export const SearchTypeSelect = ({
           isInvalid={!!error}
           errorMessage={error?.message}
           radius="full"
-          label="searchType"
+          label={t("label")}
           variant="flat"
           className="bg-transparent min-w-[235px]"
           classNames={{
@@ -48,7 +49,7 @@ export const SearchTypeSelect = ({
           {...field}
         >
           <SelectItem key={SEARCH_TYPE_NAME} data-value={SEARCH_TYPE_NAME}>
-            Nombre
+            {t("name")}
           </SelectItem>
           <SelectItem key={SEARCH_TYPE_ID} data-value={SEARCH_TYPE_ID}>
             {searchDocumentLabel}

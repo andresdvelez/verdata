@@ -2,6 +2,7 @@ import { SEARCH_TYPE_NAME } from "@/modules/app/constants/search";
 import { useSearchReportStore } from "@/modules/store/search-report-store";
 import { SearchFormInterface } from "@/types/app/search";
 import { Input } from "@heroui/react";
+import { useTranslations } from "next-intl";
 import { Control, Controller } from "react-hook-form";
 
 export const SearchInput = ({
@@ -9,6 +10,8 @@ export const SearchInput = ({
 }: {
   control: Control<SearchFormInterface>;
 }) => {
+  const t = useTranslations("search-data-input");
+
   const localSearchType = useSearchReportStore(
     (state) => state.localSearchType
   );
@@ -39,12 +42,12 @@ export const SearchInput = ({
             localSearchType !== SEARCH_TYPE_NAME && warningLabel
               ? warningLabel
               : localSearchType === SEARCH_TYPE_NAME
-              ? "Nombre"
+              ? t("name")
               : searchDocumentLabel
           }
           placeholder={
             localSearchType === SEARCH_TYPE_NAME
-              ? "Nombre"
+              ? t("name")
               : searchDocumentLabel
           }
           {...field}
