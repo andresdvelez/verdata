@@ -3,56 +3,60 @@
 import { useAuth } from "@clerk/nextjs";
 import * as Sentry from "@sentry/nextjs";
 import { useEffect, useState } from "react";
-import { useLocale } from "next-intl";
-import { getTranslations } from "@/modules/translations/lib/translations";
+import { useLocale, useTranslations } from "next-intl";
 
-function createWidget(locale: "en" | "es") {
-  const feedbackTexts = getTranslations(locale);
-
-  return Sentry.getFeedback()?.createWidget({
-    triggerLabel: feedbackTexts.triggerLabel,
-    triggerAriaLabel: feedbackTexts.triggerLabel,
-    formTitle: feedbackTexts.formTitle,
-    submitButtonLabel: feedbackTexts.submitButtonLabel,
-    cancelButtonLabel: feedbackTexts.cancelButtonLabel,
-    nameLabel: feedbackTexts.nameLabel,
-    namePlaceholder: feedbackTexts.namePlaceholder,
-    emailLabel: feedbackTexts.emailLabel,
-    emailPlaceholder: feedbackTexts.emailPlaceholder,
-    isRequiredLabel: feedbackTexts.isRequiredText,
-    messageLabel: feedbackTexts.messageLabel,
-    messagePlaceholder: feedbackTexts.messagePlaceholder,
-    successMessageText: feedbackTexts.successMessageText,
-    addScreenshotButtonLabel: feedbackTexts.addScreenshotButtonLabel,
-    removeScreenshotButtonLabel: feedbackTexts.removeScreenshotButtonLabel,
-  });
-}
-
-const useFeedbackWidget = (shouldMount: boolean) => {
-  const locale = useLocale();
-  const [widget, setWidget] = useState<ReturnType<typeof createWidget> | null>(
-    null
-  );
+const SentryFeedbackWidget = () => {
+  const auth = useAuth();
+  const locale = useLocale() as "en" | "es";
+  const t = useTranslations("feedback");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [widget, setWidget] = useState<any | null>(null);
+  const shouldMount = !!auth?.isSignedIn;
 
   useEffect(() => {
-    const handleWidget = () => {
+    const timeoutId = setTimeout(() => {
       if (shouldMount) {
         if (widget) {
           try {
             widget.removeFromDom();
           } catch (error) {
-            throw new Error(
-              "Failed to remove widget, it may already be removed",
-              error as ErrorOptions | undefined
-            );
+            console.error("Failed to remove existing widget:", error);
           }
         }
 
         try {
-          const newWidget = createWidget(locale as "en" | "es");
+          const feedbackApi = Sentry.getFeedback();
+
+          if (!feedbackApi) {
+            console.error("Sentry feedback API not available");
+            return;
+          }
+
+          const newWidget = feedbackApi.createWidget({
+            triggerLabel: t("triggerLabel"),
+            triggerAriaLabel: t("triggerLabel"),
+            formTitle: t("formTitle"),
+            submitButtonLabel: t("submitButtonLabel"),
+            cancelButtonLabel: t("cancelButtonLabel"),
+            nameLabel: t("nameLabel"),
+            namePlaceholder: t("namePlaceholder"),
+            emailLabel: t("emailLabel"),
+            emailPlaceholder: t("emailPlaceholder"),
+            isRequiredLabel: t("isRequiredText"),
+            messageLabel: t("messageLabel"),
+            messagePlaceholder: t("messagePlaceholder"),
+            successMessageText: t("successMessageText"),
+            addScreenshotButtonLabel: t("addScreenshotButtonLabel"),
+            removeScreenshotButtonLabel: t("removeScreenshotButtonLabel"),
+            confirmButtonLabel: t("confirmButtonLabel"),
+          });
+
           setWidget(newWidget);
         } catch (error) {
-          console.error("Error creating Sentry feedback widget:", error);
+          console.error(
+            "Error creating or mounting Sentry feedback widget:",
+            error
+          );
         }
       } else if (widget) {
         try {
@@ -60,33 +64,23 @@ const useFeedbackWidget = (shouldMount: boolean) => {
           setWidget(null);
         } catch (error) {
           setWidget(null);
-          throw new Error(
-            "Failed to remove widget, it may already be removed",
-            error as ErrorOptions | undefined
-          );
+          console.error("Failed to remove widget:", error);
         }
       }
-    };
-
-    const timeoutId = setTimeout(handleWidget, 0);
+    }, 500);
 
     return () => {
       clearTimeout(timeoutId);
       if (widget) {
         try {
           widget.removeFromDom();
-        } catch {
-          // Ignore errors during cleanup
+        } catch (error) {
+          console.error("Error during cleanup:", error);
         }
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shouldMount, locale]);
-};
-
-const SentryFeedbackWidget = () => {
-  const auth = useAuth();
-  useFeedbackWidget(!!auth?.isSignedIn);
+  }, [shouldMount, locale, t]);
 
   return null;
 };
