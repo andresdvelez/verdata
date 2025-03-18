@@ -38,9 +38,12 @@ model Balance {
 }
 
 model Report {
-  id         String   @id @default(cuid())
-  user_id    String
-  user       User     @relation(fields: [user_id], references: [id])
-  data       String
-  created_at DateTime @default(now())
+  id          String   @id @default(cuid())
+  user_id     String
+  user        User     @relation(fields: [user_id], references: [id])
+  data        String
+  nationality String
+  searchData  String
+  searchType  String
+  created_at  DateTime @default(now())
 }

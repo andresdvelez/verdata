@@ -3,9 +3,9 @@ import React from "react";
 
 const ProfilePage = () => {
   return (
-    <main className="py-12 px-8 w-full h-[calc(100vh-89px)] flex gap-8 bg-white overflow-auto">
+    <div className="flex gap-8">
       <UserProfile />
-    </main>
+    </div>
   );
 };
 

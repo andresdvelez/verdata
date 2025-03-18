@@ -72,7 +72,7 @@ export const ClientSideRightSection = () => {
 
         {/* Floating elements */}
         <div
-          className="absolute bottom-40 left-40 floating-tag z-20"
+          className="absolute bottom-40 left-24 2xl:left-40 floating-tag z-20"
           style={
             {
               "--index": "0",
@@ -82,39 +82,39 @@ export const ClientSideRightSection = () => {
           }
         >
           <div className="-rotate-[20deg] bg-black text-white px-10 py-6 rounded-full">
-            <span className="text-5xl font-semibold">verdata.co</span>
+            <span className="text-4xl 2xl:text-5xl font-semibold">verdata.co</span>
           </div>
         </div>
 
         <div
-          className="absolute bottom-24 left-[26rem] floating-tag z-10"
+          className="absolute bottom-24 left-[20rem] 2xl:left-[26rem] floating-tag z-10"
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           style={{ "--index": "1" } as any}
         >
           <div className="rotate-[22deg] px-10 py-6 rounded-3xl text-white bg-purple-400">
-            <span className="text-3xl font-medium">Conoce a tu cliente</span>
+            <span className="text-2xl 2xl:text-3xl font-medium">Conoce a tu cliente</span>
           </div>
         </div>
 
         <div
-          className="absolute bottom-10 left-60  text-center text-black  floating-tag"
+          className="absolute bottom-10 left-40 2xl:left-60  text-center text-black  floating-tag"
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           style={{ "--index": "2" } as any}
         >
           <div className="px-10 py-6 rounded-3xl bg-[#E6FD70] max-w-72">
-            <span className="text-3xl font-medium">
+            <span className="text-2xl 2xl:text-3xl font-medium">
               Una solución integral para tí
             </span>
           </div>
         </div>
 
         <div
-          className="absolute bottom-28 left-[39rem] z-20  text-center text-black  floating-tag"
+          className="absolute bottom-28 left-[30rem] 2xl:left-[39rem] z-20  text-center text-black  floating-tag"
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           style={{ "--index": "3" } as any}
         >
-          <div className="rotate-[15deg] px-5 py-4 bg-white border border-primary rounded-full">
-            <span className="text-xl font-medium">Reportes en WhatsApp</span>
+          <div className="rotate-[20deg] 2xl:rotate-[15deg] px-5 py-4 bg-white border border-primary rounded-full w-max">
+            <span className="text-lg 2xl:text-xl font-medium">Reportes en WhatsApp</span>
           </div>
         </div>
       </div>

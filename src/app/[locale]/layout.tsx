@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect, routing } from "@/modules/translations/i18n/routing";
-import { NextIntlClientProvider } from "next-intl";
+import { AbstractIntlMessages, NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { bricolageGrotesque } from "@/config/fonts.config";
 import { ClientWrapper } from "@/modules/core/components/ClientWrapper";
@@ -60,7 +60,9 @@ export default async function LocaleLayout({
         className={`${bricolageGrotesque.variable} font-bricolage antialiased bg-background`}
       >
         <ClientWrapper>
-          <NextIntlClientProvider messages={messages}>
+          <NextIntlClientProvider
+            messages={messages.default as AbstractIntlMessages}
+          >
             {children}
           </NextIntlClientProvider>
         </ClientWrapper>

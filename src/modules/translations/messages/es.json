@@ -1,6 +1,1 @@
-{
-    "HomePage": {
-        "title": "Hola mundo",
-        "about": "ir a la pagina de about"
-    }
-}
+{"default":{"constants":{"number-of-document":"# de documento"},"nationality-select":{"label":"Seleccione una nacionalidad"},"searchbar":{"search":"Buscar"},"search-data-input":{"name":"Nombre"},"search-type-select":{"label":"Buscar por","name":"Nombre"},"sidebar":{"credits":"Créditos","general":"General","profile":"Perfil","record":"Historial","search":"Buscar","sign-out":"desconectar"}}}

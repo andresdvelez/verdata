@@ -1,11 +1,11 @@
 import { create } from "zustand";
-import { User } from "@prisma/client";
+import { UserType } from "@/types/app/users";
 
 interface UserState {
-  user: User | null;
+  user: UserType | null;
   isLoading: boolean;
   error: string | null;
-  setUser: (user: User | null) => void;
+  setUser: (user: UserType | null) => void;
   fetchUser: (clerkId: string) => Promise<void>;
 }
 

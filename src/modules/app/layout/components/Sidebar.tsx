@@ -1,18 +1,26 @@
 "use client";
 
-import { Link } from "@/modules/translations/i18n/routing";
+import { Link, usePathname } from "@/modules/translations/i18n/routing";
 import { SignOutButton } from "@clerk/nextjs";
 import { Button, Image } from "@heroui/react";
-import { useState } from "react";
 import { SidebarItem } from "./SidebarLink";
+import { useTranslations } from "next-intl";
 
 export const Sidebar: React.FC = () => {
-  const [activeItem, setActiveItem] = useState("general");
+  const t = useTranslations("sidebar");
+  const pathname = usePathname();
+
+  const isActive = (path: string) => {
+    if (path === "/app") {
+      return pathname === "/app";
+    }
+    return pathname.startsWith(path);
+  };
 
   return (
-    <aside className="h-screen w-[283px] px-16 border-r border-primary flex flex-col bg-background">
+    <aside className="h-screen w-[260px] 2xl:w-[283px] px-10 2xl:px-16 border-r border-primary flex flex-col bg-background">
       <div className="h-[89px] flex items-center justify-center mb-4">
-        <Link href="/app" className="flex items-center gap-2 px-2">
+        <Link href="/app" className="flex items-center gap-2">
           <Image
             src="/brand/logotype.png"
             alt="Verdata logotipo"
@@ -35,10 +43,9 @@ export const Sidebar: React.FC = () => {
               aria-hidden="true"
             />
           }
-          text="General"
+          text={t("general")}
           to="/app"
-          isActive={activeItem === "general"}
-          onClick={() => setActiveItem("general")}
+          isActive={isActive("/app")}
         />
         <SidebarItem
           icon={
@@ -48,10 +55,9 @@ export const Sidebar: React.FC = () => {
               aria-hidden="true"
             />
           }
-          text="Búsqueda"
+          text={t("search")}
           to="/app/busqueda"
-          isActive={activeItem === "busqueda"}
-          onClick={() => setActiveItem("busqueda")}
+          isActive={isActive("/app/busqueda")}
         />
         <SidebarItem
           icon={
@@ -61,10 +67,9 @@ export const Sidebar: React.FC = () => {
               aria-hidden="true"
             />
           }
-          text="Historial"
+          text={t("record")}
           to="/app/records"
-          isActive={activeItem === "historial"}
-          onClick={() => setActiveItem("historial")}
+          isActive={isActive("/app/records")}
         />
         <SidebarItem
           icon={
@@ -74,10 +79,9 @@ export const Sidebar: React.FC = () => {
               aria-hidden="true"
             />
           }
-          text="Créditos"
+          text={t("credits")}
           to="/app/credits"
-          isActive={activeItem === "creditos"}
-          onClick={() => setActiveItem("creditos")}
+          isActive={isActive("/app/credits")}
         />
         <SidebarItem
           icon={
@@ -87,10 +91,9 @@ export const Sidebar: React.FC = () => {
               aria-hidden="true"
             />
           }
-          text="Perfil"
+          text={t("profile")}
           to="/app/profile"
-          isActive={activeItem === "perfil"}
-          onClick={() => setActiveItem("perfil")}
+          isActive={isActive("/app/profile")}
         />
       </nav>
 
@@ -106,7 +109,7 @@ export const Sidebar: React.FC = () => {
               />
             }
           >
-            Cerrar sesión
+            {t("sign-out")}
           </Button>
         </SignOutButton>
       </div>
