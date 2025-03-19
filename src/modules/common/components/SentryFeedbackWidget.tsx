@@ -74,8 +74,8 @@ const SentryFeedbackWidget = () => {
       if (widget) {
         try {
           widget.removeFromDom();
-        } catch (error) {
-          console.error("Error during cleanup:", error);
+        } catch {
+          // Ignore error
         }
       }
     };

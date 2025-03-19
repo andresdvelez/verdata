@@ -8,9 +8,7 @@ import {
 import { parseCountry } from "../app/utils/parseCountry";
 import { FetchData } from "@/types/app/endpoints";
 import { UserSearchByName } from "@/types/app/users";
-import { listNames } from "../app/services/listNames";
 import { UserIdentity, UserNotFound } from "@/types/app/user-identity";
-import { getIdentityByDocument } from "../app/services/identityValidation";
 import { useUserStore } from "./user-store";
 
 interface SearchReportState {
@@ -75,7 +73,7 @@ export const useSearchReportStore = create<SearchReportState>()(
         setSearchDocumentLabel: (value) => {
           set({ searchDocumentLabel: value });
         },
-        searchByName: async (countryCode: string, searchName: string) => {
+        searchByName: async (countryCode: string /* searchName: string */) => {
           set({
             isLoading: true,
             isPresearch: true,
@@ -83,12 +81,18 @@ export const useSearchReportStore = create<SearchReportState>()(
             nationalData: [],
             internationalData: [],
           });
-          const usersByName = await listNames({
-            countryCode: parseCountry(countryCode),
-            searchName,
-          });
+
+          // Simulate API call with a promise that resolves after 10 seconds
+          await new Promise((resolve) => setTimeout(resolve, 10000));
+
+          // TODO: Replace with actual API call when endpoint is ready
+          // const usersByName = await listNames({
+          //   countryCode: parseCountry(countryCode),
+          //   searchName,
+          // });
+
           set({
-            usersByName,
+            usersByName: [], // This would be the result from the API
             isEmpty: false,
             isLoading: false,
           });
@@ -183,7 +187,7 @@ export const useSearchReportStore = create<SearchReportState>()(
             //   userIdentity,
             // });
           },
-        searchById: async (countryCode: string, searchId: string) => {
+        searchById: async (countryCode: string /* searchId: string */) => {
           set({
             isEmpty: false,
             isLoading: true,
@@ -194,25 +198,25 @@ export const useSearchReportStore = create<SearchReportState>()(
             nationalData: [],
             internationalData: [],
           });
-          const userIdentity = await getIdentityByDocument({
-            country: parseCountry(countryCode),
-            identification: searchId,
-          });
-          set({ userIdentity });
-          if ("error" in userIdentity) {
-            return set({
-              isLoading: false,
-              userIdentity: null,
-              isSearchVideoActive: false,
-              matchedNationals: false,
-              matchedInternationals: false,
-            });
-          }
-          const nationalEndpoints = await get().getNationalEndpoints(
-            countryCode
-          );
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          await get().handleSearch(userIdentity, nationalEndpoints as any);
+          // TODO: Search by document
+          // const userIdentity = await getIdentityByDocument({
+          //   country: parseCountry(countryCode),
+          //   identification: searchId,
+          // });
+          // set({ userIdentity });
+          // if ("error" in userIdentity) {
+          //   return set({
+          //     isLoading: false,
+          //     userIdentity: null,
+          //     isSearchVideoActive: false,
+          //     matchedNationals: false,
+          //     matchedInternationals: false,
+          //   });
+          // }
+          // const nationalEndpoints = await get().getNationalEndpoints(
+          //   countryCode
+          // );
+          // await get().handleSearch(userIdentity, nationalEndpoints as any);
         },
         setSearchWarning: (value) => {
           set({ warningLabel: value });
@@ -228,6 +232,6 @@ export const useSearchReportStore = create<SearchReportState>()(
     )
   )
 );
-function get() {
-  return useSearchReportStore.getState();
-}
+// function get() {
+//   return useSearchReportStore.getState();
+// }
