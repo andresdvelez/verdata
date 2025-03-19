@@ -41,6 +41,7 @@ export const Sidebar: React.FC = () => {
               className="icon-[topcoat--home] size-5"
               role="img"
               aria-hidden="true"
+              id="tooltip-select-1"
             />
           }
           text={t("general")}
@@ -56,8 +57,8 @@ export const Sidebar: React.FC = () => {
             />
           }
           text={t("search")}
-          to="/app/busqueda"
-          isActive={isActive("/app/busqueda")}
+          to="/app/search"
+          isActive={isActive("/app/search")}
         />
         <SidebarItem
           icon={

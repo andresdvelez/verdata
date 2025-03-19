@@ -22,6 +22,7 @@ export const SearchBar = () => {
   const router = useRouter();
   const searchByName = useSearchReportStore((state) => state.searchByName);
   const searchById = useSearchReportStore((state) => state.searchById);
+  const isLoading = useSearchReportStore((state) => state.isLoading);
 
   const { control, handleSubmit, reset } = useForm<SearchFormInterface>({
     resolver: zodResolver(searchSchema),
@@ -40,7 +41,7 @@ export const SearchBar = () => {
       searchById(nationality, searchInput);
     }
     reset();
-    router.push(`/user-space/search`);
+    router.push(`/app/search`);
   };
 
   return (
@@ -54,6 +55,8 @@ export const SearchBar = () => {
         <SearchInput control={control} />
       </div>
       <Button
+        id="tooltip-select-0"
+        isLoading={isLoading}
         variant="solid"
         radius="none"
         className="px-8 text-lg"
