@@ -18,19 +18,17 @@ export const Sidebar: React.FC = () => {
   };
 
   return (
-    <aside className="h-screen w-[260px] 2xl:w-[283px] px-10 2xl:px-16 border-r border-primary flex flex-col bg-background">
+    <aside className="h-screen w-[260px] 2xl:w-[283px] border-r border-primary flex flex-col items-center bg-background">
       <div className="h-[89px] flex items-center justify-center mb-4">
         <Link href="/app" className="flex items-center gap-2">
           <Image
             src="/brand/logotype.png"
             alt="Verdata logotipo"
             classNames={{
-              wrapper: "size-11",
+              wrapper: "size-[38px]",
             }}
           />
-          <span className="text-3xl font-medium text-sidebar-primary">
-            Verdata
-          </span>
+          <span className="text-3xl text-sidebar-primary">Verdata</span>
         </Link>
       </div>
 
@@ -46,7 +44,7 @@ export const Sidebar: React.FC = () => {
           }
           text={t("general")}
           to="/app"
-          isActive={isActive("/app")}
+          isActive={isActive("/app") || isActive("/")}
         />
         <SidebarItem
           icon={
