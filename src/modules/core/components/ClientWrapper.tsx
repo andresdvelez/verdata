@@ -18,7 +18,7 @@ export const ClientWrapper = ({ children }: { children: ReactNode }) => {
       <ClerkProvider
         localization={locale === "en" ? enUS : esES}
         afterSignOutUrl={"/auth/sign-in"}
-        waitlistUrl="/auth/whitelist"
+        waitlistUrl="/auth/waitlist"
       >
         <SchematicProvider
           publishableKey={process.env.NEXT_PUBLIC_SCHEMATIC_PUBLISHABLE_KEY!}
