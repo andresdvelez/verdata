@@ -1,5 +1,3 @@
-"use client";
-
 import { useUserStore } from "@/modules/store/user-store";
 import {
   Table,
@@ -9,19 +7,23 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/react";
-import { RECORDS_TABLE_COLUMNS } from "../data/reports-table-columns";
+import { recordsTableColumns } from "../data/reports-table-columns";
 import { Report } from "@prisma/client";
 import { RenderCell } from "./RecordsTableCell";
+import { useTranslations } from "next-intl";
+import { RecordsTableEmpty } from "./RecordsTableEmpty";
 
 export const RecordsTable = () => {
+  const t = useTranslations("records-table");
+
   const user = useUserStore((state) => state.user);
   const isLoading = useUserStore((state) => state.isLoading);
 
   const { cell } = RenderCell();
 
-  const reports = user?.searched_reports;
+  const columns = recordsTableColumns(t);
 
-  if (!reports) return;
+  const reports = user?.searched_reports;
 
   return (
     <Table
@@ -43,7 +45,7 @@ export const RecordsTable = () => {
         </div>
       }
     >
-      <TableHeader columns={RECORDS_TABLE_COLUMNS}>
+      <TableHeader columns={columns}>
         {(column) => (
           <TableColumn
             key={column.uid}
@@ -55,11 +57,11 @@ export const RecordsTable = () => {
       </TableHeader>
       <TableBody
         isLoading={isLoading}
-        items={reports as Report[]}
-        emptyContent={"No hay datos para mostrar."}
+        items={(reports as Report[]) || []}
+        emptyContent={<RecordsTableEmpty />}
       >
         {(item) => (
-          <TableRow key={`${item.id}`}>
+          <TableRow key={`${item?.id}`}>
             {(columnKey) => <TableCell>{cell(item, columnKey)}</TableCell>}
           </TableRow>
         )}

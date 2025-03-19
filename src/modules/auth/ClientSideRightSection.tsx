@@ -3,8 +3,11 @@
 import { RoundedButton } from "../common/components/RoundedButton";
 import { usePathname } from "../translations/i18n/routing";
 import { AnimatedCurveSvg } from "../common/components/AnimatedCurveSvg";
+import { useTranslations } from "next-intl";
 
 export const ClientSideRightSection = () => {
+  const t = useTranslations("auth");
+
   const pathname = usePathname();
   const isWaitlist = pathname === "/auth/waitlist";
   const isSignIn = pathname === "/auth/sign-in";
@@ -33,15 +36,15 @@ export const ClientSideRightSection = () => {
           <div className="absolute inset-0 -inset-y-[3rem] inset-x-[4rem] w-full h-full flex flex-col justify-center items-center text-white p-12">
             <div className="max-w-lg text-left">
               <h2 className="text-5xl font-bold mb-6 leading-tight">
-                Consultas{" "}
+                {t("queries")}{" "}
                 <span className="relative inline-block">
-                  diseñadas
+                  {t("designed")}
                   <div className="absolute -bottom-2 left-0 right-0">
                     <AnimatedCurveSvg />
                   </div>
                 </span>
-                <br /> con base en tus <br />
-                necesidades***
+                <br /> {t("based-on")} <br />
+                {t("needs")}***
               </h2>
             </div>
           </div>
@@ -49,22 +52,22 @@ export const ClientSideRightSection = () => {
           <div className="absolute inset-0 -inset-y-[3rem] inset-x-[4rem] w-full h-full flex flex-col justify-center items-center text-white">
             <div className="max-w-lg text-center text-primary">
               <p className="font-bold text-9xl">+130</p>
-              <span className=" text-6xl font-bold">millones</span>
-              <p className="text-xl"> de datos consultados.</p>
+              <span className=" text-6xl font-bold">{t("millions")}</span>
+              <p className="text-xl"> {t("reports-consulted")}.</p>
             </div>
           </div>
         ) : (
           <div className="absolute inset-0 -inset-y-[3rem] inset-x-[4rem] w-full h-full flex flex-col justify-center items-center text-white p-12">
             <div className="max-w-lg text-left">
               <h2 className="text-5xl font-bold mb-6 leading-tight">
-                Consultas{" "}
+                {t("queries")}{" "}
                 <span className="relative inline-block">
-                  diseñadas
+                  {t("designed")}
                   <span className="absolute -top-1 left-0 right-0 mx-auto w-full h-[1.5px] bg-white/70 rounded-full"></span>
                   <span className="absolute -bottom-1 left-0 right-0 mx-auto w-full h-[1.5px] bg-white/70 rounded-full"></span>
                 </span>
-                <br /> con base en tus <br />
-                necesidades***
+                <br /> {t("based-on")} <br />
+                {t("needs")}***
               </h2>
             </div>
           </div>
@@ -95,19 +98,19 @@ export const ClientSideRightSection = () => {
         >
           <div className="rotate-[22deg] px-10 py-6 rounded-3xl text-white bg-purple-400">
             <span className="text-2xl 2xl:text-3xl font-medium">
-              Conoce a tu cliente
+              {t("know-your-costumer")}
             </span>
           </div>
         </div>
 
         <div
-          className="absolute bottom-10 left-40 2xl:left-60  text-center text-black  floating-tag"
+          className="absolute bottom-10 left-40 2xl:left-48  text-center text-black  floating-tag"
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           style={{ "--index": "2" } as any}
         >
-          <div className="px-10 py-6 rounded-3xl bg-[#E6FD70] max-w-72">
+          <div className="px-8 py-6 rounded-3xl bg-[#E6FD70] max-w-[350px]">
             <span className="text-2xl 2xl:text-3xl font-medium">
-              Una solución integral para tí
+              {t("a-solution-for-you")}
             </span>
           </div>
         </div>
@@ -119,7 +122,7 @@ export const ClientSideRightSection = () => {
         >
           <div className="rotate-[20deg] 2xl:rotate-[15deg] px-5 py-4 bg-white border border-primary rounded-full w-max">
             <span className="text-lg 2xl:text-xl font-medium">
-              Reportes en WhatsApp
+              {t("reports-on")} WhatsApp
             </span>
           </div>
         </div>

@@ -1,8 +1,8 @@
 "use server";
 
-import { RecordsTable } from "@/modules/app/common/components/RecordsTable";
+import { RecordsTableLayout } from "@/modules/core/components/RecordsTable";
 import { currentUser } from "@clerk/nextjs/server";
-import { Spinner } from "@heroui/react";
+import { Card, Spinner } from "@heroui/react";
 import React from "react";
 
 const AppPage = async () => {
@@ -18,17 +18,11 @@ const AppPage = async () => {
   return (
     <div className="flex flex-col gap-10 ">
       <aside className="flex gap-4 w-full">
-        <div className="border border-primary w-1/3 h-60"></div>
-        <div className="border border-primary w-1/3 h-60"></div>
-        <div className="border border-primary w-1/3 h-60"></div>
+        <Card className="w-1/3 h-60 bg-yellow-50" shadow="sm"></Card>
+        <Card className="w-1/3 h-60 bg-blue-50" shadow="sm"></Card>
+        <Card className="w-1/3 h-60 bg-red-50" shadow="sm"></Card>
       </aside>
-      <aside className="flex flex-col gap-8">
-        <div className="">
-          <h2 className="text-5xl font-semibold">Historial</h2>
-          <p className="text-lg font-medium">Últimas búsquedas</p>
-        </div>
-        <RecordsTable />
-      </aside>
+      <RecordsTableLayout />
     </div>
   );
 };
