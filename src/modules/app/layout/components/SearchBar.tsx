@@ -46,7 +46,7 @@ export const SearchBar = () => {
 
   return (
     <form
-      className="flex items-center justify-center gap-x-8 flex-1"
+      className="flex items-center justify-center flex-1"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex items-center *:border-r border-black/35 *:px-1">
@@ -59,7 +59,7 @@ export const SearchBar = () => {
         isLoading={isLoading}
         variant="solid"
         radius="none"
-        className="px-8 text-lg"
+        className="px-8 font-medium text-lg"
         color="primary"
         type="submit"
         startContent={

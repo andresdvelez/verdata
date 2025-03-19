@@ -1,5 +1,6 @@
-import { SignedIn, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { SearchBar } from "./SearchBar";
+import { SignedOutActions } from "./SignedOutActions";
 
 export const Header = () => {
   return (
@@ -11,6 +12,9 @@ export const Header = () => {
             <UserButton showName />
           </div>
         </SignedIn>
+        <SignedOut>
+          <SignedOutActions />
+        </SignedOut>
       </div>
     </header>
   );

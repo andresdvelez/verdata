@@ -36,7 +36,7 @@ export const ClientSideRightSection = () => {
           <div className="absolute inset-0 -inset-y-[3rem] inset-x-[4rem] w-full h-full flex flex-col justify-center items-center text-white p-12">
             <div className="max-w-lg text-left">
               <h2 className="text-5xl font-bold mb-6 leading-tight">
-                {t("queries")}{" "}
+                {t("consults")}{" "}
                 <span className="relative inline-block">
                   {t("designed")}
                   <div className="absolute -bottom-2 left-0 right-0">
@@ -60,7 +60,7 @@ export const ClientSideRightSection = () => {
           <div className="absolute inset-0 -inset-y-[3rem] inset-x-[4rem] w-full h-full flex flex-col justify-center items-center text-white p-12">
             <div className="max-w-lg text-left">
               <h2 className="text-5xl font-bold mb-6 leading-tight">
-                {t("queries")}{" "}
+                {t("consults")}{" "}
                 <span className="relative inline-block">
                   {t("designed")}
                   <span className="absolute -top-1 left-0 right-0 mx-auto w-full h-[1.5px] bg-white/70 rounded-full"></span>
