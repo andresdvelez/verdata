@@ -1,9 +1,8 @@
-import React from 'react'
+import { RecordsTableLayout } from "@/modules/core/components/RecordsTable";
+import React from "react";
 
 const RecordsPage = () => {
-  return (
-    <div>RecordsPage</div>
-  )
-}
+  return <RecordsTableLayout />;
+};
 
-export default RecordsPage
+export default RecordsPage;
