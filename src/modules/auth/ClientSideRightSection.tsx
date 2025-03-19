@@ -6,12 +6,12 @@ import { AnimatedCurveSvg } from "../common/components/AnimatedCurveSvg";
 
 export const ClientSideRightSection = () => {
   const pathname = usePathname();
-  const isWhitelist = pathname === "/auth/whitelist";
+  const isWaitlist = pathname === "/auth/waitlist";
   const isSignIn = pathname === "/auth/sign-in";
   const isSignUp = pathname === "/auth/sign-up";
 
   const bgColorClass =
-    isSignIn || isWhitelist ? "bg-purple-500" : "bg-[#e5e5e7]";
+    isSignIn || isWaitlist ? "bg-purple-500" : "bg-[#e5e5e7]";
 
   return (
     <div className="purple-shape-container w-1/2 relative  hidden lg:block">
@@ -29,7 +29,7 @@ export const ClientSideRightSection = () => {
         </div>
 
         {/* Conditional content based on page */}
-        {isSignIn || isWhitelist ? (
+        {isSignIn || isWaitlist ? (
           <div className="absolute inset-0 -inset-y-[3rem] inset-x-[4rem] w-full h-full flex flex-col justify-center items-center text-white p-12">
             <div className="max-w-lg text-left">
               <h2 className="text-5xl font-bold mb-6 leading-tight">
@@ -82,7 +82,9 @@ export const ClientSideRightSection = () => {
           }
         >
           <div className="-rotate-[20deg] bg-black text-white px-10 py-6 rounded-full">
-            <span className="text-4xl 2xl:text-5xl font-semibold">verdata.co</span>
+            <span className="text-4xl 2xl:text-5xl font-semibold">
+              verdata.co
+            </span>
           </div>
         </div>
 
@@ -92,7 +94,9 @@ export const ClientSideRightSection = () => {
           style={{ "--index": "1" } as any}
         >
           <div className="rotate-[22deg] px-10 py-6 rounded-3xl text-white bg-purple-400">
-            <span className="text-2xl 2xl:text-3xl font-medium">Conoce a tu cliente</span>
+            <span className="text-2xl 2xl:text-3xl font-medium">
+              Conoce a tu cliente
+            </span>
           </div>
         </div>
 
@@ -114,7 +118,9 @@ export const ClientSideRightSection = () => {
           style={{ "--index": "3" } as any}
         >
           <div className="rotate-[20deg] 2xl:rotate-[15deg] px-5 py-4 bg-white border border-primary rounded-full w-max">
-            <span className="text-lg 2xl:text-xl font-medium">Reportes en WhatsApp</span>
+            <span className="text-lg 2xl:text-xl font-medium">
+              Reportes en WhatsApp
+            </span>
           </div>
         </div>
       </div>
