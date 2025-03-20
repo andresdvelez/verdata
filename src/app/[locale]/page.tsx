@@ -11,12 +11,12 @@ export default function Home() {
       <Sidebar />
       <section className="w-full h-full">
         <Header />
-        <aside className="py-12 px-8 w-full h-[calc(100vh-89px)] flex gap-8 bg-white overflow-auto">
-          <div className="w-full h-full flex-1 flex flex-col gap-6">
+        <aside className="p-8 w-full h-[calc(100vh-102px)] flex gap-8 bg-white overflow-auto">
+          <div className="w-2/3 h-full flex-1 flex flex-col gap-6">
             <DescriptionText />
             <StaticPricing />
           </div>
-          <div className="h-full w-[450px] flex flex-col gap-5">
+          <div className="h-full w-1/3 flex flex-col gap-5">
             <Benefits />
             <HowItWorks />
           </div>

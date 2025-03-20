@@ -104,11 +104,11 @@ export const ClientSideRightSection = () => {
         </div>
 
         <div
-          className="absolute bottom-10 left-40 2xl:left-48  text-center text-black  floating-tag"
+          className="absolute bottom-10 left-36 2xl:left-48 text-center text-black  floating-tag"
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           style={{ "--index": "2" } as any}
         >
-          <div className="px-8 py-6 rounded-3xl bg-[#E6FD70] max-w-[350px]">
+          <div className="px-8 py-6 rounded-3xl bg-[#E6FD70] max-w-[300px] 2xl:max-w-[320px]">
             <span className="text-2xl 2xl:text-3xl font-medium">
               {t("a-solution-for-you")}
             </span>

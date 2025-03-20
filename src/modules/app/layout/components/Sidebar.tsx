@@ -1,14 +1,23 @@
 "use client";
 
-import { Link, usePathname } from "@/modules/translations/i18n/routing";
-import { SignOutButton } from "@clerk/nextjs";
+import {
+  Link,
+  usePathname,
+  useRouter,
+} from "@/modules/translations/i18n/routing";
+import { SignedOut, SignOutButton } from "@clerk/nextjs";
 import { Button, Image } from "@heroui/react";
 import { SidebarItem } from "./SidebarLink";
 import { useTranslations } from "next-intl";
+import { useUserStore } from "@/modules/store/user-store";
 
 export const Sidebar: React.FC = () => {
   const t = useTranslations("sidebar");
   const pathname = usePathname();
+  const router = useRouter();
+
+  const user = useUserStore((state) => state.user);
+  const isLoading = useUserStore((state) => state.isLoading);
 
   const isActive = (path: string) => {
     if (path === "/app") {
@@ -18,17 +27,19 @@ export const Sidebar: React.FC = () => {
   };
 
   return (
-    <aside className="h-screen w-[260px] 2xl:w-[283px] border-r border-primary flex flex-col items-center bg-background">
+    <aside className="h-screen w-[270px] 2xl:w-[283px] border-r border-primary flex flex-col items-center bg-background">
       <div className="h-[89px] flex items-center justify-center mb-4">
         <Link href="/app" className="flex items-center gap-2">
           <Image
             src="/brand/logotype.png"
             alt="Verdata logotipo"
             classNames={{
-              wrapper: "size-[38px]",
+              wrapper: "size-8 2xl:size-[38px]",
             }}
           />
-          <span className="text-3xl text-sidebar-primary">Verdata</span>
+          <span className="text-2xl 2xl:text-3xl text-sidebar-primary">
+            Verdata
+          </span>
         </Link>
       </div>
 
@@ -97,8 +108,9 @@ export const Sidebar: React.FC = () => {
       </nav>
 
       <div className="mt-auto py-3">
-        <SignOutButton redirectUrl={`/auth/sign-in`}>
+        <SignedOut>
           <Button
+            onPress={() => router.push("/auth/waitlist")}
             variant="light"
             startContent={
               <i
@@ -108,9 +120,26 @@ export const Sidebar: React.FC = () => {
               />
             }
           >
-            {t("sign-out")}
+            {t("sign-up")}
           </Button>
-        </SignOutButton>
+        </SignedOut>
+        {user && (
+          <SignOutButton redirectUrl={`/auth/sign-in`}>
+            <Button
+              variant="light"
+              isLoading={isLoading}
+              startContent={
+                <i
+                  className="icon-[mynaui--logout-solid] size-5"
+                  role="img"
+                  aria-hidden="true"
+                />
+              }
+            >
+              {t("sign-out")}
+            </Button>
+          </SignOutButton>
+        )}
       </div>
     </aside>
   );
