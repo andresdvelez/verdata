@@ -35,7 +35,7 @@ export const SearchTypeSelect = ({
           radius="full"
           label={t("label")}
           variant="flat"
-          className="bg-transparent min-w-[235px]"
+          className="bg-transparent min-w-[205px] 2xl:min-w-[235px]"
           classNames={{
             trigger:
               "py-0 min-h-2 bg-transparent shadow-none data-[hover=true]:bg-transparent mr-4",

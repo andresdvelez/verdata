@@ -20,7 +20,7 @@ interface PlansProps {
 export const Plans: React.FC<PlansProps> = ({ plans }) => {
   return (
     <div className="w-full">
-      <div className="flex flex-col md:flex-row gap-4 w-full max-w-6xl mx-auto">
+      <div className="flex flex-wrap gap-4 w-full max-w-6xl mx-auto">
         {plans.map((plan) => (
           <div
             key={plan.id}
@@ -31,22 +31,26 @@ export const Plans: React.FC<PlansProps> = ({ plans }) => {
             }}
           >
             <div>
-              <h3 className="text-lg font-normal mb-8">{plan.tier}</h3>
+              <h3 className="text-lg font-normal mb-6 2xl:mb-8">{plan.tier}</h3>
 
-              <div className="text-6xl font-semibold mb-1">
+              <div className="text-5xl 2xl:text-6xl font-semibold mb-1">
                 {plan.consultations}
               </div>
-              <div className="text-xl">{plan.consultationsText}</div>
+              <div className="text-lg 2xl:text-xl">
+                {plan.consultationsText}
+              </div>
 
-              <div className="flex items-baseline mt-6">
-                <span className="text-5xl font-bold">{plan.price}</span>
+              <div className="flex items-baseline mt-2 2xl:mt-6">
+                <span className="text-4xl 2xl:text-5xl font-bold">
+                  {plan.price}
+                </span>
                 <span className="text-xl">{plan.priceDetail}</span>
               </div>
             </div>
 
             <Link
               href={plan.buttonLink}
-              className={`mt-8 block py-2 font-medium text-lg underline ${
+              className={`mt-6 2xl:mt-8 block py-2 font-medium text-lg underline ${
                 plan.backgroundColor === "white"
                   ? "text-black"
                   : plan.backgroundColor === "#8A70D6"

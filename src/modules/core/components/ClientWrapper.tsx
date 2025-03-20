@@ -18,6 +18,7 @@ export const ClientWrapper = ({ children }: { children: ReactNode }) => {
       <ClerkProvider
         localization={locale === "en" ? enUS : esES}
         afterSignOutUrl={"/auth/sign-in"}
+        signInFallbackRedirectUrl={"/app"}
         waitlistUrl="/auth/waitlist"
       >
         <SchematicProvider
