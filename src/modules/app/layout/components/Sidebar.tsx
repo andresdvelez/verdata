@@ -5,7 +5,7 @@ import {
   usePathname,
   useRouter,
 } from "@/modules/translations/i18n/routing";
-import { SignedOut, SignOutButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignOutButton } from "@clerk/nextjs";
 import { Button, Image } from "@heroui/react";
 import { SidebarItem } from "./SidebarLink";
 import { useTranslations } from "next-intl";
@@ -16,7 +16,6 @@ export const Sidebar: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const user = useUserStore((state) => state.user);
   const isLoading = useUserStore((state) => state.isLoading);
 
   const isActive = (path: string) => {
@@ -123,7 +122,7 @@ export const Sidebar: React.FC = () => {
             {t("sign-up")}
           </Button>
         </SignedOut>
-        {user && (
+        <SignedIn>
           <SignOutButton redirectUrl={`/auth/sign-in`}>
             <Button
               variant="light"
@@ -139,7 +138,7 @@ export const Sidebar: React.FC = () => {
               {t("sign-out")}
             </Button>
           </SignOutButton>
-        )}
+        </SignedIn>
       </div>
     </aside>
   );
