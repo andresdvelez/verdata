@@ -17,10 +17,10 @@ const AppPage = async () => {
 
   return (
     <div className="flex flex-col gap-10 ">
-      <aside className="flex gap-4 w-full">
-        <Card className="w-1/3 h-60 bg-yellow-50" shadow="sm"></Card>
-        <Card className="w-1/3 h-60 bg-blue-50" shadow="sm"></Card>
-        <Card className="w-1/3 h-60 bg-red-50" shadow="sm"></Card>
+      <aside className="flex flex-col md:flex-row gap-4 w-full">
+        <Card className="md:w-1/3 h-60 bg-yellow-50" shadow="sm"></Card>
+        <Card className="md:w-1/3 h-60 bg-blue-50" shadow="sm"></Card>
+        <Card className="md:w-1/3 h-60 bg-red-50" shadow="sm"></Card>
       </aside>
       <RecordsTableLayout />
     </div>

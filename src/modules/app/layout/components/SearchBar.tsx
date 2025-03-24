@@ -46,7 +46,7 @@ export const SearchBar = () => {
 
   return (
     <form
-      className="flex items-center justify-start 2xl:justify-center flex-1"
+      className="hidden xl:flex items-center justify-start 2xl:justify-center flex-1"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex items-center *:border-r border-black/35 *:px-1">

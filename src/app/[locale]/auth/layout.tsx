@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 
 const AuthLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="h-screen flex flex-col md:flex-row overflow-auto">
+    <div className="h-screen flex flex-col lg:flex-row">
       {/* Left section - Sign In Form */}
-      <div className="w-full md:w-1/2 p-4 md:p-8 lg:p-12 flex flex-col animate-slide-up">
+      <div className="w-full lg:w-1/2 p-4 md:p-8 lg:p-12 flex flex-col animate-slide-up">
         <Link
           href="/"
           className="flex items-center gap-2 text-sm text-gray-600 mb-12 hover:text-black transition-colors group w-fit"
@@ -24,7 +24,7 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
           />
           Volver al home
         </Link>
-        <div className="my-auto max-w-md mx-auto w-full flex items-center justify-center">
+        <div className="my-auto mx-auto w-full flex items-center justify-center">
           {children}
         </div>
       </div>
