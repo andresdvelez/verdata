@@ -12,7 +12,7 @@ export const DescriptionText = () => {
         {t("consults")}{" "}
         <div className="relative inline-block">
           {t("designed")}
-          <span className="absolute -bottom-3 left-0 right-0">
+          <span className="absolute -bottom-1 md:-bottom-3 xl:-bottom-3 2xl:-bottom-4 left-0 right-0">
             <AnimatedCurveSvg stroke="#946DF0" />
           </span>
         </div>

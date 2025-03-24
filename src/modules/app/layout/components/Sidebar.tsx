@@ -26,7 +26,7 @@ export const Sidebar: React.FC = () => {
   };
 
   return (
-    <aside className="h-screen w-screen md:w-[270px] 2xl:w-[283px] lg:border-r border-primary flex flex-col items-center bg-background">
+    <aside className=" w-screen md:w-[270px] 2xl:w-[283px] lg:border-r border-primary flex flex-col items-center bg-background">
       <div className="h-[89px] flex items-center justify-center mb-4">
         <Link href="/app" className="flex items-center gap-2">
           <Image
