@@ -22,9 +22,9 @@ export default async function AppLayout({
           <Sidebar />
         </div>
         <MobileMenu />
-        <section className="w-full">
+        <section className="w-full overflow-hidden">
           <Header />
-          <aside className="bg-white overflow-auto w-full h-[calc(100vh-102px)] p-8">
+          <aside className="bg-white overflow-auto w-full max-h-[calc(100vh-102px)] overflow-y-auto p-8">
             {children}
             <SentryFeedbackWidget />
           </aside>
