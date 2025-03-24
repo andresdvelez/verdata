@@ -9,7 +9,7 @@ export const StaticPricing = () => {
 
   return (
     <div className="w-full h-full flex flex-col gap-8">
-      <h3 className="text-5xl font-semibold">{t("our-plans")}</h3>
+      <h3 className="text-4xl lg:text-5xl font-semibold">{t("our-plans")}</h3>
       <Plans plans={STATIC_PLANS(t)} />
     </div>
   );

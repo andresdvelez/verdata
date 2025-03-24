@@ -8,14 +8,14 @@ export const DescriptionText = () => {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <h2 className="text-6xl 2xl:text-7xl font-bold mb-6 leading-tight">
+      <h2 className="text-3xl md:text-5xl xl:text-6xl 2xl:text-7xl font-bold mb-6 leading-tight">
         {t("consults")}{" "}
-        <span className="relative inline-block">
+        <div className="relative inline-block">
           {t("designed")}
-          <div className="absolute -bottom-3 left-0 right-0">
+          <span className="absolute -bottom-3 left-0 right-0">
             <AnimatedCurveSvg stroke="#946DF0" />
-          </div>
-        </span>
+          </span>
+        </div>
         <br /> {t("based-on")}{" "}
         <span className="text-[#8d64ed]">{t("your")}</span>
         <br />

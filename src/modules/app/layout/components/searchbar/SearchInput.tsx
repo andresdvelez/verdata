@@ -31,7 +31,7 @@ export const SearchInput = ({
           isInvalid={!!error}
           errorMessage={error?.message}
           isRequired
-          className="bg-transparent shadow-none min-w-[205px] border-none"
+          className="bg-transparent shadow-none lg:min-w-[180px] xl:min-w-[205px] border-none"
           classNames={{
             inputWrapper:
               "bg-transparent shadow-none data-[hover=true]:bg-transparent group-data-[focus=true]:bg-transparent",

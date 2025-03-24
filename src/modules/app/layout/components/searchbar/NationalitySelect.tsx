@@ -32,7 +32,7 @@ export const NationalitySelect = ({
           radius="full"
           label={t("label")}
           variant="flat"
-          className="bg-transparent min-w-[205px] 2xl:min-w-[235px]"
+          className="bg-transparent lg:min-w-[180px] xl:min-w-[205px] 2xl:min-w-[235px]"
           classNames={{
             trigger:
               "py-0 min-h-2 bg-transparent shadow-none data-[hover=true]:bg-transparent",

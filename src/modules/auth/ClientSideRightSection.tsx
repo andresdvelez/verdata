@@ -35,7 +35,7 @@ export const ClientSideRightSection = () => {
         {isSignIn || isWaitlist ? (
           <div className="absolute inset-0 -inset-y-[3rem] inset-x-[4rem] w-full h-full flex flex-col justify-center items-center text-white p-12">
             <div className="max-w-lg text-left">
-              <h2 className="text-5xl font-bold mb-6 leading-tight">
+              <h2 className="text-4xl xl:text-5xl font-bold mb-6 leading-tight">
                 {t("consults")}{" "}
                 <span className="relative inline-block">
                   {t("designed")}
@@ -59,7 +59,7 @@ export const ClientSideRightSection = () => {
         ) : (
           <div className="absolute inset-0 -inset-y-[3rem] inset-x-[4rem] w-full h-full flex flex-col justify-center items-center text-white p-12">
             <div className="max-w-lg text-left">
-              <h2 className="text-5xl font-bold mb-6 leading-tight">
+              <h2 className="text-4xl xl:text-5xl font-bold mb-6 leading-tight">
                 {t("consults")}{" "}
                 <span className="relative inline-block">
                   {t("designed")}
@@ -85,42 +85,42 @@ export const ClientSideRightSection = () => {
           }
         >
           <div className="-rotate-[20deg] bg-black text-white px-10 py-6 rounded-full">
-            <span className="text-4xl 2xl:text-5xl font-semibold">
+            <span className="lg:text-3xl xl:text-4xl 2xl:text-5xl font-semibold">
               verdata.co
             </span>
           </div>
         </div>
 
         <div
-          className="absolute bottom-24 left-[20rem] 2xl:left-[26rem] floating-tag z-10"
+          className="absolute lg:bottom-32 xl:bottom-24 lg:left-[18rem] xl:left-[20rem] 2xl:left-[26rem] floating-tag z-10"
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           style={{ "--index": "1" } as any}
         >
           <div className="rotate-[22deg] px-10 py-6 rounded-3xl text-white bg-purple-400">
-            <span className="text-2xl 2xl:text-3xl font-medium">
+            <span className="lg:text-xl xl:text-2xl 2xl:text-3xl font-medium">
               {t("know-your-costumer")}
             </span>
           </div>
         </div>
 
         <div
-          className="absolute bottom-10 left-36 2xl:left-48 text-center text-black  floating-tag"
+          className="absolute bottom-12 xl:bottom-10 lg:left-32 xl:left-36 2xl:left-48 text-center text-black  floating-tag"
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           style={{ "--index": "2" } as any}
         >
           <div className="px-8 py-6 rounded-3xl bg-[#E6FD70] max-w-[300px] 2xl:max-w-[320px]">
-            <span className="text-2xl 2xl:text-3xl font-medium">
+            <span className="lg:text-xl xl:text-2xl 2xl:text-3xl font-medium">
               {t("a-solution-for-you")}
             </span>
           </div>
         </div>
 
         <div
-          className="absolute bottom-28 left-[30rem] 2xl:left-[39rem] z-20  text-center text-black  floating-tag"
+          className="absolute lg:bottom-10 xl:bottom-28 lg:left-[23rem] xl:left-[30rem] 2xl:left-[39rem] z-20  text-center text-black  floating-tag"
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           style={{ "--index": "3" } as any}
         >
-          <div className="rotate-[20deg] 2xl:rotate-[15deg] px-5 py-4 bg-white border border-primary rounded-full w-max">
+          <div className="lg:-rotate-[20deg] xl:rotate-[20deg] 2xl:rotate-[15deg] px-5 py-4 bg-white border border-primary rounded-full w-max">
             <span className="text-lg 2xl:text-xl font-medium">
               {t("reports-on")} WhatsApp
             </span>

@@ -1,3 +1,4 @@
+import { MobileMenu } from "@/modules/app/layout/components/burger-menu/BurgerMenu";
 import { Header } from "@/modules/app/layout/components/Header";
 import { Sidebar } from "@/modules/app/layout/components/Sidebar";
 import SentryFeedbackWidget from "@/modules/common/components/SentryFeedbackWidget";
@@ -17,13 +18,16 @@ export default async function AppLayout({
   return (
     <FrigadeWrapped>
       <main className="h-screen w-screen flex">
-        <Sidebar />
+        <div className="hidden lg:flex">
+          <Sidebar />
+        </div>
+        <MobileMenu />
         <section className="w-full">
           <Header />
-          <main className="bg-white overflow-auto w-full h-[calc(100vh-102px)] p-8">
+          <aside className="bg-white overflow-auto w-full h-[calc(100vh-102px)] p-8">
             {children}
             <SentryFeedbackWidget />
-          </main>
+          </aside>
         </section>
       </main>
     </FrigadeWrapped>
