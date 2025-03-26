@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useCallback } from "react";
-import { Chip,  Button } from "@heroui/react";
+import { Chip, Button } from "@heroui/react";
 import { Report } from "@prisma/client";
 import { getCountryByCode } from "../../utils/getCountryByCode";
+import { Link } from "@/modules/translations/i18n/routing";
 
 // const statusColorMap: Record<string, ChipProps["color"]> = {
 //   notasigned: "default",
@@ -56,13 +57,15 @@ export const RenderCell = () => {
       case "actions":
         return (
           <div className="relative">
-            <Button
-              variant="bordered"
-              className="underline text-mainGreen border-none"
-            >
-              Abrir
-              <span className="icon-[material-symbols--arrow-circle-right-outline] -rotate-45 scale-105"></span>
-            </Button>
+            <Link href={`/app/records/${report.id}`}>
+              <Button
+                variant="bordered"
+                className="underline text-mainGreen border-none"
+              >
+                Abrir
+                <span className="icon-[material-symbols--arrow-circle-right-outline] -rotate-45 scale-105"></span>
+              </Button>
+            </Link>
           </div>
         );
       default:

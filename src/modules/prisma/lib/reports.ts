@@ -31,6 +31,20 @@ export async function getReportById(id: string) {
   });
 }
 
+export async function getReportByReportIdAndUserId(
+  reportId: string,
+  userId: string
+) {
+  return await prisma.report.findUnique({
+    where: {
+      id: reportId,
+      user: {
+        clerk_id: userId,
+      },
+    },
+  });
+}
+
 export async function getReportsByUserId(userId?: string, limit?: number) {
   return await prisma.report.findMany({
     orderBy: { created_at: "asc" },

@@ -1,6 +1,6 @@
 "use client";
 
-import { HeroUIProvider } from "@heroui/react";
+import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import { ReactNode } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { SchematicProvider } from "@schematichq/schematic-react";
@@ -15,6 +15,7 @@ export const ClientWrapper = ({ children }: { children: ReactNode }) => {
 
   return (
     <HeroUIProvider>
+      <ToastProvider />
       <ClerkProvider
         localization={locale === "en" ? enUS : esES}
         afterSignOutUrl={"/auth/sign-in"}

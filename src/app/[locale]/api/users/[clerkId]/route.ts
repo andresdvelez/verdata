@@ -11,7 +11,6 @@ export async function GET(
     const id = (await params).clerkId;
 
     const user = await getUserByClerkId(id);
-    console.log(user);
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });

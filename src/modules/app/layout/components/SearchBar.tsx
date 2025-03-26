@@ -11,10 +11,17 @@ import { SearchInput } from "./searchbar/SearchInput";
 import { SEARCH_TYPE_ID, SEARCH_TYPE_NAME } from "../../constants/search";
 import { useRouter } from "@/modules/translations/i18n/routing";
 import { useSearchReportStore } from "@/modules/store/search-report-store";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { useRef, useState } from "react";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 export const SearchBar = () => {
+  // hCaptcha state
+  const captchaRef = useRef<HCaptcha | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+
   const t = useTranslations("searchbar");
+  const locale = useLocale();
 
   // Create the schema with translations
   const searchSchema = createSearchSchema(t);
@@ -29,19 +36,29 @@ export const SearchBar = () => {
     mode: "onBlur",
   });
 
-  const onSubmit: SubmitHandler<SearchFormInterface> = ({
+  const onSubmit: SubmitHandler<SearchFormInterface> = async ({
     nationality,
     searchType,
     searchInput,
   }: FieldValues) => {
+    if (!captchaToken) {
+      captchaRef.current?.execute();
+      return;
+    }
+
+    router.push("/app/search");
     if (searchType === SEARCH_TYPE_NAME) {
       searchByName(nationality, searchInput);
+      // const searchedReport = await searchReportByName();
+      // router.push(`/app/records/${searchedReport.id}`);
     }
     if (searchType === SEARCH_TYPE_ID) {
       searchById(nationality, searchInput);
+      // const searchedReport = await searchReportById();
+      // router.push(`/app/records/${searchedReport.id}`);
     }
     reset();
-    router.push(`/app/search`);
+    setCaptchaToken(null);
   };
 
   return (
@@ -72,6 +89,14 @@ export const SearchBar = () => {
       >
         {t("search")}
       </Button>
+      {/* Invisible hCaptcha */}
+      <HCaptcha
+        sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
+        size="invisible"
+        ref={captchaRef}
+        onVerify={(token) => setCaptchaToken(token)}
+        languageOverride={locale}
+      />
     </form>
   );
 };
