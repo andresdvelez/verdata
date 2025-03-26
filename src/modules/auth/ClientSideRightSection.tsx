@@ -39,7 +39,7 @@ export const ClientSideRightSection = () => {
                 {t("consults")}{" "}
                 <span className="relative inline-block">
                   {t("designed")}
-                  <div className="absolute -bottom-2 left-0 right-0">
+                  <div className="absolute -bottom-1 md:-bottom-3 xl:-bottom-3 2xl:-bottom-4 left-0 right-0">
                     <AnimatedCurveSvg />
                   </div>
                 </span>
@@ -63,8 +63,9 @@ export const ClientSideRightSection = () => {
                 {t("consults")}{" "}
                 <span className="relative inline-block">
                   {t("designed")}
-                  <span className="absolute -top-1 left-0 right-0 mx-auto w-full h-[1.5px] bg-white/70 rounded-full"></span>
-                  <span className="absolute -bottom-1 left-0 right-0 mx-auto w-full h-[1.5px] bg-white/70 rounded-full"></span>
+                  <div className="absolute -bottom-1 md:-bottom-3 xl:-bottom-3 2xl:-bottom-4 left-0 right-0">
+                    <AnimatedCurveSvg />
+                  </div>
                 </span>
                 <br /> {t("based-on")} <br />
                 {t("needs")}***

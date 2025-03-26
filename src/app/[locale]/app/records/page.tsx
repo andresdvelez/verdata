@@ -1,4 +1,4 @@
-import { RecordsTableLayout } from "@/modules/core/components/RecordsTable";
+import { RecordsTableLayout } from "@/modules/core/components/RecordsTableLayout";
 import React from "react";
 
 const RecordsPage = () => {

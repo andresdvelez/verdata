@@ -17,7 +17,7 @@ export const RecordsTableEmpty = () => {
           <p>{t("get-started")}</p>
           <Button
             onPress={() => router.push("/app/search")}
-            className="bg-black text-white hover:text-black hover:bg-white border-2 border-black font-clashDisplay tracking-wider font-medium"
+            className="bg-black text-white hover:text-black hover:bg-white border-2 border-black font-clashDisplay tracking-wider font-medium rounded-md"
           >
             {t("search-report")}
           </Button>

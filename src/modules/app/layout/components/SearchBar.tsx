@@ -59,7 +59,7 @@ export const SearchBar = () => {
         isLoading={isLoading}
         variant="solid"
         radius="none"
-        className="px-8 font-medium text-lg"
+        className="px-8 font-medium text-lg rounded-md"
         color="primary"
         type="submit"
         startContent={
