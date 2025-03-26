@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const { userId: clerkId, isLoaded: isClerkLoaded } = useAuth();
-  const { fetchUser } = useUserStore();
+  const fetchUser = useUserStore((state) => state.fetchUser);
 
   useEffect(() => {
     if (isClerkLoaded && clerkId) {
