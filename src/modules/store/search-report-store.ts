@@ -76,15 +76,15 @@ export const useSearchReportStore = create<SearchReportState>()(
         searchByName: async (countryCode: string /* searchName: string */) => {
           set({
             isLoading: true,
+            isEmpty: false,
             isPresearch: true,
             countryCode: parseCountry(countryCode),
             nationalData: [],
             internationalData: [],
           });
 
-          // Simulate API call with a promise that resolves after 10 seconds
-          await new Promise((resolve) => setTimeout(resolve, 10000));
-
+          // Simulate API call with a promise that resolves after 60 seconds
+          await new Promise((resolve) => setTimeout(resolve, 60000));
           // TODO: Replace with actual API call when endpoint is ready
           // const usersByName = await listNames({
           //   countryCode: parseCountry(countryCode),
@@ -119,11 +119,14 @@ export const useSearchReportStore = create<SearchReportState>()(
           // }[]
           {
             set({
+              isLoading: true,
               isEmpty: false,
               warningLabel: null,
             });
             const user = useUserStore.getState().user;
             if (!user) return;
+            // Simulate API call with a promise that resolves after 60 seconds
+            await new Promise((resolve) => setTimeout(resolve, 60000));
             // TODO: Make the search functionality
             // const internationalEndpoints = get().internationalEndpoints;
             // const localSearchType = get().localSearchType;
@@ -135,6 +138,10 @@ export const useSearchReportStore = create<SearchReportState>()(
               user: {
                 ...user,
               },
+            });
+            set({
+              isEmpty: false,
+              isLoading: false,
             });
 
             // const internationalData = await getBackgroundData({
