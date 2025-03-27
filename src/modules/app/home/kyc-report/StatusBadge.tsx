@@ -1,5 +1,6 @@
 import { cn } from "@heroui/react";
 import { VerificationResult } from "../../common/data/kycReportData";
+import { useTranslations } from "next-intl";
 
 interface StatusBadgeProps {
   result: VerificationResult;
@@ -14,7 +15,9 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   showIcon = true,
   size = "md",
 }) => {
-  const isMatch = result.status === "con coincidencias";
+  const t = useTranslations("report.content");
+
+  const isMatch = result.status === "matches";
 
   const sizeClasses = {
     sm: "text-xs py-0.5 px-2",
@@ -50,7 +53,9 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
           )}
         </>
       )}
-      <span className="capitalize">{result.status}</span>
+      <span className="capitalize">
+        {isMatch ? t("matches") : t("no-matches")}
+      </span>
     </span>
   );
 };

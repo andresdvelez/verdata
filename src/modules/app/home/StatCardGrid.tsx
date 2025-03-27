@@ -2,23 +2,26 @@
 
 import React from "react";
 import { StatCard } from "./stat-cards/StatCard";
+import { useTranslations } from "next-intl";
 
 export const StatCardGrid = () => {
+  const t = useTranslations("stat-cards");
+
   return (
     <aside className="grid-cols-1 xl:grid-cols-3 gap-6 hidden md:grid">
       {/* Database Stats Card */}
       <StatCard
         icon={<span className="text-3xl">%</span>}
-        title="Bases de datos actualizadas"
+        title={t("updated-databases")}
         value={100}
         maxValue={100}
         progressSuffix="%"
         variant="purple"
         action={{
-          text: "Realizar búsqueda",
+          text: t("search"),
           onClick: () => console.log("Search database"),
         }}
-        subtitle="Se ha actualizado el 100% satisfactoriamente"
+        subtitle={t("successful-update")}
         animationDelay={0}
       />
 
@@ -31,16 +34,16 @@ export const StatCardGrid = () => {
             aria-hidden="true"
           />
         }
-        title="Créditos de búsqueda"
+        title={t("search-credits")}
         value={5}
         maxValue={100}
         variant="lime"
         progressSuffix="/100"
         action={{
-          text: "Recargar ahora",
+          text: t("get-more-credits"),
           onClick: () => console.log("Reload credits"),
         }}
-        subtitle="Tienes 5 de 100 créditos"
+        subtitle={t("you-have-out-credits")}
         animationDelay={0.2}
       />
 
@@ -60,13 +63,13 @@ export const StatCardGrid = () => {
             aria-hidden="true"
           />
         }
-        title="¡Promoción!"
+        title={t("for-sale")}
         subtitle="Solo por hoy 2x1"
         value={0}
         showProgress={false}
         variant="white"
         action={{
-          text: "Recargar ahora",
+          text: t("get-more-credits"),
           onClick: () => console.log("Use promotion"),
         }}
         animationDelay={0.4}

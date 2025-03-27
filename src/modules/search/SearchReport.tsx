@@ -13,15 +13,7 @@ export const SearchReport = () => {
 
   if (isSearchEmpty) return <EmptySearchState />;
 
-  if (isSearchLoading)
-    return (
-      <div className="h-full w-full flex flex-col justify-center items-center">
-        <SearchLoader />
-        <h2 className="text-center text-4xl font-semibold lg:text-6xl mt-6">
-          Cargando coincidencias para la búsqueda realizada...
-        </h2>
-      </div>
-    );
+  if (isSearchLoading) return <SearchLoader />;
 
   return <KYCReportComponent report={sampleKYCReport} />;
 };

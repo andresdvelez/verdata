@@ -9,6 +9,7 @@ import { CircularProgress } from "../common/components/CircularProgress";
 import { VerificationSection } from "./kyc-report/VerifictionSection";
 import { ListSection } from "./kyc-report/ListSection";
 import { useRouter } from "@/modules/translations/i18n/routing";
+import { useTranslations } from "next-intl";
 
 interface KYCReportComponentProps {
   report: KYCReport;
@@ -21,6 +22,8 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
 }) => {
   const [showFullReport, setShowFullReport] = useState(false);
 
+  const t = useTranslations("report.content");
+
   const router = useRouter();
 
   // Flags to control which sections are expanded
@@ -29,14 +32,14 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
     identity: true,
     sanctions: false,
     peps: false,
-    criminal: report.criminalRecords.status === "con coincidencias",
+    criminal: report.criminalRecords.status === "matches",
     news: false,
   });
 
   const handleSaveReport = () => {
     addToast({
-      title: "Informe guardado",
-      description: "El informe ha sido guardado correctamente",
+      title: t("saved-report"),
+      description: t("report-saved-successfully"),
     });
   };
 
@@ -62,28 +65,28 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
             />
           }
         >
-          Volver
+          {t("go-back")}
         </Button>
-        <h1 className="text-3xl font-bold">{report.personInfo.fullName}</h1>
-        <p className="text-gray-500">
-          Fecha del reporte: {report.personInfo.reportDate}
-        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left column - Identity information */}
         <div className="lg:col-span-1 space-y-6">
+          <h1 className="text-3xl font-bold">{report.personInfo.fullName}</h1>
+          <p className="text-gray-500">
+            {t("report-date")}: {report.personInfo.reportDate}
+          </p>
           <IdentityCard personInfo={report.personInfo} />
 
-          <Card className="overflow-hidden">
-            <div className="flex justify-between items-center p-4 bg-gray-50 border-b">
+          <Card className="overflow-hidden" shadow="sm">
+            <div className="flex justify-between items-center p-4 border-b">
               <Button
                 variant="ghost"
                 size="sm"
                 className="flex items-center gap-2"
                 onPress={() => setShowFullReport(!showFullReport)}
               >
-                Ver reporte completo
+                {t("see-full-report")}
               </Button>
 
               <Button
@@ -97,7 +100,7 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
                   role="img"
                   aria-hidden="true"
                 />
-                Guardar
+                {t("save")}
               </Button>
             </div>
           </Card>
@@ -108,11 +111,11 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
           <Card shadow="sm" className="p-5">
             <div className="flex justify-between items-start">
               <div className="space-y-3">
-                <h2 className="text-lg font-medium">Detalle</h2>
+                <h2 className="text-lg font-medium">{t("detailed")}</h2>
 
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium">
-                    Verificación de identidad:
+                    {t("identity-verification")}:
                   </span>
                   <StatusBadge result={report.identityVerification} />
                 </div>
@@ -128,7 +131,7 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
                         wrapper: "size-8 2xl:size-[38px]",
                       }}
                     />
-                    <span className="text-sm font-medium">Puntuación</span>
+                    <span className="text-sm font-medium">{t("score")}</span>
                     <i
                       className="icon-[majesticons--alert-circle] text-gray-400"
                       role="img"
@@ -136,7 +139,7 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
                     />
                   </div>
                   <p className="text-sm text-gray-600">
-                    de riesgo por Verdada.
+                    {t("risk-by-verdata")}
                   </p>
                 </div>
                 <CircularProgress
@@ -151,8 +154,7 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
                   animationDelay={300}
                 />
                 <p className="text-xs text-gray-500 mt-2">
-                  Perfil que presenta coincidencias positivas en un{" "}
-                  {report.riskScore}%
+                  {t("profile-matches")} {report.riskScore}%
                 </p>
               </div>
             </div>
@@ -162,7 +164,7 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm">
-                  Verificación en 350 listas de sanciones en el mundo:
+                  {t("verification-against-350-lists")}:
                 </span>
                 <StatusBadge
                   result={report.sanctionsLists.international.overall}
@@ -172,7 +174,7 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
 
               <div className="flex items-center justify-between">
                 <span className="text-sm">
-                  Verificación en listas de riesgo 413 de América Latina:
+                  {t("verification-on-413-latam-lists")}:
                 </span>
                 <StatusBadge
                   result={report.sanctionsLists.national.overall}
@@ -181,19 +183,17 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-sm">Registros criminales:</span>
+                <span className="text-sm">{t("criminal-records")}:</span>
                 <StatusBadge result={report.criminalRecords} size="sm" />
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-sm">Identificación de PEPs:</span>
+                <span className="text-sm">{t("identification-of-peps")}:</span>
                 <StatusBadge result={report.pepsVerification} size="sm" />
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-sm">
-                  Noticias publicadas en medios de comunicación:
-                </span>
+                <span className="text-sm">{t("news-published-in-media")}:</span>
                 <StatusBadge result={report.newsMedia} size="sm" />
               </div>
             </div>

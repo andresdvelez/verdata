@@ -1,5 +1,5 @@
 export interface VerificationResult {
-  status: "sin coincidencias" | "con coincidencias";
+  status: "matches" | "no-matches";
   details?: string;
   matches?: number;
 }
@@ -60,16 +60,16 @@ export const sampleKYCReport: KYCReport = {
     nationality: "Colombia",
     documentStatus: "Vigente",
     documentType: "CC",
-    reportDate: "11/11/25",
+    reportDate: "26/04/25",
   },
   identityVerification: {
-    status: "con coincidencias",
+    status: "matches",
   },
   riskScore: 99,
   sanctionsLists: {
     international: {
       overall: {
-        status: "sin coincidencias",
+        status: "no-matches",
       },
       lists: [
         {
@@ -79,12 +79,12 @@ export const sampleKYCReport: KYCReport = {
             {
               listName: "Lista Consolidada del Consejo de Seguridad",
               description: "Incluye personas y entidades sujetas a sanciones",
-              result: { status: "sin coincidencias" },
+              result: { status: "no-matches" },
             },
             {
               listName: "Lista de terroristas de la ONU",
               description: "Individuos asociados con terrorismo",
-              result: { status: "sin coincidencias" },
+              result: { status: "no-matches" },
             },
           ],
         },
@@ -95,7 +95,7 @@ export const sampleKYCReport: KYCReport = {
             {
               listName: "Lista de Sanciones Financieras de la UE",
               description: "Sanciones económicas y financieras",
-              result: { status: "sin coincidencias" },
+              result: { status: "no-matches" },
             },
           ],
         },
@@ -106,12 +106,12 @@ export const sampleKYCReport: KYCReport = {
             {
               listName: "Lista SDN",
               description: "Specially Designated Nationals",
-              result: { status: "sin coincidencias" },
+              result: { status: "no-matches" },
             },
             {
               listName: "Lista Sectorial",
               description: "Entidades en sectores específicos",
-              result: { status: "sin coincidencias" },
+              result: { status: "no-matches" },
             },
           ],
         },
@@ -119,7 +119,7 @@ export const sampleKYCReport: KYCReport = {
     },
     national: {
       overall: {
-        status: "sin coincidencias",
+        status: "no-matches",
       },
       lists: [
         {
@@ -129,17 +129,17 @@ export const sampleKYCReport: KYCReport = {
             {
               listName: "Lista de la Contraloría",
               description: "Responsabilidad fiscal",
-              result: { status: "sin coincidencias" },
+              result: { status: "no-matches" },
             },
             {
               listName: "Lista de la Procuraduría",
               description: "Sanciones disciplinarias",
-              result: { status: "sin coincidencias" },
+              result: { status: "no-matches" },
             },
             {
               listName: "Lista DIAN",
               description: "Deudores morosos",
-              result: { status: "sin coincidencias" },
+              result: { status: "no-matches" },
             },
           ],
         },
@@ -150,7 +150,7 @@ export const sampleKYCReport: KYCReport = {
             {
               listName: "Lista de la UIF",
               description: "Personas bloqueadas",
-              result: { status: "sin coincidencias" },
+              result: { status: "no-matches" },
             },
           ],
         },
@@ -161,7 +161,7 @@ export const sampleKYCReport: KYCReport = {
             {
               listName: "Lista UIF Argentina",
               description: "Personas reportadas",
-              result: { status: "sin coincidencias" },
+              result: { status: "no-matches" },
             },
           ],
         },
@@ -169,13 +169,13 @@ export const sampleKYCReport: KYCReport = {
     },
   },
   pepsVerification: {
-    status: "sin coincidencias",
+    status: "no-matches",
   },
   criminalRecords: {
-    status: "con coincidencias",
+    status: "matches",
     details: "Se encontraron registros en la base de datos criminal nacional",
   },
   newsMedia: {
-    status: "sin coincidencias",
+    status: "matches",
   },
 };
