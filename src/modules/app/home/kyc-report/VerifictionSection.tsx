@@ -21,7 +21,7 @@ export const VerificationSection: React.FC<VerificationSectionProps> = ({
   className,
 }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
-  const hasCoincidence = result.status === "con coincidencias";
+  const hasCoincidence = result.status === "matches";
 
   return (
     <div
