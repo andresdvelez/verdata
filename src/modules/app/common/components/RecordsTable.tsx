@@ -1,5 +1,6 @@
 import { useUserStore } from "@/modules/store/user-store";
 import {
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -56,6 +57,7 @@ export const RecordsTable = () => {
         )}
       </TableHeader>
       <TableBody
+        loadingContent={<Spinner />}
         isLoading={isLoading}
         items={(reports as Report[]) || []}
         emptyContent={<RecordsTableEmpty />}

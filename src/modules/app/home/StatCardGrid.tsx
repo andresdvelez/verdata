@@ -3,6 +3,8 @@
 import React from "react";
 import { StatCard } from "./stat-cards/StatCard";
 import { useTranslations } from "next-intl";
+import { PlanUsage } from "../common/components/PlanUsage";
+import { FeatureFlag } from "../common/features/flags";
 
 export const StatCardGrid = () => {
   const t = useTranslations("stat-cards");
@@ -26,25 +28,10 @@ export const StatCardGrid = () => {
       />
 
       {/* Search Credits Card */}
-      <StatCard
-        icon={
-          <i
-            className="icon-[tdesign--search] size-8"
-            role="img"
-            aria-hidden="true"
-          />
-        }
+      <PlanUsage
+        featureFlag={FeatureFlag.MONTHLY_REQUESTS}
         title={t("search-credits")}
-        value={5}
-        maxValue={100}
-        variant="lime"
-        progressSuffix="/100"
-        action={{
-          text: t("get-more-credits"),
-          onClick: () => console.log("Reload credits"),
-        }}
-        subtitle={t("you-have-out-credits")}
-        animationDelay={0.2}
+        description={t("credits-to-do-searches")}
       />
 
       {/* Promotion Card */}
