@@ -83,8 +83,8 @@ export const useSearchReportStore = create<SearchReportState>()(
             internationalData: [],
           });
 
-          // Simulate API call with a promise that resolves after 60 seconds
-          await new Promise((resolve) => setTimeout(resolve, 60000));
+          // Simulate API call with a promise that resolves after 5 seconds
+          await new Promise((resolve) => setTimeout(resolve, 5000));
           // TODO: Replace with actual API call when endpoint is ready
           // const usersByName = await listNames({
           //   countryCode: parseCountry(countryCode),
