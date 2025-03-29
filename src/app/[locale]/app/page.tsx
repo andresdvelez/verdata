@@ -16,7 +16,7 @@ const AppPage = async () => {
     );
 
   return (
-    <div className="flex flex-col gap-10 animate-fade-up">
+    <div className="flex flex-col gap-10">
       <StatCardGrid />
       <RecordsTableLayout />
     </div>

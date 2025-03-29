@@ -38,12 +38,41 @@ model Balance {
 }
 
 model Report {
+  id                  String             @id @default(cuid())
+  user_id             String
+  user                User               @relation(fields: [user_id], references: [id])
+  related_identity_id String             @unique
+  related_identity    SearchedIdentities @relation(fields: [related_identity_id], references: [id])
+  data                Json
+  nationality         String
+  searchData          String
+  searchType          String
+  created_at          DateTime           @default(now())
+}
+
+model SearchedIdentities {
+  id            String   @id @default(cuid())
+  document      String?  @unique
+  name          String
+  nationality   String
+  document_type String?
+  report        Report?
+  created_at    DateTime @default(now())
+}
+
+model InternationalEndpoint {
+  id         String   @id @default(cuid())
+  source     String
+  url        String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model NationalEndpoint {
   id          String   @id @default(cuid())
-  user_id     String
-  user        User     @relation(fields: [user_id], references: [id])
-  data        String
-  nationality String
-  searchData  String
-  searchType  String
+  source      String
+  url         String
+  countryCode String
   created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 }

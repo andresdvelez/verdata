@@ -1,8 +1,37 @@
-import { Report } from "@prisma/client";
+import { ReportData } from "@/types/app/reports";
 import prisma from "./prisma";
+import { Prisma } from "@prisma/client";
 
-export async function createReport(data: Report) {
+export async function createReport({
+  userId,
+  identityId,
+  reportData,
+  nationality,
+  searchData,
+  searchType,
+}: {
+  userId: string;
+  identityId: string;
+  reportData: ReportData;
+  nationality: string;
+  searchData: string;
+  searchType: string;
+}) {
   try {
+    const data: Prisma.ReportCreateInput = {
+      user: {
+        connect: { id: userId },
+      },
+      related_identity: {
+        connect: { id: identityId },
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      data: reportData as any,
+      nationality,
+      searchData,
+      searchType,
+    };
+
     const report = await prisma.report.create({ data });
     return { report };
   } catch (error) {

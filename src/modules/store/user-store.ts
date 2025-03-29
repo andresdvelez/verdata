@@ -4,6 +4,7 @@ import { UserType } from "@/types/app/users";
 interface UserState {
   user: UserType | null;
   isLoading: boolean;
+  setIsLoading: (value: boolean) => void;
   error: string | null;
   setUser: (user: UserType | null) => void;
   fetchUser: (clerkId: string) => Promise<void>;
@@ -11,7 +12,10 @@ interface UserState {
 
 export const useUserStore = create<UserState>((set) => ({
   user: null,
-  isLoading: false,
+  isLoading: true,
+  setIsLoading: (value) => {
+    set({ isLoading: value });
+  },
   error: null,
 
   setUser: (user) => set({ user }),
