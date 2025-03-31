@@ -1,9 +1,10 @@
-import { cn } from "@heroui/react";
-import { PersonInfo } from "../../common/data/kycReportData";
+import { cn, Spinner } from "@heroui/react";
+import { SearchedIdentities } from "@prisma/client";
 import { useTranslations } from "next-intl";
+import { useEntitlementsValidation } from "../../common/hooks/useEntitlementsValidation";
 
 interface IdentityCardProps {
-  personInfo: PersonInfo;
+  personInfo: SearchedIdentities;
   className?: string;
 }
 
@@ -13,6 +14,8 @@ export const IdentityCard: React.FC<IdentityCardProps> = ({
 }) => {
   const t = useTranslations("report.content");
 
+  const { isLoading } = useEntitlementsValidation();
+
   return (
     <div
       className={cn(
@@ -20,41 +23,39 @@ export const IdentityCard: React.FC<IdentityCardProps> = ({
         className
       )}
     >
-      <div className="space-y-1">
-        <h2 className="text-2xl font-bold">{t("identity-verification")}</h2>
-      </div>
-
-      <div className="grid grid-cols-2 gap-x-6 gap-y-3">
-        <div className="space-y-1">
-          <p className="text-sm text-gray-500">{t("name")}:</p>
-          <p className="font-medium">{personInfo.fullName}</p>
+      {isLoading ? (
+        <div className="w-full h-full flex items-center justify-center">
+          <Spinner className="self-center" />
         </div>
+      ) : (
+        <>
+          {" "}
+          <div className="space-y-1">
+            <h2 className="text-2xl font-bold">{t("identity-verification")}</h2>
+          </div>
+          <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+            <div className="space-y-1">
+              <p className="text-sm text-gray-500">{t("name")}:</p>
+              <p className="font-medium">{personInfo.name}</p>
+            </div>
 
-        <div className="space-y-1">
-          <p className="text-sm text-gray-500">{t("age-range")}:</p>
-          <p className="font-medium">{personInfo.ageRange}</p>
-        </div>
+            <div className="space-y-1">
+              <p className="text-sm text-gray-500">{t("document-number")}:</p>
+              <p className="font-medium">{personInfo.document}</p>
+            </div>
 
-        <div className="space-y-1">
-          <p className="text-sm text-gray-500">{t("document-number")}:</p>
-          <p className="font-medium">{personInfo.documentNumber}</p>
-        </div>
+            <div className="space-y-1">
+              <p className="text-sm text-gray-500">{t("nationality")}:</p>
+              <p className="font-medium">{personInfo.nationality}</p>
+            </div>
 
-        <div className="space-y-1">
-          <p className="text-sm text-gray-500">{t("nationality")}:</p>
-          <p className="font-medium">{personInfo.nationality}</p>
-        </div>
-
-        <div className="space-y-1">
-          <p className="text-sm text-gray-500">{t("document-status")}:</p>
-          <p className="font-medium">{personInfo.documentStatus}</p>
-        </div>
-
-        <div className="space-y-1">
-          <p className="text-sm text-gray-500">{t("document-type")}:</p>
-          <p className="font-medium">{personInfo.documentType}</p>
-        </div>
-      </div>
+            <div className="space-y-1">
+              <p className="text-sm text-gray-500">{t("document-type")}:</p>
+              <p className="font-medium">{personInfo.document_type}</p>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -1,76 +1,22 @@
-export interface VerificationResult {
-  status: "matches" | "no-matches";
-  details?: string;
-  matches?: number;
-}
+import { KYCReport } from "@/types/app/reports";
 
-export interface PersonInfo {
-  fullName: string;
-  ageRange: string;
-  documentNumber: string;
-  nationality: string;
-  documentStatus: string;
-  documentType: string;
-  reportDate: string;
-}
-
-export interface ListCheck {
-  listName: string;
-  description: string;
-  result: VerificationResult;
-}
-
-export interface NationalList {
-  countryCode: string;
-  countryName: string;
-  lists: ListCheck[];
-}
-
-export interface InternationalList {
-  organization: string;
-  scope: string;
-  lists: ListCheck[];
-}
-
-export interface KYCReport {
-  personInfo: PersonInfo;
-  identityVerification: VerificationResult;
-  riskScore: number;
-  sanctionsLists: {
-    international: {
-      overall: VerificationResult;
-      lists: InternationalList[];
-    };
-    national: {
-      overall: VerificationResult;
-      lists: NationalList[];
-    };
-  };
-  pepsVerification: VerificationResult;
-  criminalRecords: VerificationResult;
-  newsMedia: VerificationResult;
-}
-
-// Mock data for development purposes
 export const sampleKYCReport: KYCReport = {
-  personInfo: {
-    fullName: "Felipe Vargas",
-    ageRange: "No disponible",
-    documentNumber: "1015555510",
+  id: "1",
+  user_id: "1",
+  related_identity_id: "123",
+  is_identity_matched: true,
+  risk_score: 59,
+  related_identity: {
+    id: "1",
+    name: "Felipe Vargas",
+    document: "1102003346",
+    document_type: "C.C",
     nationality: "Colombia",
-    documentStatus: "Vigente",
-    documentType: "CC",
-    reportDate: "26/04/25",
+    created_at: new Date("2025-03-31T12:45:30.123Z"),
   },
-  identityVerification: {
-    status: "matches",
-  },
-  riskScore: 99,
-  sanctionsLists: {
+  sanctions_lists: {
     international: {
-      overall: {
-        status: "no-matches",
-      },
+      overall: false,
       lists: [
         {
           organization: "Naciones Unidas",
@@ -79,12 +25,12 @@ export const sampleKYCReport: KYCReport = {
             {
               listName: "Lista Consolidada del Consejo de Seguridad",
               description: "Incluye personas y entidades sujetas a sanciones",
-              result: { status: "no-matches" },
+              result: false,
             },
             {
               listName: "Lista de terroristas de la ONU",
               description: "Individuos asociados con terrorismo",
-              result: { status: "no-matches" },
+              result: false,
             },
           ],
         },
@@ -95,7 +41,7 @@ export const sampleKYCReport: KYCReport = {
             {
               listName: "Lista de Sanciones Financieras de la UE",
               description: "Sanciones económicas y financieras",
-              result: { status: "no-matches" },
+              result: false,
             },
           ],
         },
@@ -106,21 +52,19 @@ export const sampleKYCReport: KYCReport = {
             {
               listName: "Lista SDN",
               description: "Specially Designated Nationals",
-              result: { status: "no-matches" },
+              result: false,
             },
             {
               listName: "Lista Sectorial",
               description: "Entidades en sectores específicos",
-              result: { status: "no-matches" },
+              result: false,
             },
           ],
         },
       ],
     },
     national: {
-      overall: {
-        status: "no-matches",
-      },
+      overall: false,
       lists: [
         {
           countryCode: "CO",
@@ -129,17 +73,17 @@ export const sampleKYCReport: KYCReport = {
             {
               listName: "Lista de la Contraloría",
               description: "Responsabilidad fiscal",
-              result: { status: "no-matches" },
+              result: false,
             },
             {
               listName: "Lista de la Procuraduría",
               description: "Sanciones disciplinarias",
-              result: { status: "no-matches" },
+              result: false,
             },
             {
               listName: "Lista DIAN",
               description: "Deudores morosos",
-              result: { status: "no-matches" },
+              result: false,
             },
           ],
         },
@@ -150,7 +94,7 @@ export const sampleKYCReport: KYCReport = {
             {
               listName: "Lista de la UIF",
               description: "Personas bloqueadas",
-              result: { status: "no-matches" },
+              result: false,
             },
           ],
         },
@@ -161,21 +105,18 @@ export const sampleKYCReport: KYCReport = {
             {
               listName: "Lista UIF Argentina",
               description: "Personas reportadas",
-              result: { status: "no-matches" },
+              result: false,
             },
           ],
         },
       ],
     },
   },
-  pepsVerification: {
-    status: "no-matches",
-  },
-  criminalRecords: {
-    status: "matches",
-    details: "Se encontraron registros en la base de datos criminal nacional",
-  },
-  newsMedia: {
-    status: "matches",
-  },
+  peps_verification: false,
+  criminal_records: true,
+  news_media: true,
+  nationality: "Colombia",
+  search_data: "1015555510",
+  search_type: "CC",
+  created_at: new Date("2025-04-26"),
 };

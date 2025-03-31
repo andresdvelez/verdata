@@ -1,4 +1,4 @@
-import { ListCheck } from "../../common/data/kycReportData";
+import { ListCheck } from "@/types/app/reports";
 import { StatusBadge } from "./StatusBadge";
 
 interface ListSectionProps {

@@ -129,11 +129,13 @@ export const Sidebar: React.FC = () => {
               variant="light"
               isLoading={isLoading}
               startContent={
-                <i
-                  className="icon-[mynaui--logout-solid] size-5"
-                  role="img"
-                  aria-hidden="true"
-                />
+                !isLoading && (
+                  <i
+                    className="icon-[mynaui--logout-solid] size-5"
+                    role="img"
+                    aria-hidden="true"
+                  />
+                )
               }
             >
               {t("sign-out")}

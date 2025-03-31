@@ -43,10 +43,15 @@ model Report {
   user                User               @relation(fields: [user_id], references: [id])
   related_identity_id String             @unique
   related_identity    SearchedIdentities @relation(fields: [related_identity_id], references: [id])
-  data                Json
+  is_identity_matched Boolean
+  risk_score          Int
+  sanctions_lists     Json
+  peps_verification   Boolean
+  criminal_records    Boolean
+  news_media          Boolean
   nationality         String
-  searchData          String
-  searchType          String
+  search_data         String
+  search_type         String
   created_at          DateTime           @default(now())
 }
 

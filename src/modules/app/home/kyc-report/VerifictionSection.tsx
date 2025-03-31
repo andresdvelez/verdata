@@ -1,12 +1,11 @@
-import { useState } from "react";
-import { VerificationResult } from "../../common/data/kycReportData";
+import React, { useState } from "react";
 import { cn } from "@heroui/react";
 import { StatusBadge } from "./StatusBadge";
 
 interface VerificationSectionProps {
   title: string;
   description?: string;
-  result: VerificationResult;
+  result: boolean;
   children?: React.ReactNode;
   defaultOpen?: boolean;
   className?: string;
@@ -21,13 +20,12 @@ export const VerificationSection: React.FC<VerificationSectionProps> = ({
   className,
 }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
-  const hasCoincidence = result.status === "matches";
-
+  const hasIssue = result === true;
   return (
     <div
       className={cn(
         "verify-section border rounded-lg overflow-hidden shadow-sm animate-fade-up",
-        hasCoincidence ? "border-red-200" : "border-gray-200",
+        hasIssue ? "border-red-200" : "border-gray-200",
         className
       )}
     >
@@ -36,13 +34,13 @@ export const VerificationSection: React.FC<VerificationSectionProps> = ({
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           "w-full px-4 py-3 flex items-center justify-between text-left transition-colors",
-          hasCoincidence
+          hasIssue
             ? "bg-red-50 hover:bg-red-100"
             : "bg-gray-50 hover:bg-gray-100"
         )}
       >
         <div className="flex items-center">
-          {hasCoincidence ? (
+          {hasIssue ? (
             <i
               className="icon-[majesticons--alert-circle] mr-2 text-red-600 size-4"
               role="img"

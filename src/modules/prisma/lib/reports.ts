@@ -7,15 +7,15 @@ export async function createReport({
   identityId,
   reportData,
   nationality,
-  searchData,
-  searchType,
+  search_data,
+  search_type,
 }: {
   userId: string;
   identityId: string;
   reportData: ReportData;
   nationality: string;
-  searchData: string;
-  searchType: string;
+  search_data: string;
+  search_type: string;
 }) {
   try {
     const data: Prisma.ReportCreateInput = {
@@ -26,10 +26,15 @@ export async function createReport({
         connect: { id: identityId },
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      data: reportData as any,
+      sanctions_lists: reportData as any,
       nationality,
-      searchData,
-      searchType,
+      search_data,
+      search_type,
+      is_identity_matched: false, // Default value, update as needed
+      risk_score: 0, // Default value, update as needed
+      peps_verification: false, // Default value, update as needed
+      criminal_records: false, // Default value, update as needed
+      news_media: false, // Default value, update as needed
     };
 
     const report = await prisma.report.create({ data });
@@ -70,6 +75,9 @@ export async function getReportByReportIdAndUserId(
       user: {
         clerk_id: userId,
       },
+    },
+    include: {
+      related_identity: true,
     },
   });
 }

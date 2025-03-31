@@ -2,35 +2,22 @@
 
 import React, { useCallback } from "react";
 import { Chip, Button } from "@heroui/react";
-import { Report } from "@prisma/client";
-import { getCountryByCode } from "../../utils/getCountryByCode";
 import { Link } from "@/modules/translations/i18n/routing";
-
-// const statusColorMap: Record<string, ChipProps["color"]> = {
-//   notasigned: "default",
-//   opened: "success",
-//   canceled: "danger",
-//   ongoing: "secondary",
-// };
-
-// const typeColorMap: Record<string, ChipProps["color"]> = {
-//   individual: "secondary",
-//   business: "danger",
-// };
+import { KYCReport } from "@/types/app/reports";
 
 export const RenderCell = () => {
-  const cell = useCallback((report: Report, columnKey: React.Key) => {
-    const cellValue = report?.[columnKey as keyof Report];
+  const cell = useCallback((report: KYCReport, columnKey: React.Key) => {
+    // Use the new field names directly
+    const cellValue = report?.[columnKey as keyof KYCReport];
 
     switch (columnKey) {
       case "nationality":
-        if (typeof cellValue === "string" && cellValue.length === 3) {
-          return getCountryByCode(cellValue || "")?.Country || "";
-        } else {
-          return String(cellValue);
-        }
-      case "searchType":
-        return cellValue === "name" ? "Nombre" : "Identificación";
+        // In the new object, nationality is now a full string (e.g., "Colombia")
+        return typeof cellValue === "string" ? cellValue : "";
+      case "search_type":
+        // Adjust mapping based on your expected search types (e.g. "name" or "CC")
+        // return cellValue === "name" ? "Nombre" : "Identificación";
+        return cellValue;
       case "created_at":
         if (
           cellValue instanceof Date ||
@@ -43,7 +30,7 @@ export const RenderCell = () => {
           ).padStart(2, "0")}/${newDate.getFullYear()}`;
         }
         return "";
-      case "data":
+      case "is_identity_matched":
         return (
           <Chip
             className="capitalize border-none gap-1 text-default-600"
@@ -69,14 +56,11 @@ export const RenderCell = () => {
           </div>
         );
       default:
-        // Ensure we always return a valid ReactNode
         return cellValue !== null && cellValue !== undefined
           ? String(cellValue)
           : "";
     }
   }, []);
 
-  return {
-    cell,
-  };
+  return { cell };
 };

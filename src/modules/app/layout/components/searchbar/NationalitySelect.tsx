@@ -16,10 +16,6 @@ export const NationalitySelect = ({
     (state) => state.setSearchDocumentLabel
   );
 
-  const setSearchWarning = useSearchReportStore(
-    (state) => state.setSearchWarning
-  );
-
   return (
     <Controller
       name="nationality"
@@ -41,25 +37,19 @@ export const NationalitySelect = ({
           }}
           {...field}
         >
-          {COUNTRIES?.map(
-            ({ Country, Country_Code, Document_Type, Warning }) => (
-              <SelectItem
-                key={Country}
-                data-value={Country_Code}
-                onPress={() => {
-                  const updatedDocumentType = Document_Type.replace(
-                    /[()]/g,
-                    ""
-                  );
-                  setSearchDocumentLabel(updatedDocumentType);
-                  setSearchWarning(Warning);
-                  onChange(Country_Code);
-                }}
-              >
-                {Country}
-              </SelectItem>
-            )
-          )}
+          {COUNTRIES?.map(({ Country, Country_Code, Document_Type }) => (
+            <SelectItem
+              key={Country}
+              data-value={Country_Code}
+              onPress={() => {
+                const updatedDocumentType = Document_Type.replace(/[()]/g, "");
+                setSearchDocumentLabel(updatedDocumentType);
+                onChange(Country_Code);
+              }}
+            >
+              {Country}
+            </SelectItem>
+          ))}
         </Select>
       )}
     />

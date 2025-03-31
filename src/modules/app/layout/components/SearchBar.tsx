@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@heroui/react";
+import { addToast, Button } from "@heroui/react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createSearchSchema } from "../../lib/search-schema";
@@ -8,28 +8,35 @@ import { NationalitySelect } from "./searchbar/NationalitySelect";
 import { SearchFormInterface } from "@/types/app/search";
 import { SearchTypeSelect } from "./searchbar/SearchTypeSelect";
 import { SearchInput } from "./searchbar/SearchInput";
-import { SEARCH_TYPE_ID, SEARCH_TYPE_NAME } from "../../constants/search";
 import { useRouter } from "@/modules/translations/i18n/routing";
 import { useSearchReportStore } from "@/modules/store/search-report-store";
 import { useLocale, useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
+import { useUser } from "@clerk/nextjs";
+import { useUserStore } from "@/modules/store/user-store";
+import { useEntitlementsValidation } from "../../common/hooks/useEntitlementsValidation";
 
 export const SearchBar = () => {
   // hCaptcha state
   const captchaRef = useRef<HCaptcha | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
+  const user = useUser();
+
   const t = useTranslations("searchbar");
   const locale = useLocale();
+  const { isFullReportAvailable } = useEntitlementsValidation();
 
   // Create the schema with translations
   const searchSchema = createSearchSchema(t);
 
   const router = useRouter();
-  const searchByName = useSearchReportStore((state) => state.searchByName);
-  const searchById = useSearchReportStore((state) => state.searchById);
+  const searchReport = useSearchReportStore(
+    (state) => state.handleSearchReport
+  );
   const isLoading = useSearchReportStore((state) => state.isLoading);
+  const addSearchedReport = useUserStore((state) => state.addSearchedReport);
 
   const { control, handleSubmit, reset } = useForm<SearchFormInterface>({
     resolver: zodResolver(searchSchema),
@@ -47,15 +54,25 @@ export const SearchBar = () => {
     }
 
     router.push("/app/search");
-    if (searchType === SEARCH_TYPE_NAME) {
-      searchByName(nationality, searchInput);
-      // const searchedReport = await searchReportByName();
-      // router.push(`/app/records/${searchedReport.id}`);
-    }
-    if (searchType === SEARCH_TYPE_ID) {
-      searchById(nationality, searchInput);
-      // const searchedReport = await searchReportById();
-      // router.push(`/app/records/${searchedReport.id}`);
+    try {
+      const searchedReport = await searchReport({
+        user,
+        searchType,
+        nationality,
+        searchInput,
+        isFullReportAvailable,
+      });
+      addSearchedReport(searchedReport);
+      addToast({
+        title: "Your report is being generated",
+        description: "Please wait",
+        color: "success",
+      });
+    } catch (error) {
+      addToast({
+        title: t(error),
+        description: "Try it later",
+      });
     }
     reset();
     setCaptchaToken(null);
