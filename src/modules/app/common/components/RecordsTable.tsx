@@ -53,13 +53,7 @@ export const RecordsTable = () => {
       >
         {(item) => (
           <TableRow key={`${item?.id}`}>
-            {(columnKey) => (
-              <TableCell>
-                {cell(item, columnKey) instanceof Date
-                  ? (cell(item, columnKey) as Date).toLocaleString()
-                  : String(cell(item, columnKey))}
-              </TableCell>
-            )}
+            {(columnKey) => <TableCell>{cell(item, columnKey)}</TableCell>}
           </TableRow>
         )}
       </TableBody>
