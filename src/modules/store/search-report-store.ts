@@ -15,8 +15,7 @@ import { sampleKYCReport } from "../app/common/data/kycReportData";
 import { searchReportService } from "../app/services/searchReportService";
 
 export type handleSearchReportType = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  user: any;
+  userId: string;
   searchType: "name" | "identification";
   nationality: string;
   searchInput: string;
@@ -27,17 +26,19 @@ interface SearchReportState {
   isLoading: boolean;
   isPreSearch: boolean;
   isEmpty: boolean;
+  token: string;
   countryCode: string | null;
   usersByName: UserSearchByName[] | null;
   searchDocumentLabel: string;
   localSearchType: string;
   userIdentity: UserIdentity | UserNotFound | null;
   warningLabel: string | null;
+  setToken: (value: string) => void;
   setSearchDocumentLabel: (value: string) => void;
   setLocalSearchType: (value: string) => void;
   searchByName: (countryCode: string, searchName: string) => Promise<void>;
   handleSearchReport: ({
-    user,
+    userId,
     searchType,
     nationality,
     searchInput,
@@ -49,7 +50,7 @@ interface SearchReportState {
 export const useSearchReportStore = create<SearchReportState>()(
   devtools(
     persist(
-      (set) => ({
+      (set, get) => ({
         isLoading: false,
         isPreSearch: false,
         isEmpty: true,
@@ -61,6 +62,10 @@ export const useSearchReportStore = create<SearchReportState>()(
         searchDocumentLabel: SEARCH_TYPE_DOCUMENT,
         localSearchType: SEARCH_TYPE_NAME,
         warningLabel: null,
+        token: "",
+        setToken: (value) => {
+          set({ token: value });
+        },
         setLocalSearchType: (value) => {
           set({ localSearchType: value });
         },
@@ -90,7 +95,7 @@ export const useSearchReportStore = create<SearchReportState>()(
           });
         },
         handleSearchReport: async ({
-          user,
+          userId,
           searchType,
           nationality,
           searchInput,
@@ -103,28 +108,29 @@ export const useSearchReportStore = create<SearchReportState>()(
               warningLabel: null,
             });
 
-            if (!user) throw new Error("Something went wrong, try it later");
+            if (!userId) throw new Error("Something went wrong, try it later");
             if (isFullReportAvailable) {
-              // TODO: Make the search functionality
-              await searchReportService({
+              const searchedReport = await searchReportService({
                 searchType,
                 nationality,
                 searchInput,
+                token: get().token,
               });
-              // Simulate API call with a promise that resolves after 60 seconds
-              await new Promise((resolve) => setTimeout(resolve, 60000));
+              await trackEntitlement(FeatureFlag.MONTHLY_REQUESTS, userId);
+              set({
+                isEmpty: false,
+                isLoading: false,
+              });
+              return searchedReport;
             } else {
-              // Simulate API call with a promise that resolves after 60 seconds
+              await trackEntitlement(FeatureFlag.MONTHLY_REQUESTS, userId);
               await new Promise((resolve) => setTimeout(resolve, 60000));
+              set({
+                isEmpty: false,
+                isLoading: false,
+              });
+              return sampleKYCReport;
             }
-
-            // Subtract monthly requests credit
-            await trackEntitlement(FeatureFlag.MONTHLY_REQUESTS, user);
-            set({
-              isEmpty: false,
-              isLoading: false,
-            });
-            return sampleKYCReport;
           } catch (error) {
             set({
               isEmpty: true,

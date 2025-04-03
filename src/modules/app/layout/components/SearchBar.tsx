@@ -22,7 +22,7 @@ export const SearchBar = () => {
   const captchaRef = useRef<HCaptcha | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
-  const user = useUser();
+  const { user } = useUser();
 
   const t = useTranslations("searchbar");
   const locale = useLocale();
@@ -53,21 +53,23 @@ export const SearchBar = () => {
       return;
     }
 
-    router.push("/app/search");
+    router.replace("/app/search");
+
     try {
+      addToast({
+        title: "Your report is being generated",
+        description: "Please wait",
+        color: "success",
+      });
       const searchedReport = await searchReport({
-        user,
+        userId: user?.id as string,
         searchType,
         nationality,
         searchInput,
         isFullReportAvailable,
       });
       addSearchedReport(searchedReport);
-      addToast({
-        title: "Your report is being generated",
-        description: "Please wait",
-        color: "success",
-      });
+      router.push(`/app/records/${searchedReport.id}`);
     } catch (error) {
       addToast({
         title: t(error),
@@ -97,11 +99,13 @@ export const SearchBar = () => {
         color="primary"
         type="submit"
         startContent={
-          <i
-            className="icon-[tdesign--search] size-4"
-            role="img"
-            aria-hidden="true"
-          />
+          !isLoading && (
+            <i
+              className="icon-[tdesign--search] size-4"
+              role="img"
+              aria-hidden="true"
+            />
+          )
         }
       >
         {t("search")}

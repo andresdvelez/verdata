@@ -22,8 +22,6 @@ export const RecordsTable = () => {
   const reports = useUserStore((state) => state.searchedReports) as KYCReport[];
   const isLoading = useUserStore((state) => state.isLoading);
 
-  console.log(reports);
-
   const { cell } = RenderCell();
 
   const columns = recordsTableColumns(t);

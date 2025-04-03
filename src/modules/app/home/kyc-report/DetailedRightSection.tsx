@@ -2,9 +2,9 @@ import { Card, Divider, Image } from "@heroui/react";
 import React from "react";
 import { StatusBadge } from "./StatusBadge";
 import { KYCReport } from "@/types/app/reports";
-import { CircularProgress } from "../../common/components/CircularProgress";
 import { useTranslations } from "next-intl";
 import { useEntitlementsValidation } from "../../common/hooks/useEntitlementsValidation";
+import { CircularProgress } from "../../common/components/CircularProgress";
 
 type DetailedRightSectionType = {
   virtualizedReport: KYCReport;
@@ -39,7 +39,7 @@ export const DetailedRightSection = ({
           </div>
         </div>
         <div className="flex flex-col items-center">
-          <div className="text-center mb-2">
+          <div className="text-center">
             <div className="flex items-center justify-center gap-1">
               <Image
                 src="/brand/logotype.png"
@@ -57,6 +57,16 @@ export const DetailedRightSection = ({
             </div>
             <p className="text-sm text-gray-600">{t("risk-by-verdata")}</p>
           </div>
+
+          {/* <GaugeChartComponent
+            value={virtualizedReport.risk_score}
+            height="170px"
+            width="280px"
+          />
+
+          <p className="text-xs text-gray-500 mt-1">
+            {t("profile-matches")} {virtualizedReport.risk_score}%
+          </p> */}
           <CircularProgress
             value={virtualizedReport.risk_score}
             size={140}
@@ -82,7 +92,7 @@ export const DetailedRightSection = ({
             {t("verification-against-international-lists")}:
           </span>
           <StatusBadge
-            result={virtualizedReport.sanctions_lists.international.overall}
+            result={virtualizedReport.sanctions_lists.international?.overall}
             size="sm"
           />
         </div>
@@ -91,7 +101,7 @@ export const DetailedRightSection = ({
             {t("verification-against-national-lists")}:
           </span>
           <StatusBadge
-            result={virtualizedReport.sanctions_lists.national.overall}
+            result={virtualizedReport.sanctions_lists.national?.overall}
             size="sm"
           />
         </div>

@@ -11,8 +11,8 @@ export const ReportNotFound = () => {
         </p>
         <div className="mt-8">
           <Link
-            href="/records"
-            className="inline-flex items-center gap-2 transition-colors hover:bg-blue-400"
+            href="/app/records"
+            className="inline-flex items-center gap-2 transition-colors"
           >
             Back to reports
           </Link>
