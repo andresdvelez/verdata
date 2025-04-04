@@ -25,7 +25,7 @@ export const FullReport = ({ virtualizedReport }: FullReportType) => {
       </VerificationSection>
 
       <InternationalSanctionsSection
-        title={t("international-sanctions")}
+        title={t("verification-against-350-lists")}
         internationalData={
           virtualizedReport.sanctions_lists.international.lists
         }
@@ -33,7 +33,7 @@ export const FullReport = ({ virtualizedReport }: FullReportType) => {
       />
 
       <NationalSanctionsSection
-        title={t("national-sanctions")}
+        title={t("verification-against-350-lists")}
         nationalData={virtualizedReport.sanctions_lists.national.lists}
         overallResult={virtualizedReport.sanctions_lists.national.overall}
       />
@@ -48,14 +48,14 @@ export const FullReport = ({ virtualizedReport }: FullReportType) => {
       </VerificationSection>
 
       <VerificationSection
-        title={t("peps-verification")}
+        title={t("identification-of-peps")}
         result={virtualizedReport.peps_verification}
       >
         <p className="text-sm text-gray-600">{t("peps-description")}</p>
       </VerificationSection>
 
       <VerificationSection
-        title={t("news-media")}
+        title={t("news-published-in-media")}
         result={virtualizedReport.news_media}
       >
         <p className="text-sm text-gray-600">{t("news-media-description")}</p>
