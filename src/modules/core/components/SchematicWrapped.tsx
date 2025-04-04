@@ -32,14 +32,9 @@ export const SchematicWrapped = ({ children }: { children: ReactNode }) => {
         name: userName as string,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clerkUser, identify, client, user]);
 
   useEffect(() => {
-    console.log({
-      ...client.getFlagCheck(FeatureFlag.MONTHLY_REQUESTS),
-      userId: user?.id,
-    });
     const token = generateToken({
       ...client.getFlagCheck(FeatureFlag.MONTHLY_REQUESTS),
       userId: user?.id,
