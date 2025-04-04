@@ -14,11 +14,7 @@ export async function GET() {
 
     const client = new SchematicClient({ apiKey });
 
-    console.log(client, 'client')
-
     const plans = await client.plans.listPlans();
-
-    console.log(plans, 'plans')
 
     return NextResponse.json(plans.data);
   } catch (error) {
