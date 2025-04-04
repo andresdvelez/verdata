@@ -22,6 +22,13 @@ export const SchematicWrapped = ({ children }: { children: ReactNode }) => {
       clerkUser?.emailAddresses[0] ??
       clerkUser?.id;
 
+    const token = generateToken({
+      ...client.getFlagCheck(FeatureFlag.MONTHLY_REQUESTS),
+      userId: user?.id,
+    });
+
+    token.then((token) => setToken(token));
+
     if (clerkUser?.id) {
       identify({
         company: {
@@ -33,16 +40,7 @@ export const SchematicWrapped = ({ children }: { children: ReactNode }) => {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clerkUser, identify, client]);
-
-  useEffect(() => {
-    const token = generateToken({
-      ...client.getFlagCheck(FeatureFlag.MONTHLY_REQUESTS),
-      userId: user?.id,
-    });
-
-    token.then((token) => setToken(token));
-  }, [user]);
+  }, [clerkUser, identify, client, user]);
 
   return <>{children}</>;
 };
