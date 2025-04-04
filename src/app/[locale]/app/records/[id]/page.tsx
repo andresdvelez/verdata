@@ -1,3 +1,4 @@
+import { sampleKYCReport } from "@/modules/app/common/data/kycReportData";
 import { KYCReportComponent } from "@/modules/app/home/KYCReportComponent";
 import { getReportByReportIdAndUserId } from "@/modules/prisma/lib/reports";
 import { ReportNotFound } from "@/modules/reports/components/ReportNotFound";
@@ -17,7 +18,9 @@ const ReportPage = async ({ params }: { params: Promise<{ id: string }> }) => {
     return <ReportNotFound />;
   }
 
-  return <KYCReportComponent report={report as KYCReport} />;
+  return (
+    <KYCReportComponent report={(report as KYCReport) || sampleKYCReport} />
+  );
 };
 
 export default ReportPage;

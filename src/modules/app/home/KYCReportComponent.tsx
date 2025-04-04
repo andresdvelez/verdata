@@ -29,16 +29,15 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
   report,
   className,
 }) => {
-  const [virtualizedReport, setVirtualizedReport] =
-    useState<KYCReport>(sampleKYCReport);
+  const [virtualizedReport, setVirtualizedReport] = useState<KYCReport>(report);
   const [showFullReport, setShowFullReport] = useState(false);
   const t = useTranslations("report.content");
   const router = useRouter();
   const { isFullReportAvailable, isLoading } = useEntitlementsValidation();
 
   useEffect(() => {
-    if (isFullReportAvailable) {
-      setVirtualizedReport(report);
+    if (!isFullReportAvailable) {
+      setVirtualizedReport(sampleKYCReport);
     }
   }, [isFullReportAvailable, report]);
 

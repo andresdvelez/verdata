@@ -6,6 +6,7 @@ import { EmptySearchState } from "./EmptySearchState";
 import { KYCReportComponent } from "../app/home/KYCReportComponent";
 import { SearchLoader } from "./SearchLoader";
 import { KYCReport } from "@/types/app/reports";
+import { sampleKYCReport } from "../app/common/data/kycReportData";
 
 export const SearchReport = ({ report }: { report: KYCReport }) => {
   const isSearchEmpty = useSearchReportStore((state) => state.isEmpty);
@@ -15,5 +16,7 @@ export const SearchReport = ({ report }: { report: KYCReport }) => {
 
   if (isSearchLoading) return <SearchLoader />;
 
-  return <KYCReportComponent report={report} />;
+  return (
+    <KYCReportComponent report={(report as KYCReport) || sampleKYCReport} />
+  );
 };
