@@ -44,10 +44,13 @@ export const SearchBar = () => {
     control,
     handleSubmit,
     reset,
+    getValues,
     formState: { isDirty },
   } = useForm<SearchFormInterface>({
     resolver: zodResolver(searchSchema),
   });
+
+  console.log(getValues());
 
   // Function to process the actual search
   const processSearch = async (formData: SearchFormInterface) => {

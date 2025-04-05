@@ -44,6 +44,8 @@ export const SearchTypeSelect = ({
             setLocalSearchType(event.target.value);
           }}
           {...field}
+          selectionMode="single"
+          selectedKeys={[field.value]}
         >
           {/* <SelectItem key={SEARCH_TYPE_NAME} data-value={SEARCH_TYPE_NAME}>
             {t("name")}
