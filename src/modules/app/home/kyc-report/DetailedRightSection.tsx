@@ -89,7 +89,7 @@ export const DetailedRightSection = ({
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <span className="text-sm">
-            {t("verification-against-international-lists")}:
+            {t("verification-against-350-lists")}:
           </span>
           <StatusBadge
             result={virtualizedReport.sanctions_lists.international?.overall}
@@ -98,7 +98,7 @@ export const DetailedRightSection = ({
         </div>
         <div className="flex items-center justify-between">
           <span className="text-sm">
-            {t("verification-against-national-lists")}:
+            {t("verification-against-350-lists")}:
           </span>
           <StatusBadge
             result={virtualizedReport.sanctions_lists.national?.overall}
@@ -110,11 +110,11 @@ export const DetailedRightSection = ({
           <StatusBadge result={virtualizedReport.criminal_records} size="sm" />
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-sm">{t("peps-verification")}:</span>
+          <span className="text-sm">{t("identification-of-peps")}:</span>
           <StatusBadge result={virtualizedReport.peps_verification} size="sm" />
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-sm">{t("news-media")}:</span>
+          <span className="text-sm">{t("news-published-in-media")}:</span>
           <StatusBadge result={virtualizedReport.news_media} size="sm" />
         </div>
       </div>
