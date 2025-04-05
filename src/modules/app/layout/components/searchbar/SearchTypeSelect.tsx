@@ -1,7 +1,4 @@
-import {
-  SEARCH_TYPE_ID,
-  SEARCH_TYPE_NAME,
-} from "@/modules/app/constants/search";
+import { SEARCH_TYPE_ID } from "@/modules/app/constants/search";
 import { useSearchReportStore } from "@/modules/store/search-report-store";
 import { SearchFormInterface } from "@/types/app/search";
 import { Select, SelectItem } from "@heroui/react";
@@ -48,9 +45,9 @@ export const SearchTypeSelect = ({
           }}
           {...field}
         >
-          <SelectItem key={SEARCH_TYPE_NAME} data-value={SEARCH_TYPE_NAME}>
+          {/* <SelectItem key={SEARCH_TYPE_NAME} data-value={SEARCH_TYPE_NAME}>
             {t("name")}
-          </SelectItem>
+          </SelectItem> */}
           <SelectItem key={SEARCH_TYPE_ID} data-value={SEARCH_TYPE_ID}>
             {searchDocumentLabel}
           </SelectItem>

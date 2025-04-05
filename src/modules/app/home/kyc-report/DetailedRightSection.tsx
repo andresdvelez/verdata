@@ -98,7 +98,7 @@ export const DetailedRightSection = ({
         </div>
         <div className="flex items-center justify-between">
           <span className="text-sm">
-            {t("verification-against-350-lists")}:
+            {t("verification-on-413-latam-lists")}:
           </span>
           <StatusBadge
             result={virtualizedReport.sanctions_lists.national?.overall}

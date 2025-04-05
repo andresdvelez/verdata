@@ -33,7 +33,7 @@ export const FullReport = ({ virtualizedReport }: FullReportType) => {
       />
 
       <NationalSanctionsSection
-        title={t("verification-against-350-lists")}
+        title={t("verification-on-413-latam-lists")}
         nationalData={virtualizedReport.sanctions_lists.national.lists}
         overallResult={virtualizedReport.sanctions_lists.national.overall}
       />
