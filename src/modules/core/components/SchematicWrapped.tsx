@@ -35,10 +35,6 @@ export const SchematicWrapped = ({ children }: { children: ReactNode }) => {
   }, [clerkUser, identify, client, user]);
 
   useEffect(() => {
-    console.log({
-      ...client.getFlagCheck(FeatureFlag.MONTHLY_REQUESTS),
-      userId: user?.id,
-    });
     const token = generateToken({
       ...client.getFlagCheck(FeatureFlag.MONTHLY_REQUESTS),
       userId: user?.id,

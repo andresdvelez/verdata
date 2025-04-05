@@ -11,6 +11,7 @@ export const NationalitySelect = ({
   control: Control<SearchFormInterface>;
 }) => {
   const t = useTranslations("nationality-select");
+  const tError = useTranslations("searchbar.errors");
 
   const setSearchDocumentLabel = useSearchReportStore(
     (state) => state.setSearchDocumentLabel
@@ -20,11 +21,10 @@ export const NationalitySelect = ({
     <Controller
       name="nationality"
       control={control}
-      defaultValue=""
       render={({ field: { onChange, ...field }, fieldState: { error } }) => (
         <Select
           isInvalid={!!error}
-          errorMessage={error?.message}
+          errorMessage={tError("nationalityRequired")}
           radius="full"
           label={t("label")}
           variant="flat"

@@ -11,6 +11,7 @@ export const SearchInput = ({
   control: Control<SearchFormInterface>;
 }) => {
   const t = useTranslations("search-data-input");
+  const tError = useTranslations("searchbar.errors");
 
   const localSearchType = useSearchReportStore(
     (state) => state.localSearchType
@@ -25,16 +26,14 @@ export const SearchInput = ({
     <Controller
       name="searchInput"
       control={control}
-      defaultValue=""
       render={({ field, fieldState: { error } }) => (
         <Input
           isInvalid={!!error}
-          errorMessage={error?.message}
-          isRequired
+          errorMessage={tError("searchInputRequired")}
           className="bg-transparent shadow-none lg:min-w-[180px] xl:min-w-[205px] border-none"
           classNames={{
             inputWrapper:
-              "bg-transparent shadow-none data-[hover=true]:bg-transparent group-data-[focus=true]:bg-transparent",
+              "!bg-transparent shadow-none data-[hover=true]:bg-transparent group-data-[focus=true]:!bg-transparent data-[hover=true]:!bg-transparent",
             errorMessage: "absolute bottom-0",
           }}
           type="text"

@@ -1,7 +1,7 @@
 "use client";
 
-import { addToast, Button } from "@heroui/react";
-import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
+import { addToast, Button, Chip } from "@heroui/react";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createSearchSchema } from "../../lib/search-schema";
 import { NationalitySelect } from "./searchbar/NationalitySelect";
@@ -18,41 +18,39 @@ import { useUserStore } from "@/modules/store/user-store";
 import { useEntitlementsValidation } from "../../common/hooks/useEntitlementsValidation";
 
 export const SearchBar = () => {
-  // hCaptcha state
   const captchaRef = useRef<HCaptcha | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   const { user } = useUser();
-
   const t = useTranslations("searchbar");
   const locale = useLocale();
+  const router = useRouter();
   const { isFullReportAvailable } = useEntitlementsValidation();
 
   // Create the schema with translations
   const searchSchema = createSearchSchema(t);
 
-  const router = useRouter();
+  // Store functions
   const searchReport = useSearchReportStore(
     (state) => state.handleSearchReport
   );
   const isLoading = useSearchReportStore((state) => state.isLoading);
   const addSearchedReport = useUserStore((state) => state.addSearchedReport);
+  const resetSearchState = useSearchReportStore(
+    (state) => state.resetSearchState
+  );
 
-  const { control, handleSubmit, reset } = useForm<SearchFormInterface>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isDirty },
+  } = useForm<SearchFormInterface>({
     resolver: zodResolver(searchSchema),
-    mode: "onBlur",
   });
 
-  const onSubmit: SubmitHandler<SearchFormInterface> = async ({
-    nationality,
-    searchType,
-    searchInput,
-  }: FieldValues) => {
-    if (!captchaToken) {
-      captchaRef.current?.execute();
-      return;
-    }
-
+  // Function to process the actual search
+  const processSearch = async (formData: SearchFormInterface) => {
     router.replace("/app/search");
 
     try {
@@ -61,23 +59,59 @@ export const SearchBar = () => {
         description: "Please wait",
         color: "success",
       });
+
       const searchedReport = await searchReport({
         userId: user?.id as string,
-        searchType,
-        nationality,
-        searchInput,
+        searchType: formData.searchType as "name" | "identification",
+        nationality: formData.nationality,
+        searchInput: formData.searchInput,
         isFullReportAvailable,
       });
+
       addSearchedReport(searchedReport);
       router.push(`/app/records/${searchedReport.id}`);
+
+      // Reset form and state
+      resetForm();
     } catch (error) {
       addToast({
         title: t(error),
         description: "Try it later",
       });
     }
-    reset();
+  };
+
+  // Handler for form submission
+  const onSubmit: SubmitHandler<SearchFormInterface> = (data) => {
+    if (captchaToken) {
+      // If captcha is already verified, proceed with search
+      processSearch(data);
+    } else {
+      // Otherwise, trigger captcha verification
+      captchaRef.current?.execute();
+    }
+  };
+
+  // Reset form and state
+  const resetForm = () => {
+    reset({
+      nationality: "",
+      searchType: "",
+      searchInput: "",
+    });
+    resetSearchState();
     setCaptchaToken(null);
+  };
+
+  // Handle captcha verification
+  const handleVerify = (token: string) => {
+    setCaptchaToken(token);
+
+    // Get current form values and submit the form programmatically
+    // This is a better approach than storing form values in state
+    handleSubmit((data) => {
+      processSearch(data);
+    })();
   };
 
   return (
@@ -90,32 +124,51 @@ export const SearchBar = () => {
         <SearchTypeSelect control={control} />
         <SearchInput control={control} />
       </div>
-      <Button
-        id="tooltip-select-0"
-        isLoading={isLoading}
-        variant="solid"
-        radius="none"
-        className="px-8 font-medium text-lg rounded-md"
-        color="primary"
-        type="submit"
-        startContent={
-          !isLoading && (
-            <i
-              className="icon-[tdesign--search] size-4"
-              role="img"
-              aria-hidden="true"
-            />
-          )
-        }
-      >
-        {t("search")}
-      </Button>
+      <div className="relative">
+        <Button
+          id="tooltip-select-0"
+          isLoading={isLoading}
+          variant="solid"
+          radius="none"
+          className="px-8 font-medium text-lg rounded-md"
+          color="primary"
+          type="submit"
+          startContent={
+            !isLoading && (
+              <i
+                className="icon-[tdesign--search] size-4"
+                role="img"
+                aria-hidden="true"
+              />
+            )
+          }
+        >
+          {t("search")}
+        </Button>
+        {isDirty && !captchaToken && (
+          <Chip
+            className="absolute -left-3 -bottom-7"
+            variant="flat"
+            color="warning"
+            size="sm"
+            startContent={
+              <i
+                className="icon-[typcn--warning]"
+                role="img"
+                aria-hidden="true"
+              />
+            }
+          >
+            {t("complete-captcha")}
+          </Chip>
+        )}
+      </div>
       {/* Invisible hCaptcha */}
       <HCaptcha
         sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
         size="invisible"
         ref={captchaRef}
-        onVerify={(token) => setCaptchaToken(token)}
+        onVerify={handleVerify}
         languageOverride={locale}
       />
     </form>

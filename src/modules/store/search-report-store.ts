@@ -36,6 +36,10 @@ interface SearchReportState {
   setToken: (value: string) => void;
   setSearchDocumentLabel: (value: string) => void;
   setLocalSearchType: (value: string) => void;
+  // New reset functions
+  resetSearchDocumentLabel: () => void;
+  resetLocalSearchType: () => void;
+  resetSearchState: () => void;
   searchByName: (countryCode: string, searchName: string) => Promise<void>;
   handleSearchReport: ({
     userId,
@@ -63,6 +67,8 @@ export const useSearchReportStore = create<SearchReportState>()(
         localSearchType: SEARCH_TYPE_NAME,
         warningLabel: null,
         token: "",
+
+        // Existing setters
         setToken: (value) => {
           set({ token: value });
         },
@@ -72,6 +78,27 @@ export const useSearchReportStore = create<SearchReportState>()(
         setSearchDocumentLabel: (value) => {
           set({ searchDocumentLabel: value });
         },
+
+        // New reset functions
+        resetSearchDocumentLabel: () => {
+          set({ searchDocumentLabel: SEARCH_TYPE_DOCUMENT });
+        },
+        resetLocalSearchType: () => {
+          set({ localSearchType: SEARCH_TYPE_NAME });
+        },
+        resetSearchState: () => {
+          set({
+            searchDocumentLabel: SEARCH_TYPE_DOCUMENT,
+            localSearchType: SEARCH_TYPE_NAME,
+            warningLabel: null,
+            usersByName: [],
+            userIdentity: null,
+            isPreSearch: false,
+            isEmpty: true,
+          });
+        },
+
+        // Existing methods
         searchByName: async (countryCode: string /* searchName: string */) => {
           set({
             isLoading: true,
