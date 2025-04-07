@@ -55,8 +55,8 @@ export const SearchBar = () => {
 
     try {
       addToast({
-        title: "Your report is being generated",
-        description: "Please wait",
+        title: t("alerts.report-being-generated"),
+        description: t("alerts.please-wait"),
         color: "success",
       });
 
@@ -76,7 +76,7 @@ export const SearchBar = () => {
     } catch (error) {
       addToast({
         title: t(error),
-        description: "Try it later",
+        description: t("alerts.try-it-later"),
       });
     }
   };

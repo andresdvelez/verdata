@@ -1,7 +1,6 @@
-import { cn, Spinner } from "@heroui/react";
+import { cn } from "@heroui/react";
 import { SearchedIdentities } from "@prisma/client";
 import { useTranslations } from "next-intl";
-import { useEntitlementsValidation } from "../../common/hooks/useEntitlementsValidation";
 
 interface IdentityCardProps {
   personInfo: SearchedIdentities;
@@ -14,7 +13,12 @@ export const IdentityCard: React.FC<IdentityCardProps> = ({
 }) => {
   const t = useTranslations("report.content");
 
-  const { isLoading } = useEntitlementsValidation();
+  const identityFields = [
+    { label: t("name"), value: personInfo.name },
+    { label: t("document-number"), value: personInfo.document },
+    { label: t("nationality"), value: personInfo.nationality },
+    { label: t("document-type"), value: personInfo.document_type },
+  ];
 
   return (
     <div
@@ -23,39 +27,18 @@ export const IdentityCard: React.FC<IdentityCardProps> = ({
         className
       )}
     >
-      {isLoading ? (
-        <div className="w-full h-full flex items-center justify-center">
-          <Spinner className="self-center" />
-        </div>
-      ) : (
-        <>
-          {" "}
-          <div className="space-y-1">
-            <h2 className="text-2xl font-bold">{t("identity-verification")}</h2>
+      <div className="space-y-1">
+        <h2 className="text-2xl font-bold">{t("identity-verification")}</h2>
+      </div>
+
+      <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+        {identityFields.map((field, index) => (
+          <div key={index} className="space-y-1">
+            <p className="text-sm text-gray-500">{field.label}:</p>
+            <p className="font-medium">{field.value}</p>
           </div>
-          <div className="grid grid-cols-2 gap-x-6 gap-y-3">
-            <div className="space-y-1">
-              <p className="text-sm text-gray-500">{t("name")}:</p>
-              <p className="font-medium">{personInfo.name}</p>
-            </div>
-
-            <div className="space-y-1">
-              <p className="text-sm text-gray-500">{t("document-number")}:</p>
-              <p className="font-medium">{personInfo.document}</p>
-            </div>
-
-            <div className="space-y-1">
-              <p className="text-sm text-gray-500">{t("nationality")}:</p>
-              <p className="font-medium">{personInfo.nationality}</p>
-            </div>
-
-            <div className="space-y-1">
-              <p className="text-sm text-gray-500">{t("document-type")}:</p>
-              <p className="font-medium">{personInfo.document_type}</p>
-            </div>
-          </div>
-        </>
-      )}
+        ))}
+      </div>
     </div>
   );
 };

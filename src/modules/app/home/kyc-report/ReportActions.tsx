@@ -1,29 +1,34 @@
 import { addToast, Button, Card } from "@heroui/react";
-import React, { Dispatch, SetStateAction } from "react";
 import { useEntitlementsValidation } from "../../common/hooks/useEntitlementsValidation";
 import { useTranslations } from "next-intl";
 
-export const ReportActions = ({
+interface ReportActionsProps {
+  showFullReport: boolean;
+  setShowFullReport: (value: boolean) => void;
+}
+
+export const ReportActions: React.FC<ReportActionsProps> = ({
   showFullReport,
   setShowFullReport,
-}: {
-  showFullReport: boolean;
-  setShowFullReport: Dispatch<SetStateAction<boolean>>;
 }) => {
   const { isFullReportAvailable } = useEntitlementsValidation();
   const t = useTranslations("report.content");
 
   const handleSaveReport = () => {
-    if (!isFullReportAvailable)
+    if (!isFullReportAvailable) {
       return addToast({
         title: t("you-dont-have-subscription"),
         description: t("get-subscription-to-get-full-report"),
       });
+    }
+
     addToast({
       title: t("saved-report"),
       description: t("report-saved-successfully"),
     });
   };
+
+  const toggleFullReport = () => setShowFullReport(!showFullReport);
 
   return (
     <Card className="overflow-hidden" shadow="sm">
@@ -33,7 +38,7 @@ export const ReportActions = ({
           variant="ghost"
           size="sm"
           className="flex items-center gap-2"
-          onPress={() => setShowFullReport(!showFullReport)}
+          onPress={toggleFullReport}
         >
           {t("see-full-report")}
         </Button>

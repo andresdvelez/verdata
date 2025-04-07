@@ -1,24 +1,20 @@
 "use client";
 
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  cn,
-  Spinner,
-} from "@heroui/react";
-import { useEffect, useState } from "react";
-import { sampleKYCReport } from "../common/data/kycReportData";
-import { IdentityCard } from "./kyc-report/IdentityCard";
+import { Button, cn } from "@heroui/react";
 import { useRouter } from "@/modules/translations/i18n/routing";
 import { useTranslations } from "next-intl";
-import { useEntitlementsValidation } from "../common/hooks/useEntitlementsValidation";
 import { KYCReport } from "@/types/app/reports";
+
+// Custom hook
+import { useKYCReport } from "../hooks/useKYCReport";
+
+// Components
+import { IdentityCard } from "./kyc-report/IdentityCard";
 import { DetailedRightSection } from "./kyc-report/DetailedRightSection";
 import { FullReport } from "./kyc-report/FullReport";
 import { ReportActions } from "./kyc-report/ReportActions";
+import { KYCReportSkeleton } from "./kyc-report/KYCReportSkeleton";
+import { SubscriptionOverlay } from "./kyc-report/SubscriptionOverlay";
 
 interface KYCReportComponentProps {
   report: KYCReport;
@@ -29,37 +25,27 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
   report,
   className,
 }) => {
-  const [virtualizedReport, setVirtualizedReport] =
-    useState<KYCReport>(sampleKYCReport);
-  const [showFullReport, setShowFullReport] = useState(false);
+  const {
+    report: virtualizedReport,
+    showFullReport,
+    setShowFullReport,
+    isLoading,
+    isFullReportAvailable,
+  } = useKYCReport({ initialReport: report });
+
   const t = useTranslations("report.content");
   const router = useRouter();
-  const { isFullReportAvailable, isLoading } = useEntitlementsValidation();
 
-  useEffect(() => {
-    if (isFullReportAvailable) {
-      setVirtualizedReport(report);
-    }
-  }, [isFullReportAvailable, report]);
+  // Early return for loading state
+  if (isLoading) {
+    return <KYCReportSkeleton />;
+  }
 
   return (
     <div className={cn("animate-fade-in", className)}>
       {/* Header */}
       <div className="mb-8 space-y-1">
-        <Button
-          onPress={() => router.back()}
-          className="flex items-center gap-2 text-sm text-gray-500 mb-12 hover:text-black transition-colors group w-fit"
-          variant="light"
-          startContent={
-            <i
-              className="icon-[bx--left-arrow-alt] size-4 group-hover:-translate-x-1 transition-transform"
-              role="img"
-              aria-hidden="true"
-            />
-          }
-        >
-          {t("go-back")}
-        </Button>
+        <BackButton onBack={() => router.back()} label={t("go-back")} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -83,35 +69,16 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
 
         {/* Right Column – Detailed Verification */}
         <div className="lg:col-span-2 space-y-6 relative">
-          {isLoading ? (
-            <div className="w-full h-full flex items-center justify-center">
-              <Spinner className="self-center" />
-            </div>
-          ) : (
-            <>
-              {!isFullReportAvailable && (
-                <Card className="flex flex-col items-center text-center absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm z-10">
-                  <CardHeader className="text-4xl font-semibold justify-center">
-                    {t("found-your-report")}
-                  </CardHeader>
-                  <CardBody className="text-xl font-semibold">
-                    {t("not-subscribed-to-see-full-report")}
-                  </CardBody>
-                  <CardFooter className="flex justify-center">
-                    <Button
-                      onPress={() => router.push("/app/credits")}
-                      className="bg-primary text-background"
-                      variant="solid"
-                      radius="sm"
-                    >
-                      {t("buy-more-credits")}
-                    </Button>
-                  </CardFooter>
-                </Card>
-              )}
-              <DetailedRightSection virtualizedReport={virtualizedReport} />
-            </>
+          {!isFullReportAvailable && (
+            <SubscriptionOverlay
+              onBuyCredits={() => router.push("/app/credits")}
+            />
           )}
+
+          <DetailedRightSection
+            virtualizedReport={virtualizedReport}
+            isBlurred={!isFullReportAvailable}
+          />
 
           {/* Detailed Sections */}
           {showFullReport && (
@@ -122,3 +89,27 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
     </div>
   );
 };
+
+// Extracted BackButton component
+const BackButton = ({
+  onBack,
+  label,
+}: {
+  onBack: () => void;
+  label: string;
+}) => (
+  <Button
+    onPress={onBack}
+    className="flex items-center gap-2 text-sm text-gray-500 mb-12 hover:text-black transition-colors group w-fit"
+    variant="light"
+    startContent={
+      <i
+        className="icon-[bx--left-arrow-alt] size-4 group-hover:-translate-x-1 transition-transform"
+        role="img"
+        aria-hidden="true"
+      />
+    }
+  >
+    {label}
+  </Button>
+);
