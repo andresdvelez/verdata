@@ -22,45 +22,39 @@ export const NationalitySelect = ({
       name="nationality"
       control={control}
       defaultValue=""
-      render={({ field: { onChange, ...field }, fieldState: { error } }) => {
-        console.log(field.value);
-        return (
-          <Select
-            isInvalid={!!error}
-            errorMessage={tError("nationalityRequired")}
-            radius="full"
-            label={t("label")}
-            variant="flat"
-            className="bg-transparent lg:min-w-[180px] xl:min-w-[205px] 2xl:min-w-[235px]"
-            classNames={{
-              trigger:
-                "py-0 min-h-2 bg-transparent shadow-none data-[hover=true]:bg-transparent",
-              listbox: "max-h-60 overflow-y-auto",
-              errorMessage: "absolute bottom-0",
-            }}
-            {...field}
-            selectionMode="single"
-            selectedKeys={[field.value]}
-          >
-            {COUNTRIES?.map(({ Country, Country_Code, Document_Type }) => (
-              <SelectItem
-                key={Country_Code}
-                data-value={Country_Code}
-                onPress={() => {
-                  const updatedDocumentType = Document_Type.replace(
-                    /[()]/g,
-                    ""
-                  );
-                  setSearchDocumentLabel(updatedDocumentType);
-                  onChange(Country_Code);
-                }}
-              >
-                {Country}
-              </SelectItem>
-            ))}
-          </Select>
-        );
-      }}
+      render={({ field: { onChange, ...field }, fieldState: { error } }) => (
+        <Select
+          isInvalid={!!error}
+          errorMessage={tError("nationalityRequired")}
+          radius="full"
+          label={t("label")}
+          variant="flat"
+          className="bg-transparent lg:min-w-[180px] xl:min-w-[205px] 2xl:min-w-[235px]"
+          classNames={{
+            trigger:
+              "py-0 min-h-2 bg-transparent shadow-none data-[hover=true]:bg-transparent",
+            listbox: "max-h-60 overflow-y-auto",
+            errorMessage: "absolute bottom-0",
+          }}
+          {...field}
+          selectionMode="single"
+          selectedKeys={[field.value]}
+        >
+          {COUNTRIES?.map(({ Country, Country_Code, Document_Type }) => (
+            <SelectItem
+              key={Country_Code}
+              data-value={Country_Code}
+              onPress={() => {
+                const updatedDocumentType = Document_Type.replace(/[()]/g, "");
+                setSearchDocumentLabel(updatedDocumentType);
+                onChange(Country_Code);
+              }}
+            >
+              {Country}
+            </SelectItem>
+          ))}
+        </Select>
+      )}
     />
   );
 };

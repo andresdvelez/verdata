@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import { devtools } from "zustand/middleware";
 import {
   SEARCH_TYPE_DOCUMENT,
+  SEARCH_TYPE_ID,
   SEARCH_TYPE_NAME,
 } from "../app/constants/search";
 import { parseCountry } from "../app/utils/parseCountry";
@@ -64,7 +65,7 @@ export const useSearchReportStore = create<SearchReportState>()(
         usersByName: [],
         userIdentity: null,
         searchDocumentLabel: SEARCH_TYPE_DOCUMENT,
-        localSearchType: SEARCH_TYPE_NAME,
+        localSearchType: SEARCH_TYPE_ID,
         warningLabel: null,
         token: "",
 
