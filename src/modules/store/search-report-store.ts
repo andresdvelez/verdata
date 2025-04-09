@@ -13,7 +13,6 @@ import { Report } from "@prisma/client";
 import { trackEntitlement } from "@/actions/trackSchematicEntitlements";
 import { FeatureFlag } from "../app/common/features/flags";
 import { sampleKYCReport } from "../app/common/data/kycReportData";
-import { searchReportService } from "../app/services/searchReportService";
 
 export type handleSearchReportType = {
   userId: string;
@@ -55,7 +54,7 @@ interface SearchReportState {
 export const useSearchReportStore = create<SearchReportState>()(
   devtools(
     persist(
-      (set, get) => ({
+      (set) => ({
         isLoading: false,
         isPreSearch: false,
         isEmpty: true,
@@ -130,6 +129,7 @@ export const useSearchReportStore = create<SearchReportState>()(
           isFullReportAvailable,
         }) => {
           try {
+            console.log(searchType, nationality, searchInput);
             set({
               isLoading: true,
               isEmpty: false,
@@ -138,18 +138,20 @@ export const useSearchReportStore = create<SearchReportState>()(
 
             if (!userId) throw new Error("Something went wrong, try it later");
             if (isFullReportAvailable) {
-              const searchedReport = await searchReportService({
-                searchType,
-                nationality,
-                searchInput,
-                token: get().token,
-              });
+              await new Promise((resolve) => setTimeout(resolve, 10000));
+
+              // const searchedReport = await searchReportService({
+              //   searchType,
+              //   nationality,
+              //   searchInput,
+              //   token: get().token,
+              // });
               await trackEntitlement(FeatureFlag.MONTHLY_REQUESTS, userId);
               set({
                 isEmpty: false,
                 isLoading: false,
               });
-              return searchedReport;
+              return sampleKYCReport;
             } else {
               await trackEntitlement(FeatureFlag.MONTHLY_REQUESTS, userId);
               await new Promise((resolve) => setTimeout(resolve, 60000));

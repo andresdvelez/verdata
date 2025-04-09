@@ -1,15 +1,15 @@
 import { KYCReport } from "@/types/app/reports";
 
 export const sampleKYCReport: KYCReport = {
-  id: "1",
-  user_id: "1",
-  related_identity_id: "123",
+  id: "cm937kfn20002stz55t7yced4",
+  user_id: "cm8wa44et0000jp03pcclw5yb",
+  related_identity_id: "cm937kfbr0000stz5aconbidq",
   is_identity_matched: true,
   risk_score: 59,
   related_identity: {
-    id: "1",
-    name: "Felipe Vargas",
-    document: "1102003346",
+    id: "cm937kfbr0000stz5aconbidq",
+    name: "JUAN MANUEL ARANZAZU HERNANDEZ",
+    document: "10258284",
     document_type: "C.C",
     nationality: "Colombia",
     created_at: new Date("2025-03-31T12:45:30.123Z"),
