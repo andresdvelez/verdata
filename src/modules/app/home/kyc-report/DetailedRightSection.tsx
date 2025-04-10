@@ -18,7 +18,7 @@ export const DetailedRightSection = ({
 
   return (
     <Card shadow="sm" className={cn("p-5", isBlurred && "blur-sm")}>
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col md:flex-row justify-between items-start">
         <div className="space-y-3">
           <h2 className="text-lg font-medium">{t("detailed")}</h2>
           <div className="flex items-center gap-2">

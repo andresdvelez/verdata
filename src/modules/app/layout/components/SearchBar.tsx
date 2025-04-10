@@ -16,8 +16,13 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { useUser } from "@clerk/nextjs";
 import { useUserStore } from "@/modules/store/user-store";
 import { useEntitlementsValidation } from "../../common/hooks/useEntitlementsValidation";
+import { clsx } from "clsx";
 
-export const SearchBar = () => {
+export const SearchBar = ({
+  variant = "header",
+}: {
+  variant?: "header" | "search-page";
+}) => {
   const captchaRef = useRef<HCaptcha | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
@@ -116,10 +121,15 @@ export const SearchBar = () => {
 
   return (
     <form
-      className="hidden xl:flex items-center justify-start 2xl:justify-center flex-1"
+      className={clsx(
+        "flex flex-col lg:flex-row items-center justify-start 2xl:justify-center ",
+        {
+          "hidden xl:flex flex-1": variant === "header",
+        }
+      )}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex items-center *:border-r border-black/35 *:px-1">
+      <div className=" flex flex-col lg:flex-row items-center lg:*:border-r border-black/35 *:px-1">
         <NationalitySelect control={control} />
         <SearchTypeSelect control={control} />
         <SearchInput control={control} />
