@@ -11,7 +11,7 @@
         "@heroui/react": "^2.7.4",
         "@hookform/resolvers": "^4.1.3",
         "@prisma/client": "^6.5.0",
-        "@schematichq/schematic-components": "^0.7.4",
+        "@schematichq/schematic-components": "^0.7.10",
         "@schematichq/schematic-react": "^1.2.4",
         "@schematichq/schematic-typescript-node": "^1.1.10",
         "@sentry/nextjs": "^9",
@@ -855,7 +855,7 @@
 
     "@rushstack/eslint-patch": ["@rushstack/eslint-patch@1.10.5", "", {}, "sha512-kkKUDVlII2DQiKy7UstOR1ErJP8kUKAQ4oa+SQtM0K+lPdmmjj0YnnxBgtTVYH7mUKtbsxeFC9y0AmK7Yb78/A=="],
 
-    "@schematichq/schematic-components": ["@schematichq/schematic-components@0.7.4", "", { "dependencies": { "@stripe/stripe-js": "^7.0.0", "classnames": "^2.5.1", "i18next": "^24.2.3", "lodash": "^4.17.21", "pako": "^2.1.0", "pluralize": "^8.0.0", "react-i18next": "^15.4.1", "styled-components": "^6.1.17", "uuid": "^11.1.0" }, "peerDependencies": { "@stripe/react-stripe-js": ">=3", "react": ">=18", "react-dom": ">=18" } }, "sha512-xfexpyqes3d751d5vAdh/pwDbmJtwWWHeo0SOoVTFEQNUJdXBD5QRdnUbbemCXuEIebxnF16gxP/zGGs91jK6Q=="],
+    "@schematichq/schematic-components": ["@schematichq/schematic-components@0.7.10", "", { "dependencies": { "@stripe/stripe-js": "^7.0.0", "classnames": "^2.5.1", "i18next": "^24.2.3", "lodash": "^4.17.21", "pako": "^2.1.0", "pluralize": "^8.0.0", "react-i18next": "^15.4.1", "styled-components": "^6.1.17", "uuid": "^11.1.0" }, "peerDependencies": { "@stripe/react-stripe-js": ">=3", "react": ">=18", "react-dom": ">=18" } }, "sha512-lqk+InCHtZNjF5PRS1V/cuqsewA8BIo2YlX9leS6Dx0Cxsvs7Qp9EX2GrV7bdtq2AnZGrhq6fTm7mAqvMQgAsg=="],
 
     "@schematichq/schematic-js": ["@schematichq/schematic-js@1.2.2", "", { "dependencies": { "cross-fetch": "^4.1.0", "uuid": "^11.0.5" } }, "sha512-8aoFYOQddSgcGM4ahHjenfVkj2F3uoATEgxMo9ljBPeU7xYQ5bUhCvIJDB7yGZfts8UQ3rwtCZQt4PT/1PfGKA=="],
 

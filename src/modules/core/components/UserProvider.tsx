@@ -3,11 +3,17 @@
 import { useUserStore } from "@/modules/store/user-store";
 import { useAuth } from "@clerk/nextjs";
 import { useEffect } from "react";
+import { generateToken } from "../utils/generateJwtToken";
+import { useSchematic } from "@schematichq/schematic-react";
+import { FeatureFlag } from "@/modules/app/common/features/flags";
+import { useSearchReportStore } from "@/modules/store/search-report-store";
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const { userId: clerkId, isLoaded: isClerkLoaded } = useAuth();
   const fetchUser = useUserStore((state) => state.fetchUser);
   const user = useUserStore((state) => state.user);
+  const { client } = useSchematic();
+  const setToken = useSearchReportStore((state) => state.setToken);
   const setSearchedReports = useUserStore((state) => state.setSearchedReports);
 
   useEffect(() => {
@@ -19,6 +25,15 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (user) {
       setSearchedReports(user.searched_reports);
+
+      const token = generateToken({
+        ...client.getFlagCheck(FeatureFlag.MONTHLY_REQUESTS),
+        userId: user?.id,
+      });
+
+      token.then((token) => {
+        setToken(token);
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);

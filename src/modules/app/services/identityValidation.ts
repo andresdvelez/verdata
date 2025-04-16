@@ -1,19 +1,30 @@
-import axios from "axios";
+import { axiosInstance } from "@/modules/core/lib/axios";
 
 export const getIdentityByDocument = async ({
-  country,
+  nationality,
   identification,
+  token,
 }: {
-  country: string;
+  nationality: string;
   identification: string;
+  token: string;
 }) => {
   try {
-    const response = await axios.get(
-      `identity_validation/${country}/query_by_document/${identification}`
+    const response = await axiosInstance.post(
+      `/searched-identities`,
+      {
+        document: identification,
+        nationality,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     return response.data;
   } catch (error) {
-    console.error(error);
+    return { error };
   }
 };
 
@@ -25,7 +36,7 @@ export const getIdentityByName = async ({
   name: string;
 }) => {
   try {
-    const response = await axios.get(
+    const response = await axiosInstance.get(
       `identity_validation/${country}/query_by_name/${name}`
     );
     return response.data;

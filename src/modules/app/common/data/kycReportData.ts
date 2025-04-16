@@ -8,8 +8,8 @@ export const sampleKYCReport: KYCReport = {
   risk_score: 59,
   related_identity: {
     id: "cm937kfbr0000stz5aconbidq",
-    name: "JUAN MANUEL ARANZAZU HERNANDEZ",
-    document: "10258284",
+    name: "JUAN HERNANDO ARANZAZU",
+    document: "1234567",
     document_type: "C.C",
     nationality: "Colombia",
     created_at: new Date("2025-03-31T12:45:30.123Z"),

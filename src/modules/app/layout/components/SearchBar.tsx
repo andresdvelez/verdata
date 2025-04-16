@@ -88,13 +88,13 @@ export const SearchBar = ({
 
   // Handler for form submission
   const onSubmit: SubmitHandler<SearchFormInterface> = (data) => {
-    if (captchaToken) {
+    // if (captchaToken) {
       // If captcha is already verified, proceed with search
       processSearch(data);
-    } else {
-      // Otherwise, trigger captcha verification
-      captchaRef.current?.execute();
-    }
+    // } else {
+    //   // Otherwise, trigger captcha verification
+    //   captchaRef.current?.execute();
+    // }
   };
 
   // Reset form and state

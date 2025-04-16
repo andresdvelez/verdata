@@ -14,6 +14,7 @@ import { trackEntitlement } from "@/actions/trackSchematicEntitlements";
 import { FeatureFlag } from "../app/common/features/flags";
 import { sampleKYCReport } from "../app/common/data/kycReportData";
 import { searchReportService } from "../app/services/searchReportService";
+import { getIdentityByDocument } from "../app/services/identityValidation";
 
 export type handleSearchReportType = {
   userId: string;
@@ -151,13 +152,20 @@ export const useSearchReportStore = create<SearchReportState>()(
               });
               return searchedReport;
             } else {
+              const searchedIdentity = await getIdentityByDocument({
+                identification: searchInput,
+                nationality,
+                token: get().token,
+              });
               await trackEntitlement(FeatureFlag.MONTHLY_REQUESTS, userId);
-              await new Promise((resolve) => setTimeout(resolve, 60000));
               set({
                 isEmpty: false,
                 isLoading: false,
               });
-              return sampleKYCReport;
+              return {
+                ...searchedIdentity,
+                ...sampleKYCReport,
+              };
             }
           } catch (error) {
             set({

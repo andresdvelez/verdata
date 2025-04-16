@@ -1,18 +1,13 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { useSchematic, useSchematicEvents } from "@schematichq/schematic-react";
+import { useSchematicEvents } from "@schematichq/schematic-react";
 import { ReactNode, useEffect } from "react";
-import { generateToken } from "../utils/generateJwtToken";
-import { FeatureFlag } from "@/modules/app/common/features/flags";
-import { useSearchReportStore } from "@/modules/store/search-report-store";
 import { useUserStore } from "@/modules/store/user-store";
 
 export const SchematicWrapped = ({ children }: { children: ReactNode }) => {
   const { identify } = useSchematicEvents();
-  const { client } = useSchematic();
   const { user: clerkUser } = useUser();
-  const setToken = useSearchReportStore((state) => state.setToken);
   const user = useUserStore((state) => state.user);
 
   useEffect(() => {
@@ -32,16 +27,7 @@ export const SchematicWrapped = ({ children }: { children: ReactNode }) => {
         name: userName as string,
       });
     }
-  }, [clerkUser, identify, client, user]);
-
-  useEffect(() => {
-    const token = generateToken({
-      ...client.getFlagCheck(FeatureFlag.MONTHLY_REQUESTS),
-      userId: user?.id,
-    });
-
-    token.then((token) => setToken(token));
-  }, [user]);
+  }, [clerkUser, identify, user]);
 
   return <>{children}</>;
 };

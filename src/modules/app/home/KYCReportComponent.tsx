@@ -15,6 +15,7 @@ import { FullReport } from "./kyc-report/FullReport";
 import { ReportActions } from "./kyc-report/ReportActions";
 import { KYCReportSkeleton } from "./kyc-report/KYCReportSkeleton";
 import { SubscriptionOverlay } from "./kyc-report/SubscriptionOverlay";
+import { sampleKYCReport } from "../common/data/kycReportData";
 
 interface KYCReportComponentProps {
   report: KYCReport;
@@ -81,9 +82,7 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
           />
 
           {/* Detailed Sections */}
-          {showFullReport && (
-            <FullReport virtualizedReport={virtualizedReport} />
-          )}
+          {showFullReport && <FullReport virtualizedReport={sampleKYCReport} />}
         </div>
       </div>
     </div>
