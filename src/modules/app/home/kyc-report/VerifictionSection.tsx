@@ -56,7 +56,7 @@ export const VerificationSection: React.FC<VerificationSectionProps> = ({
           <span className="font-medium">{title}</span>
         </div>
         <div className="flex items-center gap-3">
-          <StatusBadge result={result} showIcon={false} />
+          <StatusBadge isMatch={result} showIcon={false} />
           {isOpen ? (
             <i
               className="icon-[humbleicons--chevron-up] size-5 text-gray-500"

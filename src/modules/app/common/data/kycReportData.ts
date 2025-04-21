@@ -19,47 +19,39 @@ export const sampleKYCReport: KYCReport = {
       overall: false,
       lists: [
         {
-          organization: "Naciones Unidas",
-          scope: "Global",
-          lists: [
-            {
-              listName: "Lista Consolidada del Consejo de Seguridad",
-              description: "Incluye personas y entidades sujetas a sanciones",
-              result: false,
-            },
-            {
-              listName: "Lista de terroristas de la ONU",
-              description: "Individuos asociados con terrorismo",
-              result: false,
-            },
-          ],
+          listCode: "UNSC_CONS",
+          listName: "Lista Consolidada del Consejo de Seguridad",
+          isMatch: false,
+          items: [],
+          screenshots: [],
         },
         {
-          organization: "Unión Europea",
-          scope: "Europa",
-          lists: [
-            {
-              listName: "Lista de Sanciones Financieras de la UE",
-              description: "Sanciones económicas y financieras",
-              result: false,
-            },
-          ],
+          listCode: "UN_TERROR",
+          listName: "Lista de terroristas de la ONU",
+          isMatch: false,
+          items: [],
+          screenshots: [],
         },
         {
-          organization: "OFAC",
-          scope: "Estados Unidos",
-          lists: [
-            {
-              listName: "Lista SDN",
-              description: "Specially Designated Nationals",
-              result: false,
-            },
-            {
-              listName: "Lista Sectorial",
-              description: "Entidades en sectores específicos",
-              result: false,
-            },
-          ],
+          listCode: "EU_FIN",
+          listName: "Lista de Sanciones Financieras de la UE",
+          isMatch: false,
+          items: [],
+          screenshots: [],
+        },
+        {
+          listCode: "OFAC_SDN",
+          listName: "Lista SDN",
+          isMatch: false,
+          items: [],
+          screenshots: [],
+        },
+        {
+          listCode: "OFAC_SECTOR",
+          listName: "Lista Sectorial",
+          isMatch: false,
+          items: [],
+          screenshots: [],
         },
       ],
     },
@@ -67,47 +59,39 @@ export const sampleKYCReport: KYCReport = {
       overall: false,
       lists: [
         {
-          countryCode: "CO",
-          countryName: "Colombia",
-          lists: [
-            {
-              listName: "Lista de la Contraloría",
-              description: "Responsabilidad fiscal",
-              result: false,
-            },
-            {
-              listName: "Lista de la Procuraduría",
-              description: "Sanciones disciplinarias",
-              result: false,
-            },
-            {
-              listName: "Lista DIAN",
-              description: "Deudores morosos",
-              result: false,
-            },
-          ],
+          listCode: "CO_CTR",
+          listName: "Lista de la Contraloría",
+          isMatch: false,
+          items: [],
+          screenshots: [],
         },
         {
-          countryCode: "MX",
-          countryName: "México",
-          lists: [
-            {
-              listName: "Lista de la UIF",
-              description: "Personas bloqueadas",
-              result: false,
-            },
-          ],
+          listCode: "CO_PRC",
+          listName: "Lista de la Procuraduría",
+          isMatch: false,
+          items: [],
+          screenshots: [],
         },
         {
-          countryCode: "AR",
-          countryName: "Argentina",
-          lists: [
-            {
-              listName: "Lista UIF Argentina",
-              description: "Personas reportadas",
-              result: false,
-            },
-          ],
+          listCode: "CO_DIAN",
+          listName: "Lista DIAN",
+          isMatch: false,
+          items: [],
+          screenshots: [],
+        },
+        {
+          listCode: "MX_UIF",
+          listName: "Lista de la UIF",
+          isMatch: false,
+          items: [],
+          screenshots: [],
+        },
+        {
+          listCode: "AR_UIF",
+          listName: "Lista UIF Argentina",
+          isMatch: false,
+          items: [],
+          screenshots: [],
         },
       ],
     },

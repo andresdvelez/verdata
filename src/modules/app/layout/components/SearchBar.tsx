@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createSearchSchema } from "../../lib/search-schema";
 import { NationalitySelect } from "./searchbar/NationalitySelect";
-import { SearchFormInterface } from "@/types/app/search";
+import { SearchFormInterface, SearchType } from "@/types/app/search";
 import { SearchTypeSelect } from "./searchbar/SearchTypeSelect";
 import { SearchInput } from "./searchbar/SearchInput";
 import { useRouter } from "@/modules/translations/i18n/routing";
@@ -32,13 +32,12 @@ export const SearchBar = ({
   const router = useRouter();
   const { isFullReportAvailable } = useEntitlementsValidation();
 
-  // Create the schema with translations
   const searchSchema = createSearchSchema(t);
 
-  // Store functions
   const searchReport = useSearchReportStore(
     (state) => state.handleSearchReport
   );
+  const searchByName = useSearchReportStore((state) => state.searchByName);
   const isLoading = useSearchReportStore((state) => state.isLoading);
   const addSearchedReport = useUserStore((state) => state.addSearchedReport);
   const resetSearchState = useSearchReportStore(
@@ -54,29 +53,34 @@ export const SearchBar = ({
     resolver: zodResolver(searchSchema),
   });
 
-  // Function to process the actual search
   const processSearch = async (formData: SearchFormInterface) => {
     router.replace("/app/search");
 
     try {
-      addToast({
-        title: t("alerts.report-being-generated"),
-        description: t("alerts.please-wait"),
-        color: "success",
-      });
+      if (formData.searchType === SearchType.DOCUMENT) {
+        addToast({
+          title: t("alerts.report-being-generated"),
+          description: t("alerts.please-wait"),
+          color: "success",
+        });
 
-      const searchedReport = await searchReport({
-        userId: user?.id as string,
-        searchType: formData.searchType as "name" | "identification",
-        nationality: formData.nationality,
-        searchInput: formData.searchInput,
-        isFullReportAvailable,
-      });
+        const searchedReport = await searchReport({
+          userId: user?.id as string,
+          searchType: formData.searchType as SearchType,
+          nationality: formData.nationality,
+          searchInput: formData.searchInput,
+          isFullReportAvailable,
+        });
 
-      addSearchedReport(searchedReport);
-      router.push(`/app/records/${searchedReport.id}`);
+        addSearchedReport(searchedReport);
+        router.push(`/app/records/${searchedReport.id}`);
+      } else if (formData.searchType === SearchType.NAME) {
+        await searchByName({
+          countryCode: formData.nationality,
+          searchName: formData.searchInput,
+        });
+      }
 
-      // Reset form and state
       resetForm();
     } catch (error) {
       addToast({
@@ -88,13 +92,12 @@ export const SearchBar = ({
 
   // Handler for form submission
   const onSubmit: SubmitHandler<SearchFormInterface> = (data) => {
-    // if (captchaToken) {
-      // If captcha is already verified, proceed with search
+    if (captchaToken) {
       processSearch(data);
-    // } else {
-    //   // Otherwise, trigger captcha verification
-    //   captchaRef.current?.execute();
-    // }
+    } else {
+      // Otherwise, trigger captcha verification
+      captchaRef.current?.execute();
+    }
   };
 
   // Reset form and state
@@ -108,12 +111,9 @@ export const SearchBar = ({
     setCaptchaToken(null);
   };
 
-  // Handle captcha verification
   const handleVerify = (token: string) => {
     setCaptchaToken(token);
 
-    // Get current form values and submit the form programmatically
-    // This is a better approach than storing form values in state
     handleSubmit((data) => {
       processSearch(data);
     })();

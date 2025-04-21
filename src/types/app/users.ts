@@ -1,5 +1,8 @@
-import { Report, User } from "@prisma/client";
+import { Report, SearchedIdentities, User } from "@prisma/client";
 
 export type UserType = User & { searched_reports: Report[] };
 
-export type UserSearchByName = { Nombre: string };
+export interface SearchNameResults {
+  results: SearchedIdentities[];
+  total: number;
+}

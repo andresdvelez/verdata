@@ -7,21 +7,27 @@ import {
   SEARCH_TYPE_NAME,
 } from "../app/constants/search";
 import { parseCountry } from "../app/utils/parseCountry";
-import { UserSearchByName } from "@/types/app/users";
-import { UserIdentity, UserNotFound } from "@/types/app/user-identity";
 import { Report } from "@prisma/client";
 import { trackEntitlement } from "@/actions/trackSchematicEntitlements";
 import { FeatureFlag } from "../app/common/features/flags";
 import { sampleKYCReport } from "../app/common/data/kycReportData";
 import { searchReportService } from "../app/services/searchReportService";
 import { getIdentityByDocument } from "../app/services/identityValidation";
+import { listNames } from "../app/services/listNames";
+import { SearchType } from "@/types/app/search";
+import { SearchNameResults } from "@/types/app/users";
 
 export type handleSearchReportType = {
   userId: string;
-  searchType: "name" | "identification";
+  searchType: SearchType;
   nationality: string;
   searchInput: string;
   isFullReportAvailable: boolean;
+};
+
+export type handleSearchNameType = {
+  countryCode: string;
+  searchName: string;
 };
 
 interface SearchReportState {
@@ -29,20 +35,22 @@ interface SearchReportState {
   isPreSearch: boolean;
   isEmpty: boolean;
   token: string;
+  nameSearched: string | null;
   countryCode: string | null;
-  usersByName: UserSearchByName[] | null;
+  usersByName: SearchNameResults | null;
   searchDocumentLabel: string;
   localSearchType: string;
-  userIdentity: UserIdentity | UserNotFound | null;
   warningLabel: string | null;
   setToken: (value: string) => void;
   setSearchDocumentLabel: (value: string) => void;
-  setLocalSearchType: (value: string) => void;
-  // New reset functions
+  setLocalSearchType: (value: SearchType) => void;
   resetSearchDocumentLabel: () => void;
   resetLocalSearchType: () => void;
   resetSearchState: () => void;
-  searchByName: (countryCode: string, searchName: string) => Promise<void>;
+  searchByName: ({
+    countryCode,
+    searchName,
+  }: handleSearchNameType) => Promise<void>;
   handleSearchReport: ({
     userId,
     searchType,
@@ -50,7 +58,6 @@ interface SearchReportState {
     searchInput,
     isFullReportAvailable,
   }: handleSearchReportType) => Promise<Report>;
-  searchById: (countryCode: string, searchId: string) => Promise<void>;
 }
 
 export const useSearchReportStore = create<SearchReportState>()(
@@ -60,11 +67,11 @@ export const useSearchReportStore = create<SearchReportState>()(
         isLoading: false,
         isPreSearch: false,
         isEmpty: true,
+        nameSearched: null,
         countryCode: null,
         nationalData: [],
         internationalData: [],
-        usersByName: [],
-        userIdentity: null,
+        usersByName: null,
         searchDocumentLabel: SEARCH_TYPE_DOCUMENT,
         localSearchType: SEARCH_TYPE_ID,
         warningLabel: null,
@@ -93,35 +100,38 @@ export const useSearchReportStore = create<SearchReportState>()(
             searchDocumentLabel: SEARCH_TYPE_DOCUMENT,
             localSearchType: SEARCH_TYPE_NAME,
             warningLabel: null,
-            usersByName: [],
-            userIdentity: null,
-            isPreSearch: false,
-            isEmpty: true,
           });
         },
 
-        // Existing methods
-        searchByName: async (countryCode: string /* searchName: string */) => {
-          set({
-            isLoading: true,
-            isEmpty: false,
-            isPreSearch: true,
-            countryCode: parseCountry(countryCode),
-          });
+        searchByName: async ({ countryCode, searchName }) => {
+          try {
+            set({
+              isLoading: true,
+              isEmpty: false,
+              countryCode: parseCountry(countryCode),
+              nameSearched: searchName,
+            });
 
-          // Simulate API call with a promise that resolves after 5 seconds
-          await new Promise((resolve) => setTimeout(resolve, 5000));
-          // TODO: Replace with actual API call when endpoint is ready
-          // const usersByName = await listNames({
-          //   countryCode: parseCountry(countryCode),
-          //   searchName,
-          // });
-
-          set({
-            usersByName: [], // This would be the result from the API
-            isEmpty: false,
-            isLoading: false,
-          });
+            const usersByName = await listNames({
+              countryCode: parseCountry(countryCode),
+              identityName: searchName,
+              token: get().token,
+            });
+            set({
+              usersByName: usersByName,
+              isEmpty: false,
+              isLoading: false,
+              isPreSearch: true,
+            });
+          } catch (error) {
+            set({
+              usersByName: null,
+              isEmpty: true,
+              isLoading: false,
+              isPreSearch: false,
+            });
+            throw error;
+          }
         },
         handleSearchReport: async ({
           userId,
@@ -175,28 +185,6 @@ export const useSearchReportStore = create<SearchReportState>()(
             throw error;
           }
         },
-        searchById: async (countryCode: string /* searchId: string */) => {
-          set({
-            isEmpty: false,
-            isLoading: true,
-            countryCode: parseCountry(countryCode),
-          });
-          // TODO: Search by document
-          // const userIdentity = await getIdentityByDocument({
-          //   country: parseCountry(countryCode),
-          //   identification: searchId,
-          // });
-          // set({ userIdentity });
-          // if ("error" in userIdentity) {
-          //   return set({
-          //     isLoading: false,
-          //     userIdentity: null,
-          //     matchedNationals: false,
-          //     matchedInternationals: false,
-          //   });
-          // }
-          // await get().handleSearch(userIdentity, nationalEndpoints as any);
-        },
       }),
       {
         name: "search-report-store",
@@ -208,6 +196,3 @@ export const useSearchReportStore = create<SearchReportState>()(
     )
   )
 );
-// function get() {
-//   return useSearchReportStore.getState();
-// }

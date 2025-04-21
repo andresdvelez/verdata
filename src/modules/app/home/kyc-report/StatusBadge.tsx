@@ -3,20 +3,19 @@ import { cn } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
 interface StatusBadgeProps {
-  result: boolean;
+  isMatch: boolean;
   className?: string;
   showIcon?: boolean;
   size?: "sm" | "md" | "lg";
 }
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({
-  result,
+  isMatch,
   className,
   showIcon = true,
   size = "md",
 }) => {
   const t = useTranslations("report.content");
-  const isMatch = result === true;
   const sizeClasses = {
     sm: "text-xs py-0.5 px-2",
     md: "text-sm py-1 px-2.5",

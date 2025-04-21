@@ -1,3 +1,4 @@
+import { RestrictiveList } from "@/modules/app/home/kyc-report/InternationalSanctionsSection";
 import {
   InternationalEndpoint,
   NationalEndpoint,
@@ -6,24 +7,6 @@ import {
 } from "@prisma/client";
 
 export type VerificationResult = boolean;
-
-export interface ListCheck {
-  listName: string;
-  description: string;
-  result: VerificationResult;
-}
-
-export interface NationalList {
-  countryCode: string;
-  countryName: string;
-  lists: ListCheck[];
-}
-
-export interface InternationalList {
-  organization: string;
-  scope: string;
-  lists: ListCheck[];
-}
 
 export interface ReportData {
   identity: SearchedIdentities;
@@ -35,11 +18,11 @@ export type KYCReport = Report & {
   sanctions_lists: {
     international: {
       overall: VerificationResult;
-      lists: InternationalList[];
+      lists: RestrictiveList[];
     };
     national: {
       overall: VerificationResult;
-      lists: NationalList[];
+      lists: RestrictiveList[];
     };
   };
   related_identity: SearchedIdentities;

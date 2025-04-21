@@ -1,9 +1,9 @@
-import { ListCheck } from "@/types/app/reports";
+import { RestrictiveList } from "./InternationalSanctionsSection";
 import { StatusBadge } from "./StatusBadge";
 
 interface ListSectionProps {
   title: string;
-  lists: ListCheck[];
+  lists: RestrictiveList[];
   className?: string;
 }
 
@@ -24,9 +24,8 @@ export const ListSection: React.FC<ListSectionProps> = ({
             <div className="flex justify-between items-start">
               <div>
                 <h4 className="font-medium text-sm">{list.listName}</h4>
-                <p className="text-xs text-gray-500 mt-1">{list.description}</p>
               </div>
-              <StatusBadge result={list.result} size="sm" />
+              <StatusBadge isMatch={list.isMatch} size="sm" />
             </div>
           </div>
         ))}

@@ -25,7 +25,7 @@ export const DetailedRightSection = ({
             <span className="text-sm font-medium">
               {t("identity-verification")}:
             </span>
-            <StatusBadge result={virtualizedReport.is_identity_matched} />
+            <StatusBadge isMatch={virtualizedReport.is_identity_matched} />
           </div>
         </div>
         <RiskScoreDisplay riskScore={virtualizedReport.risk_score} />

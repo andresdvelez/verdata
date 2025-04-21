@@ -18,18 +18,6 @@ export const VerificationList = ({
       label: t("verification-on-413-latam-lists"),
       result: virtualizedReport.sanctions_lists.national?.overall,
     },
-    {
-      label: t("criminal-records"),
-      result: virtualizedReport.criminal_records,
-    },
-    {
-      label: t("identification-of-peps"),
-      result: virtualizedReport.peps_verification,
-    },
-    {
-      label: t("news-published-in-media"),
-      result: virtualizedReport.news_media,
-    },
   ];
 
   return (
@@ -37,7 +25,7 @@ export const VerificationList = ({
       {verificationItems.map((item, index) => (
         <div key={index} className="flex items-center justify-between">
           <span className="text-sm">{item.label}:</span>
-          <StatusBadge result={item.result} size="sm" />
+          <StatusBadge isMatch={item.result} size="sm" />
         </div>
       ))}
     </div>

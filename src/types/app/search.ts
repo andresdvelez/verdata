@@ -3,3 +3,8 @@ export interface SearchFormInterface {
   searchType: string;
   searchInput: string;
 }
+
+export enum SearchType {
+  NAME = "name",
+  DOCUMENT = "document",
+}

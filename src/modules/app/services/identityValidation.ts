@@ -27,20 +27,3 @@ export const getIdentityByDocument = async ({
     return { error };
   }
 };
-
-export const getIdentityByName = async ({
-  country,
-  name,
-}: {
-  country: string;
-  name: string;
-}) => {
-  try {
-    const response = await axiosInstance.get(
-      `identity_validation/${country}/query_by_name/${name}`
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};

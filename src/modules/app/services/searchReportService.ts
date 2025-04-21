@@ -17,7 +17,7 @@ export const searchReportService = async ({
       {
         searchType,
         countryCode: nationality,
-        documentNumber: searchInput,
+        identityData: searchInput,
       },
       {
         headers: {
