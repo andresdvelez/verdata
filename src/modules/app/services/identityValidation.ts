@@ -1,4 +1,5 @@
 import { axiosInstance } from "@/modules/core/lib/axios";
+import { SearchType } from "@/types/app/search";
 
 export const getIdentityByDocument = async ({
   nationality,
@@ -13,8 +14,9 @@ export const getIdentityByDocument = async ({
     const response = await axiosInstance.post(
       `/searched-identities`,
       {
-        document: identification,
-        nationality,
+        identityData: identification,
+        countryCode: nationality,
+        searchType: SearchType.DOCUMENT,
       },
       {
         headers: {

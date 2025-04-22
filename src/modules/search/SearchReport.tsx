@@ -14,7 +14,6 @@ export const SearchReport = ({ report }: { report: KYCReport }) => {
   const isSearchLoading = useSearchReportStore((state) => state.isLoading);
   const isPresearchByName = useSearchReportStore((state) => state.isPreSearch);
 
-  console.log(isPresearchByName);
   if (isSearchEmpty) return <EmptySearchState />;
 
   if (isSearchLoading) return <SearchLoader />;

@@ -27,8 +27,14 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       setSearchedReports(user.searched_reports);
 
       const token = generateToken({
-        ...client.getFlagCheck(FeatureFlag.MONTHLY_REQUESTS),
-        userId: user?.id,
+        monthly_requests: client.getFlagCheck(FeatureFlag.MONTHLY_REQUESTS),
+        national_lists_search: client.getFlagCheck(
+          FeatureFlag.NATIONAL_LISTS_SEARCH
+        ),
+        international_lists_search: client.getFlagCheck(
+          FeatureFlag.INTERNATIONAL_LISTS_SEARCH
+        ),
+        id: user?.id,
       });
 
       token.then((token) => {

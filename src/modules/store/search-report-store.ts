@@ -10,9 +10,7 @@ import { parseCountry } from "../app/utils/parseCountry";
 import { Report } from "@prisma/client";
 import { trackEntitlement } from "@/actions/trackSchematicEntitlements";
 import { FeatureFlag } from "../app/common/features/flags";
-import { sampleKYCReport } from "../app/common/data/kycReportData";
 import { searchReportService } from "../app/services/searchReportService";
-import { getIdentityByDocument } from "../app/services/identityValidation";
 import { listNames } from "../app/services/listNames";
 import { SearchType } from "@/types/app/search";
 import { SearchNameResults } from "@/types/app/users";
@@ -138,7 +136,6 @@ export const useSearchReportStore = create<SearchReportState>()(
           searchType,
           nationality,
           searchInput,
-          isFullReportAvailable,
         }) => {
           try {
             set({
@@ -148,35 +145,18 @@ export const useSearchReportStore = create<SearchReportState>()(
             });
 
             if (!userId) throw new Error("Something went wrong, try it later");
-            if (isFullReportAvailable) {
-              const searchedReport = await searchReportService({
-                searchType,
-                nationality,
-                searchInput,
-                token: get().token,
-              });
-              await trackEntitlement(FeatureFlag.MONTHLY_REQUESTS, userId);
-              set({
-                isEmpty: false,
-                isLoading: false,
-              });
-              return searchedReport;
-            } else {
-              const searchedIdentity = await getIdentityByDocument({
-                identification: searchInput,
-                nationality,
-                token: get().token,
-              });
-              await trackEntitlement(FeatureFlag.MONTHLY_REQUESTS, userId);
-              set({
-                isEmpty: false,
-                isLoading: false,
-              });
-              return {
-                ...searchedIdentity,
-                ...sampleKYCReport,
-              };
-            }
+            const searchedReport = await searchReportService({
+              searchType,
+              nationality,
+              searchInput,
+              token: get().token,
+            });
+            await trackEntitlement(FeatureFlag.MONTHLY_REQUESTS, userId);
+            set({
+              isEmpty: false,
+              isLoading: false,
+            });
+            return searchedReport;
           } catch (error) {
             set({
               isEmpty: true,

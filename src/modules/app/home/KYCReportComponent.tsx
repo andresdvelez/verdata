@@ -26,7 +26,6 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
   className,
 }) => {
   const {
-    report: virtualizedReport,
     showFullReport,
     setShowFullReport,
     isLoading,
@@ -51,15 +50,13 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column – Identity */}
         <div className="lg:col-span-1 space-y-6">
-          <h1 className="text-3xl font-bold">
-            {virtualizedReport.related_identity.name}
-          </h1>
+          <h1 className="text-3xl font-bold">{report.related_identity.name}</h1>
           <p className="text-gray-500">
             {t("report-date")}:{" "}
-            {new Date(virtualizedReport.created_at).toLocaleDateString()}
+            {new Date(report.created_at).toLocaleDateString()}
           </p>
 
-          <IdentityCard personInfo={virtualizedReport.related_identity} />
+          <IdentityCard personInfo={report.related_identity} />
 
           <ReportActions
             showFullReport={showFullReport}
@@ -76,14 +73,12 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
           )}
 
           <DetailedRightSection
-            virtualizedReport={virtualizedReport}
+            virtualizedReport={report}
             isBlurred={!isFullReportAvailable}
           />
 
           {/* Detailed Sections */}
-          {showFullReport && (
-            <FullReport virtualizedReport={virtualizedReport} />
-          )}
+          {showFullReport && <FullReport virtualizedReport={report} />}
         </div>
       </div>
     </div>
