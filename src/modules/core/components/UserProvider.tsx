@@ -38,6 +38,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       token.then((token) => {
+        console.log(token);
         setToken(token);
       });
     }
