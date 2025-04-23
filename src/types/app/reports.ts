@@ -1,4 +1,3 @@
-import { RestrictiveList } from "@/modules/app/home/kyc-report/InternationalSanctionsSection";
 import {
   InternationalEndpoint,
   NationalEndpoint,
@@ -18,12 +17,40 @@ export type KYCReport = Report & {
   sanctions_lists: {
     international: {
       overall: VerificationResult;
-      lists: RestrictiveList[];
+      lists: RestrictiveListResult[];
     };
     national: {
       overall: VerificationResult;
-      lists: RestrictiveList[];
+      lists: RestrictiveListResult[];
     };
   };
   related_identity: SearchedIdentities;
 };
+
+export interface RestrictiveListItem {
+  title: string;
+  url: string;
+  description?: string;
+  imageUrl?: string;
+}
+
+export interface RestrictiveListResult {
+  listName: string;
+  listCode: string;
+  isMatch: boolean;
+  file?: string;
+  items: RestrictiveListItem[];
+  screenshots: string[];
+  error?: string;
+}
+
+export interface RestrictiveListsData {
+  national: {
+    lists: RestrictiveListResult[];
+    overall: boolean;
+  };
+  international: {
+    lists: RestrictiveListResult[];
+    overall: boolean;
+  };
+}

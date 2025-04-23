@@ -3,6 +3,7 @@ import React from "react";
 import { getCountryName } from "../utils/getCountryByCode";
 import { SearchedIdentities } from "@prisma/client";
 import { SearchType } from "@/types/app/search";
+import { useTranslations } from "next-intl";
 
 interface NameMatchesListUserCardProps {
   user: SearchedIdentities;
@@ -13,6 +14,8 @@ export const NameMatchesListUserCard = ({
   user,
   handleSearchReport,
 }: NameMatchesListUserCardProps) => {
+  const t = useTranslations("name-matches-list.user-card");
+
   return (
     <Card shadow="none" key={user.id} className="group stat-card">
       <CardBody className="p-6">
@@ -32,13 +35,13 @@ export const NameMatchesListUserCard = ({
           </div>
           <div className="flex justify-around flex-wrap gap-2">
             <div className="flex flex-col gap-1">
-              <p className="text-primary">Document type</p>
+              <p className="text-primary">{t("document-type")}</p>
               <Chip variant="solid" className="px-3 py-1">
                 {user.document_type}
               </Chip>
             </div>
             <div className="flex flex-col gap-1">
-              <p className="text-primary">Nationality</p>
+              <p className="text-primary">{t("nationality")}</p>
               <Chip variant="solid" className="px-3 py-1">
                 {getCountryName(user.nationality)}
               </Chip>
@@ -53,7 +56,7 @@ export const NameMatchesListUserCard = ({
           variant="solid"
           color="primary"
         >
-          View Report
+          {t("view-report")}
         </Button>
       </CardFooter>
     </Card>

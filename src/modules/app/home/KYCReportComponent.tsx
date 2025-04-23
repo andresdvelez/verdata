@@ -73,6 +73,8 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
           )}
 
           <DetailedRightSection
+            showFullReport={showFullReport}
+            setShowFullReport={setShowFullReport}
             virtualizedReport={report}
             isBlurred={!isFullReportAvailable}
           />

@@ -1,4 +1,5 @@
 import { Button } from "@heroui/react";
+import { useTranslations } from "next-intl";
 
 interface NameMatchesListHeaderProps {
   resultCount: number;
@@ -11,12 +12,16 @@ export const NameMatchesListHeader = ({
   showNotFound,
   toggleNotFoundSection,
 }: NameMatchesListHeaderProps) => {
+  const t = useTranslations("name-matches-list.header");
+
   return (
     <div className="text-center space-y-2 relative">
-      <h2 className="text-3xl font-bold tracking-tight">Search Results</h2>
+      <h2 className="text-3xl font-bold tracking-tight">
+        {t("search-results")}
+      </h2>
       <div className="flex justify-center items-center gap-4">
         <p className="text-muted-foreground">
-          Found {resultCount} potential matches
+          {t("found")} {resultCount} {t("potential-matches")}
         </p>
         <Button
           variant="solid"
@@ -30,10 +35,10 @@ export const NameMatchesListHeader = ({
                 className="icon-[solar--close-circle-line-duotone] size-5"
                 aria-hidden="true"
               />
-              <span>Close</span>
+              <span>{t("close")}</span>
             </div>
           ) : (
-            <span>Can&apos;t find the exact match?</span>
+            <span> {t("cannot-find-match")} </span>
           )}
         </Button>
       </div>

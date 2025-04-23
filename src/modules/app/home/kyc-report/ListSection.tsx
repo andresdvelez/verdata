@@ -1,9 +1,9 @@
-import { RestrictiveList } from "./InternationalSanctionsSection";
+import { RestrictiveListResult } from "@/types/app/reports";
 import { StatusBadge } from "./StatusBadge";
 
 interface ListSectionProps {
   title: string;
-  lists: RestrictiveList[];
+  lists: RestrictiveListResult[];
   className?: string;
 }
 

@@ -1,4 +1,5 @@
 import { Button } from "@heroui/react";
+import { useTranslations } from "next-intl";
 
 interface NameMatchesListPaginationProps {
   currentPage: number;
@@ -13,10 +14,12 @@ export const NameMatchesListPagination = ({
   handlePreviousPage,
   handleNextPage,
 }: NameMatchesListPaginationProps) => {
+  const t = useTranslations("name-matches-list.pagination");
+
   return (
     <div className="flex items-center justify-between mt-8">
       <p className="text-sm text-muted-foreground">
-        Page {currentPage} of {totalPages}
+        {t("page")} {currentPage} {t("of")} {totalPages}
       </p>
       <div className="flex gap-2">
         <Button
@@ -25,7 +28,7 @@ export const NameMatchesListPagination = ({
           onPress={handlePreviousPage}
           disabled={currentPage === 1}
         >
-          Previous
+          {t("previous")}
         </Button>
         <Button
           variant="bordered"
@@ -33,7 +36,7 @@ export const NameMatchesListPagination = ({
           onPress={handleNextPage}
           disabled={currentPage === totalPages}
         >
-          Next
+          {t("next")}
         </Button>
       </div>
     </div>

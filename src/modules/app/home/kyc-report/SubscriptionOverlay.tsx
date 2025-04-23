@@ -15,7 +15,7 @@ export const SubscriptionOverlay: React.FC<SubscriptionOverlayProps> = ({
       <CardHeader className="text-4xl font-semibold justify-center">
         {t("found-your-report")}
       </CardHeader>
-      <CardBody className="text-xl font-semibold">
+      <CardBody className="text-xl text-center font-semibold">
         {t("not-subscribed-to-see-full-report")}
       </CardBody>
       <CardFooter className="flex justify-center">

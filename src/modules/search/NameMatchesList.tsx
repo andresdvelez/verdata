@@ -27,7 +27,7 @@ export const NameMatchesList = () => {
   const { isFullReportAvailable } = useEntitlementsValidation();
   const router = useRouter();
   const { user } = useUser();
-  const t = useTranslations();
+  const t = useTranslations("searchbar");
 
   // Local state
   const [filterText, setFilterText] = useState("");

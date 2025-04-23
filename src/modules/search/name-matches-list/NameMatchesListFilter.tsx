@@ -1,4 +1,5 @@
 import { Button, Input } from "@heroui/react";
+import { useTranslations } from "next-intl";
 
 interface SearchFilterProps {
   filterText: string;
@@ -11,6 +12,8 @@ export const NameMatchesListFilter = ({
   setFilterText,
   setCurrentPage,
 }: SearchFilterProps) => {
+  const t = useTranslations("name-matches-list.filter");
+
   return (
     <div className="flex justify-center">
       <div className="relative w-full max-w-sm">
@@ -22,7 +25,7 @@ export const NameMatchesListFilter = ({
             setFilterText(e.target.value);
             setCurrentPage(1);
           }}
-          placeholder="Filter by name"
+          placeholder={t("filter-by-name")}
           className="w-full rounded-md px-4 py-2 pr-12"
         />
         <Button
@@ -40,7 +43,7 @@ export const NameMatchesListFilter = ({
               : "opacity-0 pointer-events-none")
           }
         >
-          Clear
+          {t("clear")}
         </Button>
       </div>
     </div>
