@@ -40,7 +40,7 @@ export const useUserStore = create<UserState>((set, get) => ({
       searchedReports: filteredReports,
     });
   },
-  setUser: (user) => set({ user }),
+  setUser: (user) => set({ user, isLoading: false }),
   fetchUser: async (clerkId) => {
     set({ isLoading: true, error: null });
     try {

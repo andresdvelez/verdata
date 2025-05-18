@@ -47,9 +47,9 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
         <BackButton onBack={() => router.back()} label={t("go-back")} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
         {/* Left Column – Identity */}
-        <div className="lg:col-span-1 space-y-6">
+        <div className="lg:col-span-1 space-y-6 sticky left-0 top-0 h-max">
           <h1 className="text-3xl font-bold">{report.related_identity.name}</h1>
           <p className="text-gray-500">
             {t("report-date")}:{" "}

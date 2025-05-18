@@ -32,6 +32,7 @@ export interface RestrictiveListItem {
   url: string;
   description?: string;
   imageUrl?: string;
+  screenshots: string[];
 }
 
 export interface RestrictiveListResult {
@@ -40,8 +41,8 @@ export interface RestrictiveListResult {
   isMatch: boolean;
   file?: string;
   items: RestrictiveListItem[];
-  screenshots: string[];
   error?: string;
+  screenshots: string[];
 }
 
 export interface RestrictiveListsData {

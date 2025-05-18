@@ -1,8 +1,10 @@
+import { useRef, useState } from "react";
 import { RestrictiveListResult } from "@/types/app/reports";
 import { FileDownload } from "./FileDownload";
 import { ListItem } from "./ListItem";
 import { ScreenshotGallery } from "./ScreenshotGallery";
 import { StatusBadge } from "./StatusBadge";
+import { Button } from "@heroui/react";
 
 export const RestrictiveList = ({
   listData,
@@ -10,10 +12,25 @@ export const RestrictiveList = ({
   listData: RestrictiveListResult;
 }) => {
   const { listName, isMatch, items, error, file, screenshots } = listData;
+  const [visibleCount, setVisibleCount] = useState(5);
+
+  // ref for the list header
+  const headerRef = useRef<HTMLDivElement>(null);
+
+  const handleViewMore = () => setVisibleCount((prev) => prev + 5);
+  const handleGoTop = () => {
+    headerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const allVisible = visibleCount >= items.length;
+  const showGoTop = visibleCount >= 10;
 
   return (
     <div className="mb-4 border-b pb-4 last:border-b-0 last:pb-0">
-      <div className="w-full flex items-center justify-between mb-2">
+      <div
+        ref={headerRef}
+        className="w-full flex items-center justify-between mb-2"
+      >
         <h3 className="font-medium">{listName}</h3>
         <StatusBadge isMatch={isMatch} size="sm" />
       </div>
@@ -57,11 +74,32 @@ export const RestrictiveList = ({
           {file && <FileDownload fileUrl={file} />}
 
           {items.length > 0 ? (
-            <div className="space-y-2">
-              {items.map((item, idx) => (
-                <ListItem key={idx} item={item} />
-              ))}
-            </div>
+            <>
+              <div className="space-y-2">
+                {items.slice(0, visibleCount).map((item, idx) => (
+                  <ListItem key={idx} item={item} />
+                ))}
+              </div>
+
+              <div className="mt-2 text-center space-x-2">
+                {!allVisible && (
+                  <Button
+                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    onPress={handleViewMore}
+                  >
+                    View More
+                  </Button>
+                )}
+                {showGoTop && (
+                  <Button
+                    className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+                    onPress={handleGoTop}
+                  >
+                    Go to Top
+                  </Button>
+                )}
+              </div>
+            </>
           ) : isMatch && !file ? (
             <p className="text-sm text-gray-600 italic">
               Existe una coincidencia, pero no hay detalles disponibles.
