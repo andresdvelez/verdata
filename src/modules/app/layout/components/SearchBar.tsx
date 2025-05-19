@@ -1,6 +1,6 @@
 "use client";
 
-import { addToast, Button, Chip } from "@heroui/react";
+import { addToast, Button } from "@heroui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createSearchSchema } from "../../lib/search-schema";
@@ -44,12 +44,7 @@ export const SearchBar = ({
     (state) => state.resetSearchState
   );
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { isDirty },
-  } = useForm<SearchFormInterface>({
+  const { control, handleSubmit, reset } = useForm<SearchFormInterface>({
     resolver: zodResolver(searchSchema),
   });
 
@@ -57,6 +52,15 @@ export const SearchBar = ({
     router.replace("/app/search");
 
     try {
+      if (!user) {
+        addToast({
+          title: t("alerts.have-to-sign-in"),
+          description: t("alerts.please-sign-in"),
+          color: "warning",
+        });
+        router.push("/auth/sign-in");
+      }
+
       if (formData.searchType === SearchType.DOCUMENT) {
         addToast({
           title: t("alerts.report-being-generated"),
@@ -155,23 +159,6 @@ export const SearchBar = ({
         >
           {t("search")}
         </Button>
-        {isDirty && !captchaToken && (
-          <Chip
-            className="absolute -left-3 -bottom-7"
-            variant="flat"
-            color="warning"
-            size="sm"
-            startContent={
-              <i
-                className="icon-[typcn--warning]"
-                role="img"
-                aria-hidden="true"
-              />
-            }
-          >
-            {t("complete-captcha")}
-          </Chip>
-        )}
       </div>
       {/* Invisible hCaptcha */}
       <HCaptcha

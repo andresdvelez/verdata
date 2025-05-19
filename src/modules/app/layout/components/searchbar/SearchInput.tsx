@@ -1,4 +1,10 @@
-import { SEARCH_TYPE_NAME } from "@/modules/app/constants/search";
+"use client";
+
+import {
+  SEARCH_TYPE_NAME,
+  SEARCH_TYPE_ID,
+} from "@/modules/app/constants/search";
+import { documentValidation } from "@/modules/app/lib/search-schema";
 import { useSearchReportStore } from "@/modules/store/search-report-store";
 import { SearchFormInterface } from "@/types/app/search";
 import { Input } from "@heroui/react";
@@ -16,40 +22,98 @@ export const SearchInput = ({
   const localSearchType = useSearchReportStore(
     (state) => state.localSearchType
   );
-
-  const warningLabel = useSearchReportStore((state) => state.warningLabel);
+  const nationality = useSearchReportStore((state) => state.countryCode);
   const searchDocumentLabel = useSearchReportStore(
     (state) => state.searchDocumentLabel
   );
+
+  const isDoc = localSearchType === SEARCH_TYPE_ID;
+  const isName = localSearchType === SEARCH_TYPE_NAME;
+
+  // Name regex: two words, letters only, ≥2 letters each
+  const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ]{2,}\s+[A-Za-zÀ-ÖØ-öø-ÿ]{2,}$/;
+  const nameError = tError("nameTwoWords");
+
+  // Document validation rule
+  const docRule = isDoc && documentValidation[nationality!];
+  const docRegex = docRule ? docRule?.regex : "";
+  // derive max length from regex
+  let docMax = undefined as number | undefined;
+  if (docRegex) {
+    const matchExact = docRegex.source.match(/\\d\\{(\\d+)\\}/);
+    const matchRange = docRegex.source.match(/\\d\\{(\\d+),(\\d+)\\}/);
+    if (matchExact) docMax = parseInt(matchExact[1], 10);
+    else if (matchRange) docMax = parseInt(matchRange[2], 10);
+  }
+
+  const validateValue = (value: string) => {
+    const v = value.trim();
+    if (!v) return tError("searchInputRequired");
+    if (isName && !nameRegex.test(v)) return nameError;
+    if (isDoc) {
+      if (docRegex) {
+        if (!docRegex.test(v))
+          return tError(
+            `invalidDocument_${docRule ? docRule?.messageKey : "generic"}`
+          );
+      } else if (!/^\d+$/.test(v)) {
+        return tError("invalidDocumentGeneric");
+      }
+    }
+    return true;
+  };
 
   return (
     <Controller
       name="searchInput"
       control={control}
-      render={({ field, fieldState: { error } }) => (
+      rules={{ validate: validateValue }}
+      render={({
+        field: { value, onChange, onBlur },
+        fieldState: { error },
+      }) => (
         <Input
+          type="text"
+          value={value}
+          onChange={onChange}
+          onBlur={onBlur}
+          // restrict typing
+          onKeyDown={(e) => {
+            // block invalid chars for name
+            if (isName) {
+              const allowed = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]$/;
+              if (!allowed.test(e.key) && e.key.length === 1)
+                e.preventDefault();
+            }
+            if (
+              isDoc &&
+              typeof docMax === "number" &&
+              e.key.length === 1 &&
+              value.length >= docMax
+            ) {
+              e.preventDefault();
+            }
+          }}
           isInvalid={!!error}
-          errorMessage={tError("searchInputRequired")}
-          className="bg-transparent shadow-none lg:min-w-[180px] xl:min-w-[205px] border-none"
+          validationBehavior="aria"
+          errorMessage={error?.message}
+          className="bg-transparent shadow-none lg:min-w-[180px] xl:min-w-[225px] border-none"
           classNames={{
             inputWrapper:
               "!bg-transparent shadow-none data-[hover=true]:bg-transparent group-data-[focus=true]:!bg-transparent data-[hover=true]:!bg-transparent",
             errorMessage: "absolute bottom-0",
           }}
-          type="text"
-          label={
-            localSearchType !== SEARCH_TYPE_NAME && warningLabel
-              ? warningLabel
-              : localSearchType === SEARCH_TYPE_NAME
-              ? t("name")
-              : searchDocumentLabel
-          }
-          placeholder={
-            localSearchType === SEARCH_TYPE_NAME
-              ? t("name")
-              : searchDocumentLabel
-          }
-          {...field}
+          label={isName ? t("name") : isDoc ? searchDocumentLabel : undefined}
+          placeholder={isName ? t("name") : searchDocumentLabel}
+          {...(isName && { pattern: nameRegex.source, title: nameError })}
+          {...(isDoc &&
+            docRegex && {
+              pattern: docRegex.source,
+              title: tError(
+                `invalidDocument_${docRule ? docRule?.messageKey : "generic"}`
+              ),
+              maxLength: docMax,
+            })}
         />
       )}
     />

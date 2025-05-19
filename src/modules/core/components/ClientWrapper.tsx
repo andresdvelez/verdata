@@ -34,11 +34,9 @@ export const ClientWrapper = ({
         <SchematicProvider
           publishableKey={process.env.NEXT_PUBLIC_SCHEMATIC_PUBLISHABLE_KEY!}
         >
-          <SchematicWrapped>
-            <UserProvider serverUser={serverUser} serverToken={serverToken}>
-              {children}
-            </UserProvider>
-          </SchematicWrapped>
+          <UserProvider serverUser={serverUser} serverToken={serverToken}>
+            <SchematicWrapped>{children}</SchematicWrapped>
+          </UserProvider>
         </SchematicProvider>
       </ClerkProvider>
     </HeroUIProvider>

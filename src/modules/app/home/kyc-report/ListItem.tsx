@@ -1,7 +1,10 @@
 import { RestrictiveListItem } from "@/types/app/reports";
 import { Image } from "@heroui/react";
+import { useTranslations } from "next-intl";
 
 export const ListItem = ({ item }: { item: RestrictiveListItem }) => {
+  const t = useTranslations("report.list-item");
+
   return (
     <div className="border rounded-md p-3 mb-3 bg-gray-50">
       <div className="flex flex-col lg:flex-row gap-3">
@@ -21,10 +24,11 @@ export const ListItem = ({ item }: { item: RestrictiveListItem }) => {
           )}
           {item.url && (
             <a
+              target="_blank"
               href={item.url}
               className="text-blue-600 hover:text-blue-800 text-sm mt-2 inline-block"
             >
-              Ver fuente
+              {t("view-source")}
             </a>
           )}
         </div>

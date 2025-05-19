@@ -10,7 +10,6 @@ import { redirect, routing } from "@/modules/translations/i18n/routing";
 import { notFound } from "next/navigation";
 import { ReactNode } from "react";
 import { CheckFlagResponse } from "@schematichq/schematic-typescript-node/api";
-import { UserType } from "@/types/app/users";
 
 export default async function LocaleLayout({
   children,
@@ -45,7 +44,19 @@ export default async function LocaleLayout({
         imageUrl: clerkUser.imageUrl,
         referral_code: generateUniqueReferralCode(),
       },
+      include: {
+        searched_reports: true,
+      },
       update: {},
+    });
+
+    await client.identify({
+      company: {
+        keys: { id: clerkId },
+        name: `${clerkUser.firstName} ${clerkUser.lastName}`,
+      },
+      keys: { id: clerkId },
+      name: `${clerkUser.firstName} ${clerkUser.lastName}`,
     });
 
     const monthly_requests: CheckFlagResponse = await client.features.checkFlag(
@@ -69,11 +80,10 @@ export default async function LocaleLayout({
     });
   }
 
+  console.log(serverUser);
+
   return (
-    <ClientWrapper
-      serverUser={serverUser as UserType}
-      serverToken={serverToken}
-    >
+    <ClientWrapper serverUser={serverUser} serverToken={serverToken}>
       {children}
     </ClientWrapper>
   );
