@@ -5,10 +5,10 @@ Sentry.init({
 
   integrations: [
     Sentry.replayIntegration(),
-    Sentry.feedbackIntegration({
-      autoInject: false,
-      showBranding: false,
-    }),
+    // Sentry.feedbackIntegration({
+    //   autoInject: false,
+    //   showBranding: false,
+    // }),
   ],
 
   tracesSampleRate: 1,

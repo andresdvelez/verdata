@@ -30,6 +30,7 @@ export type handleSearchNameType = {
 
 interface SearchReportState {
   isLoading: boolean;
+  setIsLoading: (value: boolean) => void;
   isPreSearch: boolean;
   isEmpty: boolean;
   token: string;
@@ -63,6 +64,9 @@ export const useSearchReportStore = create<SearchReportState>()(
     persist(
       (set, get) => ({
         isLoading: false,
+        setIsLoading: (value) => {
+          set({ isLoading: value });
+        },
         isPreSearch: false,
         isEmpty: true,
         nameSearched: null,

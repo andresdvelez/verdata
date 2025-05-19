@@ -39,6 +39,7 @@ export const SearchBar = ({
   );
   const searchByName = useSearchReportStore((state) => state.searchByName);
   const isLoading = useSearchReportStore((state) => state.isLoading);
+  const setIsLoading = useSearchReportStore((state) => state.setIsLoading);
   const addSearchedReport = useUserStore((state) => state.addSearchedReport);
   const resetSearchState = useSearchReportStore(
     (state) => state.resetSearchState
@@ -99,7 +100,7 @@ export const SearchBar = ({
     if (captchaToken) {
       processSearch(data);
     } else {
-      // Otherwise, trigger captcha verification
+      setIsLoading(true);
       captchaRef.current?.execute();
     }
   };
@@ -167,6 +168,9 @@ export const SearchBar = ({
         ref={captchaRef}
         onVerify={handleVerify}
         languageOverride={locale}
+        onClose={() => setIsLoading(false)}
+        onError={() => setIsLoading(false)}
+        onExpire={() => setIsLoading(false)}
       />
     </form>
   );
