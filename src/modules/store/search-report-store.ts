@@ -11,7 +11,9 @@ import { Report } from "@prisma/client";
 import { SearchType } from "@/types/app/search";
 import { SearchNameResults } from "@/types/app/users";
 import { performSearchReport } from "@/actions/searchReport";
-import { performSearchName } from "@/actions/searchName";
+import { listNames } from "../app/services/listNames";
+import { trackEntitlement } from "@/actions/trackSchematicEntitlements";
+import { FeatureFlag } from "../app/common/features/flags";
 
 export type handleSearchReportType = {
   userId: string;
@@ -114,12 +116,12 @@ export const useSearchReportStore = create<SearchReportState>()(
               nameSearched: searchName,
             });
 
-            const usersByName = await performSearchName({
-              userId,
+            const usersByName = await listNames({
               countryCode: parseCountry(countryCode),
-              searchName,
+              identityName: searchName,
               token: get().token,
             });
+            await trackEntitlement(FeatureFlag.MONTHLY_REQUESTS, userId);
 
             set({
               usersByName: usersByName,
