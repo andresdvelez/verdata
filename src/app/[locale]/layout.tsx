@@ -80,8 +80,6 @@ export default async function LocaleLayout({
     });
   }
 
-  console.log(serverUser);
-
   return (
     <ClientWrapper serverUser={serverUser} serverToken={serverToken}>
       {children}

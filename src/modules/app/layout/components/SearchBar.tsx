@@ -47,6 +47,8 @@ export const SearchBar = ({
 
   const { control, handleSubmit, reset } = useForm<SearchFormInterface>({
     resolver: zodResolver(searchSchema),
+    mode: "onChange",
+    reValidateMode: "onChange",
   });
 
   const processSearch = async (formData: SearchFormInterface) => {
@@ -81,6 +83,7 @@ export const SearchBar = ({
         router.push(`/app/records/${searchedReport.id}`);
       } else if (formData.searchType === SearchType.NAME) {
         await searchByName({
+          userId: user?.id as string,
           countryCode: formData.nationality,
           searchName: formData.searchInput,
         });

@@ -8,12 +8,10 @@ import {
 } from "../app/constants/search";
 import { parseCountry } from "../app/utils/parseCountry";
 import { Report } from "@prisma/client";
-import { trackEntitlement } from "@/actions/trackSchematicEntitlements";
-import { FeatureFlag } from "../app/common/features/flags";
-import { searchReportService } from "../app/services/searchReportService";
-import { listNames } from "../app/services/listNames";
 import { SearchType } from "@/types/app/search";
 import { SearchNameResults } from "@/types/app/users";
+import { performSearchReport } from "@/actions/searchReport";
+import { performSearchName } from "@/actions/searchName";
 
 export type handleSearchReportType = {
   userId: string;
@@ -24,6 +22,7 @@ export type handleSearchReportType = {
 };
 
 export type handleSearchNameType = {
+  userId: string;
   countryCode: string;
   searchName: string;
 };
@@ -47,6 +46,7 @@ interface SearchReportState {
   resetLocalSearchType: () => void;
   resetSearchState: () => void;
   searchByName: ({
+    userId,
     countryCode,
     searchName,
   }: handleSearchNameType) => Promise<void>;
@@ -105,7 +105,7 @@ export const useSearchReportStore = create<SearchReportState>()(
           });
         },
 
-        searchByName: async ({ countryCode, searchName }) => {
+        searchByName: async ({ userId, countryCode, searchName }) => {
           try {
             set({
               isLoading: true,
@@ -114,11 +114,13 @@ export const useSearchReportStore = create<SearchReportState>()(
               nameSearched: searchName,
             });
 
-            const usersByName = await listNames({
+            const usersByName = await performSearchName({
+              userId,
               countryCode: parseCountry(countryCode),
-              identityName: searchName,
+              searchName,
               token: get().token,
             });
+
             set({
               usersByName: usersByName,
               isEmpty: false,
@@ -135,12 +137,7 @@ export const useSearchReportStore = create<SearchReportState>()(
             throw error;
           }
         },
-        handleSearchReport: async ({
-          userId,
-          searchType,
-          nationality,
-          searchInput,
-        }) => {
+        handleSearchReport: async (args) => {
           try {
             set({
               isLoading: true,
@@ -148,14 +145,12 @@ export const useSearchReportStore = create<SearchReportState>()(
               warningLabel: null,
             });
 
-            if (!userId) throw new Error("Something went wrong, try it later");
-            const searchedReport = await searchReportService({
-              searchType,
-              nationality,
-              searchInput,
+            if (!args.userId)
+              throw new Error("Something went wrong, try it later");
+            const searchedReport = await performSearchReport({
+              ...args,
               token: get().token,
             });
-            await trackEntitlement(FeatureFlag.MONTHLY_REQUESTS, userId);
             set({
               isEmpty: false,
               isLoading: false,

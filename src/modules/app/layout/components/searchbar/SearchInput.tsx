@@ -95,7 +95,7 @@ export const SearchInput = ({
             }
           }}
           isInvalid={!!error}
-          validationBehavior="aria"
+          validationBehavior="native"
           errorMessage={error?.message}
           className="bg-transparent shadow-none lg:min-w-[180px] xl:min-w-[225px] border-none"
           classNames={{
