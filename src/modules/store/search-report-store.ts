@@ -6,14 +6,9 @@ import {
   SEARCH_TYPE_ID,
   SEARCH_TYPE_NAME,
 } from "../app/constants/search";
-import { parseCountry } from "../app/utils/parseCountry";
 import { Report } from "@prisma/client";
 import { SearchType } from "@/types/app/search";
 import { SearchNameResults } from "@/types/app/users";
-import { performSearchReport } from "@/actions/searchReport";
-import { listNames } from "../app/services/listNames";
-import { trackEntitlement } from "@/actions/trackSchematicEntitlements";
-import { FeatureFlag } from "../app/common/features/flags";
 
 export type handleSearchReportType = {
   userId: string;
@@ -52,13 +47,7 @@ interface SearchReportState {
     countryCode,
     searchName,
   }: handleSearchNameType) => Promise<void>;
-  handleSearchReport: ({
-    userId,
-    searchType,
-    nationality,
-    searchInput,
-    isFullReportAvailable,
-  }: handleSearchReportType) => Promise<Report>;
+  handleSearchReport: (args: handleSearchReportType) => Promise<Report>;
 }
 
 export const useSearchReportStore = create<SearchReportState>()(
@@ -66,65 +55,48 @@ export const useSearchReportStore = create<SearchReportState>()(
     persist(
       (set, get) => ({
         isLoading: false,
-        setIsLoading: (value) => {
-          set({ isLoading: value });
-        },
+        setIsLoading: (value) => set({ isLoading: value }),
         isPreSearch: false,
         isEmpty: true,
         nameSearched: null,
         countryCode: null,
-        nationalData: [],
-        internationalData: [],
         usersByName: null,
         searchDocumentLabel: SEARCH_TYPE_DOCUMENT,
         localSearchType: SEARCH_TYPE_ID,
         warningLabel: null,
         token: "",
 
-        // Existing setters
-        setToken: (value) => {
-          set({ token: value });
-        },
-        setLocalSearchType: (value) => {
-          set({ localSearchType: value });
-        },
-        setSearchDocumentLabel: (value) => {
-          set({ searchDocumentLabel: value });
-        },
+        // Setters
+        setToken: (value) => set({ token: value }),
+        setLocalSearchType: (value) => set({ localSearchType: value }),
+        setSearchDocumentLabel: (value) => set({ searchDocumentLabel: value }),
 
-        // New reset functions
-        resetSearchDocumentLabel: () => {
-          set({ searchDocumentLabel: SEARCH_TYPE_DOCUMENT });
-        },
-        resetLocalSearchType: () => {
-          set({ localSearchType: SEARCH_TYPE_NAME });
-        },
-        resetSearchState: () => {
+        // Resetters
+        resetSearchDocumentLabel: () =>
+          set({ searchDocumentLabel: SEARCH_TYPE_DOCUMENT }),
+        resetLocalSearchType: () => set({ localSearchType: SEARCH_TYPE_NAME }),
+        resetSearchState: () =>
           set({
             searchDocumentLabel: SEARCH_TYPE_DOCUMENT,
             localSearchType: SEARCH_TYPE_NAME,
             warningLabel: null,
-          });
-        },
+          }),
 
         searchByName: async ({ userId, countryCode, searchName }) => {
           try {
-            set({
-              isLoading: true,
-              isEmpty: false,
-              countryCode: parseCountry(countryCode),
-              nameSearched: searchName,
+            set({ isLoading: true, isEmpty: false });
+            const res = await fetch("/api/search-name", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${get().token}`,
+              },
+              body: JSON.stringify({ userId, countryCode, searchName }),
             });
-
-            const usersByName = await listNames({
-              countryCode: parseCountry(countryCode),
-              identityName: searchName,
-              token: get().token,
-            });
-            await trackEntitlement(FeatureFlag.MONTHLY_REQUESTS, userId);
-
+            if (!res.ok) throw new Error("Name search failed");
+            const usersByName = await res.json();
             set({
-              usersByName: usersByName,
+              usersByName,
               isEmpty: false,
               isLoading: false,
               isPreSearch: true,
@@ -139,30 +111,32 @@ export const useSearchReportStore = create<SearchReportState>()(
             throw error;
           }
         },
+
         handleSearchReport: async (args) => {
           try {
-            set({
-              isLoading: true,
-              isEmpty: false,
-              warningLabel: null,
-            });
-
+            set({ isLoading: true, isEmpty: false, warningLabel: null });
             if (!args.userId)
               throw new Error("Something went wrong, try it later");
-            const searchedReport = await performSearchReport({
-              ...args,
-              token: get().token,
+
+            const res = await fetch("/api/search-report", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${get().token}`,
+              },
+              body: JSON.stringify({
+                userId: args.userId,
+                searchType: args.searchType,
+                nationality: args.nationality,
+                searchInput: args.searchInput,
+              }),
             });
-            set({
-              isEmpty: false,
-              isLoading: false,
-            });
-            return searchedReport;
+            if (!res.ok) throw new Error("Report search failed");
+            const report = await res.json();
+            set({ isEmpty: false, isLoading: false });
+            return report;
           } catch (error) {
-            set({
-              isEmpty: true,
-              isLoading: false,
-            });
+            set({ isEmpty: true, isLoading: false });
             throw error;
           }
         },
