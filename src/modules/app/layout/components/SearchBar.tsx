@@ -62,6 +62,7 @@ export const SearchBar = ({
           color: "warning",
         });
         router.push("/auth/sign-in");
+        setIsLoading(false);
       }
 
       if (formData.searchType === SearchType.DOCUMENT) {
@@ -131,7 +132,7 @@ export const SearchBar = ({
   return (
     <form
       className={clsx(
-        "flex flex-col lg:flex-row items-center justify-start 2xl:justify-center ",
+        "flex flex-col lg:flex-row items-center justify-start 2xl:justify-center w-full",
         {
           "hidden xl:flex flex-1": variant === "header",
         }

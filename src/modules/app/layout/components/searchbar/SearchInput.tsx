@@ -104,7 +104,7 @@ export const SearchInput = ({
           isInvalid={!!error}
           validationBehavior="native"
           errorMessage={error?.message}
-          className="bg-transparent shadow-none lg:min-w-[180px] xl:min-w-[225px] border-none"
+          className="bg-transparent shadow-none lg:min-w-[200px] xl:min-w-[225px] border-none"
           classNames={{
             inputWrapper:
               "!bg-transparent shadow-none data-[hover=true]:bg-transparent group-data-[focus=true]:!bg-transparent data-[hover=true]:!bg-transparent",
