@@ -9,7 +9,7 @@ export const documentValidation: Record<
   BOL: { regex: /^\d{6,8}$/, messageKey: "bolDocument" },
   BRA: { regex: /^\d{11}$/, messageKey: "braDocument" },
   CHL: { regex: /^\d{1,2}\.\d{3}\.\d{3}-[\dkK]$/, messageKey: "chlDocument" },
-  COL: { regex: /^\d{10}$/, messageKey: "colDocument" },
+  COL: { regex: /^\d{6,10}$/, messageKey: "colDocument" },
   CRI: { regex: /^\d{9}$/, messageKey: "criDocument" },
   ECU: { regex: /^\d{10}$/, messageKey: "ecuDocument" },
   SLV: { regex: /^\d{4}-\d{6}-\d$/, messageKey: "slvDocument" },

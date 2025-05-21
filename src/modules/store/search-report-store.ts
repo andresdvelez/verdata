@@ -166,7 +166,7 @@ export const useSearchReportStore = create<SearchReportState>()(
               isEmpty: true,
               isLoading: false,
             });
-            throw error;
+            throw new Error((error as { message: string }).message);
           }
         },
       }),

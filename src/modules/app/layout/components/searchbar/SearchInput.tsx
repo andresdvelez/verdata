@@ -30,36 +30,43 @@ export const SearchInput = ({
   const isDoc = localSearchType === SEARCH_TYPE_ID;
   const isName = localSearchType === SEARCH_TYPE_NAME;
 
-  // Name regex: two words, letters only, ≥2 letters each
-  const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ]{2,}\s+[A-Za-zÀ-ÖØ-öø-ÿ]{2,}$/;
+  // Name regex: at least two words, each ≥2 letters, allows more words
+  const nameRegex = /^(?:[A-Za-zÀ-ÖØ-öø-ÿ]{2,}\s+){1,}[A-Za-zÀ-ÖØ-öø-ÿ]{2,}$/;
   const nameError = tError("nameTwoWords");
 
   // Document validation rule
   const docRule = isDoc && documentValidation[nationality!];
-  const docRegex = docRule ? docRule?.regex : "";
+  const docRegex = docRule ? docRule.regex : null;
+
   // derive max length from regex
-  let docMax = undefined as number | undefined;
+  let docMax: number | undefined;
   if (docRegex) {
-    const matchExact = docRegex.source.match(/\\d\\{(\\d+)\\}/);
-    const matchRange = docRegex.source.match(/\\d\\{(\\d+),(\\d+)\\}/);
-    if (matchExact) docMax = parseInt(matchExact[1], 10);
-    else if (matchRange) docMax = parseInt(matchRange[2], 10);
+    const src = docRegex.source;
+    const exact = src.match(/\\d\\{(\\d+)\\}/);
+    const range = src.match(/\\d\\{(\\d+),(\\d+)\\}/);
+    if (exact) docMax = parseInt(exact[1], 10);
+    else if (range) docMax = parseInt(range[2], 10);
   }
 
   const validateValue = (value: string) => {
     const v = value.trim();
     if (!v) return tError("searchInputRequired");
-    if (isName && !nameRegex.test(v)) return nameError;
+
+    if (isName && !nameRegex.test(v)) {
+      return nameError;
+    }
+
     if (isDoc) {
       if (docRegex) {
         if (!docRegex.test(v))
           return tError(
-            `invalidDocument_${docRule ? docRule?.messageKey : "generic"}`
+            `invalidDocument_${docRule ? docRule.messageKey : "generic"}`
           );
       } else if (!/^\d+$/.test(v)) {
         return tError("invalidDocumentGeneric");
       }
     }
+
     return true;
   };
 
@@ -77,13 +84,13 @@ export const SearchInput = ({
           value={value}
           onChange={onChange}
           onBlur={onBlur}
-          // restrict typing
+          // block invalid keys for name, cap length only for ID
           onKeyDown={(e) => {
-            // block invalid chars for name
             if (isName) {
               const allowed = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]$/;
-              if (!allowed.test(e.key) && e.key.length === 1)
+              if (!allowed.test(e.key) && e.key.length === 1) {
                 e.preventDefault();
+              }
             }
             if (
               isDoc &&
@@ -110,7 +117,7 @@ export const SearchInput = ({
             docRegex && {
               pattern: docRegex.source,
               title: tError(
-                `invalidDocument_${docRule ? docRule?.messageKey : "generic"}`
+                `invalidDocument_${docRule ? docRule.messageKey : "generic"}`
               ),
               maxLength: docMax,
             })}

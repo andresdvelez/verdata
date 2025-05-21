@@ -91,6 +91,7 @@ export const SearchBar = ({
 
       resetForm();
     } catch (error) {
+      console.log("test");
       addToast({
         title: t(error),
         description: t("alerts.try-it-later"),
