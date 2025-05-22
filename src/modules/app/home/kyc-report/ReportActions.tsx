@@ -2,6 +2,8 @@ import { addToast, Button, Card } from "@heroui/react";
 import { useEntitlementsValidation } from "../../common/hooks/useEntitlementsValidation";
 import { useTranslations } from "next-intl";
 import { useSearchReportStore } from "@/modules/store/search-report-store";
+import { downloadReportServerAction } from "@/actions/downloadReport";
+import { useState } from "react";
 
 interface ReportActionsProps {
   showFullReport: boolean;
@@ -14,10 +16,12 @@ export const ReportActions: React.FC<ReportActionsProps> = ({
   setShowFullReport,
   reportId,
 }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const { isFullReportAvailable } = useEntitlementsValidation();
   const t = useTranslations("report.content");
-  const downloadReport = useSearchReportStore((s) => s.downloadReport);
-  const isLoading = useSearchReportStore((s) => s.isLoading);
+  const isReportLoading = useSearchReportStore((s) => s.isLoading);
+  const token = useSearchReportStore((s) => s.token);
 
   const handleDownload = async () => {
     if (!isFullReportAvailable) {
@@ -28,13 +32,32 @@ export const ReportActions: React.FC<ReportActionsProps> = ({
     }
 
     try {
-      await downloadReport(reportId);
+      setIsLoading(true);
+      const response = await downloadReportServerAction(reportId, token);
+
+      const identityName = response.report?.relatedIdentityName || reportId;
+      const sanitizedName = identityName.replace(/\s+/g, "-");
+      const filename = `verdata-report-${sanitizedName}.pdf`;
+
+      const uint8Array = new Uint8Array(response.data);
+      const blob = new Blob([uint8Array], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+
+      setIsLoading(false);
       addToast({
         title: t("saved-report"),
         description: t("report-saved-successfully"),
         color: "success",
       });
     } catch {
+      setIsLoading(false);
       addToast({
         title: t("download-error"),
         description: t("could-not-download-report"),
@@ -58,11 +81,12 @@ export const ReportActions: React.FC<ReportActionsProps> = ({
           {t("see-full-report")}
         </Button>
         <Button
-          isDisabled={isLoading || !isFullReportAvailable}
+          isDisabled={isReportLoading || !isFullReportAvailable}
           variant="solid"
           size="sm"
           className="flex items-center gap-2 bg-black text-white hover:bg-gray-800"
           onPress={handleDownload}
+          isLoading={isLoading}
         >
           <i
             className="icon-[material-symbols--download] size-4"

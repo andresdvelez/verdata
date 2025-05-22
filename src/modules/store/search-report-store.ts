@@ -9,7 +9,6 @@ import {
 import { Report } from "@prisma/client";
 import { SearchType } from "@/types/app/search";
 import { SearchNameResults } from "@/types/app/users";
-import { axiosInstance } from "../core/lib/axios";
 import axios from "axios";
 
 export type handleSearchReportType = {
@@ -38,7 +37,6 @@ interface SearchReportState {
   searchDocumentLabel: string;
   localSearchType: string;
   warningLabel: string | null;
-  downloadReport: (reportId: string) => Promise<void>;
   setToken: (value: string) => void;
   setSearchDocumentLabel: (value: string) => void;
   setLocalSearchType: (value: SearchType) => void;
@@ -68,36 +66,6 @@ export const useSearchReportStore = create<SearchReportState>()(
         localSearchType: SEARCH_TYPE_ID,
         warningLabel: null,
         token: "",
-
-        // Download PDF report
-        downloadReport: async (reportId: string) => {
-          set({ isLoading: true });
-          try {
-            const response = await axiosInstance.get(
-              `/reports/${reportId}/pdf`,
-              {
-                responseType: "blob",
-                headers: {
-                  Authorization: `Bearer ${get().token}`,
-                },
-              }
-            );
-            const blob = new Blob([response.data], { type: "application/pdf" });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `KYC-Report-${reportId}.pdf`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            window.URL.revokeObjectURL(url);
-          } catch (error) {
-            console.error("Download error", error);
-            // Optionally trigger a toast or error state
-          } finally {
-            set({ isLoading: false });
-          }
-        },
 
         // Setters
         setToken: (value) => set({ token: value }),

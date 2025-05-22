@@ -61,6 +61,7 @@ export async function getReportById(id: string) {
     },
     include: {
       user: true,
+      related_identity: true,
     },
   });
 }
