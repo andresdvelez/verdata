@@ -61,6 +61,7 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
           <ReportActions
             showFullReport={showFullReport}
             setShowFullReport={setShowFullReport}
+            reportId={report.id}
           />
         </div>
 

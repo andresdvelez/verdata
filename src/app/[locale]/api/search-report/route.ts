@@ -9,18 +9,15 @@ export const maxDuration = 60;
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    console.log("🔍 /api/search-report received:", body);
 
     const tokenHeader = request.headers.get("authorization") || "";
     const token = tokenHeader.replace(/^Bearer\s+/i, "");
-    console.log("🔐 token:", token);
 
     const { userId, searchType, nationality, searchInput } = body;
     if (!userId) {
       return NextResponse.json({ error: "Missing userId" }, { status: 400 });
     }
 
-    // Service will log its own payload if you sprinkle a console.log in there
     const report = await searchReportService({
       searchType,
       nationality,

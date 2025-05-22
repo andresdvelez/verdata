@@ -9,6 +9,8 @@ import {
 import { Report } from "@prisma/client";
 import { SearchType } from "@/types/app/search";
 import { SearchNameResults } from "@/types/app/users";
+import { axiosInstance } from "../core/lib/axios";
+import axios from "axios";
 
 export type handleSearchReportType = {
   userId: string;
@@ -36,6 +38,7 @@ interface SearchReportState {
   searchDocumentLabel: string;
   localSearchType: string;
   warningLabel: string | null;
+  downloadReport: (reportId: string) => Promise<void>;
   setToken: (value: string) => void;
   setSearchDocumentLabel: (value: string) => void;
   setLocalSearchType: (value: SearchType) => void;
@@ -66,6 +69,36 @@ export const useSearchReportStore = create<SearchReportState>()(
         warningLabel: null,
         token: "",
 
+        // Download PDF report
+        downloadReport: async (reportId: string) => {
+          set({ isLoading: true });
+          try {
+            const response = await axiosInstance.get(
+              `/reports/${reportId}/pdf`,
+              {
+                responseType: "blob",
+                headers: {
+                  Authorization: `Bearer ${get().token}`,
+                },
+              }
+            );
+            const blob = new Blob([response.data], { type: "application/pdf" });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `KYC-Report-${reportId}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+          } catch (error) {
+            console.error("Download error", error);
+            // Optionally trigger a toast or error state
+          } finally {
+            set({ isLoading: false });
+          }
+        },
+
         // Setters
         setToken: (value) => set({ token: value }),
         setLocalSearchType: (value) => set({ localSearchType: value }),
@@ -82,21 +115,20 @@ export const useSearchReportStore = create<SearchReportState>()(
             warningLabel: null,
           }),
 
+        // Name search
         searchByName: async ({ userId, countryCode, searchName }) => {
           try {
             set({ isLoading: true, isEmpty: false });
-            const res = await fetch("/api/search-name", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${get().token}`,
-              },
-              body: JSON.stringify({ userId, countryCode, searchName }),
-            });
-            if (!res.ok) throw new Error("Name search failed");
-            const usersByName = await res.json();
+            const res = await axios.post(
+              "/api/search-name",
+              { userId, countryCode, searchName },
+              {
+                headers: { Authorization: `Bearer ${get().token}` },
+              }
+            );
             set({
-              usersByName,
+              nameSearched: searchName,
+              usersByName: res.data,
               isEmpty: false,
               isLoading: false,
               isPreSearch: true,
@@ -112,29 +144,24 @@ export const useSearchReportStore = create<SearchReportState>()(
           }
         },
 
+        // Report search
         handleSearchReport: async (args) => {
           try {
             set({ isLoading: true, isEmpty: false, warningLabel: null });
-            if (!args.userId)
-              throw new Error("Something went wrong, try it later");
-
-            const res = await fetch("/api/search-report", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${get().token}`,
-              },
-              body: JSON.stringify({
+            const res = await axios.post(
+              "/api/search-report",
+              {
                 userId: args.userId,
                 searchType: args.searchType,
                 nationality: args.nationality,
                 searchInput: args.searchInput,
-              }),
-            });
-            if (!res.ok) throw new Error("Report search failed");
-            const report = await res.json();
+              },
+              {
+                headers: { Authorization: `Bearer ${get().token}` },
+              }
+            );
             set({ isEmpty: false, isLoading: false });
-            return report;
+            return res.data as Report;
           } catch (error) {
             set({ isEmpty: true, isLoading: false });
             throw error;
