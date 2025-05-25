@@ -16,7 +16,6 @@ export const UserProvider = ({ serverUser, serverToken, children }: Props) => {
   const setSearchedReports = useUserStore((s) => s.setSearchedReports);
   const setToken = useSearchReportStore((s) => s.setToken);
 
-  console.log(serverToken);
 
   useEffect(() => {
     if (serverUser) {

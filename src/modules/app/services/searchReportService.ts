@@ -23,10 +23,7 @@ export const searchReportService = async ({
       identityData: searchInput,
     };
 
-    console.log("🚀 Sending request to backend:", {
-      payload,
-      baseURL: axiosInstance.defaults.baseURL,
-    });
+
 
     const { data: searchReport } = await axiosInstance.post(
       "/reports",
@@ -41,7 +38,6 @@ export const searchReportService = async ({
       }
     );
 
-    console.log("✅ Backend response received:", searchReport);
     return searchReport;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

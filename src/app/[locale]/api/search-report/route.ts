@@ -53,13 +53,6 @@ export async function POST(request: Request) {
       );
     }
 
-    console.log("🔍 Processing search request:", {
-      userId,
-      searchType,
-      nationality,
-      searchInput: searchInput.substring(0, 10) + "...", // Log only first 10 chars for privacy
-      tokenPresent: !!token,
-    });
 
     const report = await searchReportService({
       searchType,
@@ -70,7 +63,6 @@ export async function POST(request: Request) {
 
     await trackEntitlement(FeatureFlag.MONTHLY_REQUESTS, userId);
 
-    console.log("✅ Search completed successfully");
     return NextResponse.json(report);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {

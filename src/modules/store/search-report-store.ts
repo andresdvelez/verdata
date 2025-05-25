@@ -149,13 +149,6 @@ export const useSearchReportStore = create<SearchReportState>()(
               throw new Error("searchInput is required");
             }
 
-            console.log("🔍 Starting search report request:", {
-              userId: args.userId,
-              searchType: args.searchType,
-              nationality: args.nationality,
-              searchInputLength: args.searchInput.length,
-            });
-
             const res = await axios.post(
               "/api/search-report",
               {

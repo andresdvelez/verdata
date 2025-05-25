@@ -35,7 +35,6 @@ export async function downloadReportServerAction(
       },
     };
   } catch (error) {
-    console.log(error);
     throw error;
   }
 }
