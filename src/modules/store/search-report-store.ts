@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { devtools } from "zustand/middleware";
@@ -87,13 +88,24 @@ export const useSearchReportStore = create<SearchReportState>()(
         searchByName: async ({ userId, countryCode, searchName }) => {
           try {
             set({ isLoading: true, isEmpty: false });
+
+            const token = get().token;
+            if (!token) {
+              throw new Error("No authentication token available");
+            }
+
             const res = await axios.post(
               "/api/search-name",
               { userId, countryCode, searchName },
               {
-                headers: { Authorization: `Bearer ${get().token}` },
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                },
+                timeout: 30000, // 30 second timeout
               }
             );
+
             set({
               nameSearched: searchName,
               usersByName: res.data,
@@ -101,7 +113,8 @@ export const useSearchReportStore = create<SearchReportState>()(
               isLoading: false,
               isPreSearch: true,
             });
-          } catch (error) {
+          } catch (error: any) {
+            console.error("❌ Error in searchByName:", error);
             set({
               usersByName: null,
               isEmpty: true,
@@ -116,22 +129,82 @@ export const useSearchReportStore = create<SearchReportState>()(
         handleSearchReport: async (args) => {
           try {
             set({ isLoading: true, isEmpty: false, warningLabel: null });
+
+            const token = get().token;
+            if (!token) {
+              throw new Error("No authentication token available");
+            }
+
+            // Validate required arguments
+            if (!args.userId) {
+              throw new Error("userId is required");
+            }
+            if (!args.searchType) {
+              throw new Error("searchType is required");
+            }
+            if (!args.nationality) {
+              throw new Error("nationality is required");
+            }
+            if (!args.searchInput?.trim()) {
+              throw new Error("searchInput is required");
+            }
+
+            console.log("🔍 Starting search report request:", {
+              userId: args.userId,
+              searchType: args.searchType,
+              nationality: args.nationality,
+              searchInputLength: args.searchInput.length,
+            });
+
             const res = await axios.post(
               "/api/search-report",
               {
                 userId: args.userId,
                 searchType: args.searchType,
                 nationality: args.nationality,
-                searchInput: args.searchInput,
+                searchInput: args.searchInput.trim(),
               },
               {
-                headers: { Authorization: `Bearer ${get().token}` },
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                },
+                timeout: 60000, // 60 second timeout to match your API route
+                validateStatus: (status) => status < 500, // Don't throw for 4xx errors
               }
             );
+
+            // Handle different response statuses
+            if (res.status >= 400) {
+              const errorMessage =
+                res.data?.error || `Request failed with status ${res.status}`;
+              throw new Error(errorMessage);
+            }
+
             set({ isEmpty: false, isLoading: false });
             return res.data as Report;
-          } catch (error) {
+          } catch (error: any) {
+            console.error("❌ Error in handleSearchReport:", {
+              message: error.message,
+              response: error.response?.data,
+              status: error.response?.status,
+            });
+
             set({ isEmpty: true, isLoading: false });
+
+            // Provide more specific error messages
+            if (error.code === "ECONNABORTED") {
+              throw new Error("Request timeout - please try again");
+            }
+            if (error.response?.status === 401) {
+              throw new Error("Authentication failed - please log in again");
+            }
+            if (error.response?.status === 400) {
+              const errorMsg =
+                error.response?.data?.error || "Invalid request parameters";
+              throw new Error(errorMsg);
+            }
+
             throw error;
           }
         },

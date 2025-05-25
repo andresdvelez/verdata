@@ -8,15 +8,58 @@ export const maxDuration = 60;
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    let body;
+    try {
+      body = await request.json();
+    } catch (parseError) {
+      console.error("❌ Failed to parse request body:", parseError);
+      return NextResponse.json(
+        { error: "Invalid JSON in request body" },
+        { status: 400 }
+      );
+    }
 
     const tokenHeader = request.headers.get("authorization") || "";
     const token = tokenHeader.replace(/^Bearer\s+/i, "");
 
     const { userId, searchType, nationality, searchInput } = body;
+
+    // Validate required fields
     if (!userId) {
       return NextResponse.json({ error: "Missing userId" }, { status: 400 });
     }
+    if (!searchType) {
+      return NextResponse.json(
+        { error: "Missing searchType" },
+        { status: 400 }
+      );
+    }
+    if (!nationality) {
+      return NextResponse.json(
+        { error: "Missing nationality" },
+        { status: 400 }
+      );
+    }
+    if (!searchInput) {
+      return NextResponse.json(
+        { error: "Missing searchInput" },
+        { status: 400 }
+      );
+    }
+    if (!token) {
+      return NextResponse.json(
+        { error: "Missing authorization token" },
+        { status: 401 }
+      );
+    }
+
+    console.log("🔍 Processing search request:", {
+      userId,
+      searchType,
+      nationality,
+      searchInput: searchInput.substring(0, 10) + "...", // Log only first 10 chars for privacy
+      tokenPresent: !!token,
+    });
 
     const report = await searchReportService({
       searchType,
@@ -26,18 +69,52 @@ export async function POST(request: Request) {
     });
 
     await trackEntitlement(FeatureFlag.MONTHLY_REQUESTS, userId);
+
+    console.log("✅ Search completed successfully");
     return NextResponse.json(report);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
-    console.error("❌ Error in /api/search-report:", err);
-    // If it’s an AxiosError, log the response payload too
+    console.error("❌ Error in /api/search-report:", {
+      message: err.message,
+      name: err.name,
+      stack: err.stack,
+    });
+
+    // If it's an AxiosError, log the response payload too
     if (err.response) {
-      console.error("➡️ Downstream response data:", err.response.data);
+      console.error("➡️ Downstream response:", {
+        status: err.response.status,
+        statusText: err.response.statusText,
+        data: err.response.data,
+        headers: err.response.headers,
+      });
     }
-    const msg = err.response?.data || err.message || "Unknown error";
-    return NextResponse.json(
-      { error: msg },
-      { status: err.response?.status || 500 }
-    );
+
+    // Handle different types of errors
+    if (err.code === "ETIMEDOUT" || err.code === "ECONNABORTED") {
+      return NextResponse.json(
+        { error: "Request timeout - please try again" },
+        { status: 408 }
+      );
+    }
+
+    if (err.response?.status === 401) {
+      return NextResponse.json(
+        { error: "Unauthorized - invalid token" },
+        { status: 401 }
+      );
+    }
+
+    if (err.response?.status === 400) {
+      return NextResponse.json(
+        { error: err.response.data || "Bad request to backend service" },
+        { status: 400 }
+      );
+    }
+
+    const msg = err.response?.data?.message || err.message || "Unknown error";
+    const status = err.response?.status || 500;
+
+    return NextResponse.json({ error: msg }, { status });
   }
 }
