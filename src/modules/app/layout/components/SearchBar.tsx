@@ -8,7 +8,7 @@ import { NationalitySelect } from "./searchbar/NationalitySelect";
 import { SearchFormInterface, SearchType } from "@/types/app/search";
 import { SearchTypeSelect } from "./searchbar/SearchTypeSelect";
 import { SearchInput } from "./searchbar/SearchInput";
-import { useRouter } from "@/modules/translations/i18n/routing";
+import { usePathname, useRouter } from "@/modules/translations/i18n/routing";
 import { useSearchReportStore } from "@/modules/store/search-report-store";
 import { useLocale, useTranslations } from "next-intl";
 import { useRef, useState } from "react";
@@ -30,6 +30,7 @@ export const SearchBar = ({
   const t = useTranslations("searchbar");
   const locale = useLocale();
   const router = useRouter();
+  const pathname = usePathname();
   const { isFullReportAvailable } = useEntitlementsValidation();
 
   const searchSchema = createSearchSchema(t);
@@ -127,6 +128,8 @@ export const SearchBar = ({
       processSearch(data);
     })();
   };
+
+  if (variant === "header" && pathname === "/app/search") return <></>;
 
   return (
     <form
