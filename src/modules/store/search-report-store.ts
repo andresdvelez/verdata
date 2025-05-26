@@ -31,6 +31,7 @@ interface SearchReportState {
   setIsLoading: (value: boolean) => void;
   isPreSearch: boolean;
   isEmpty: boolean;
+  setIsEmpty: (value: boolean) => void;
   token: string;
   nameSearched: string | null;
   countryCode: string | null;
@@ -60,6 +61,7 @@ export const useSearchReportStore = create<SearchReportState>()(
         setIsLoading: (value) => set({ isLoading: value }),
         isPreSearch: false,
         isEmpty: true,
+        setIsEmpty: (value) => set({ isEmpty: value }),
         nameSearched: null,
         countryCode: null,
         usersByName: null,

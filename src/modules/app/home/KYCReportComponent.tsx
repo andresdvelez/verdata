@@ -15,6 +15,7 @@ import { FullReport } from "./kyc-report/FullReport";
 import { ReportActions } from "./kyc-report/ReportActions";
 import { KYCReportSkeleton } from "./kyc-report/KYCReportSkeleton";
 import { SubscriptionOverlay } from "./kyc-report/SubscriptionOverlay";
+import { useSearchReportStore } from "@/modules/store/search-report-store";
 
 interface KYCReportComponentProps {
   report: KYCReport;
@@ -25,6 +26,8 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
   report,
   className,
 }) => {
+  const setIsEmpty = useSearchReportStore((state) => state.setIsEmpty);
+
   const {
     showFullReport,
     setShowFullReport,
@@ -40,11 +43,16 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
     return <KYCReportSkeleton />;
   }
 
+  const handleGoBack = () => {
+    setIsEmpty(true);
+    router.back();
+  };
+
   return (
     <div className={cn("animate-fade-in", className)}>
       {/* Header */}
       <div className="mb-8 space-y-1">
-        <BackButton onBack={() => router.back()} label={t("go-back")} />
+        <BackButton onBack={handleGoBack} label={t("go-back")} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
