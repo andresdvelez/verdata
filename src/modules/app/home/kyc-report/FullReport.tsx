@@ -1,5 +1,4 @@
 import React from "react";
-import { VerificationSection } from "./VerifictionSection";
 import { InternationalSanctionsSection } from "./InternationalSanctionsSection";
 import { NationalSanctionsSection } from "./NationalSanctionsSection";
 import { KYCReport } from "@/types/app/reports";
@@ -58,12 +57,12 @@ export const FullReport = ({
       )}
 
       {/* Always show news media at the bottom if any section is expanded */}
-      <VerificationSection
+      {/* <VerificationSection
         title={t("news-published-in-media")}
         result={virtualizedReport.news_media}
       >
         <p className="text-sm text-gray-600">{t("news-media-description")}</p>
-      </VerificationSection>
+      </VerificationSection> */}
     </div>
   );
 };
