@@ -3,7 +3,7 @@ import {
   SEARCH_TYPE_NAME,
 } from "@/modules/app/constants/search";
 import { useSearchReportStore } from "@/modules/store/search-report-store";
-import { SearchFormInterface } from "@/types/app/search";
+import { SearchFormInterface, SearchType } from "@/types/app/search";
 import { Select, SelectItem } from "@heroui/react";
 import { useTranslations } from "next-intl";
 import { Control, Controller } from "react-hook-form";
@@ -44,9 +44,11 @@ export const SearchTypeSelect = ({
           }}
           onChange={(event) => {
             onChange(event);
-            setLocalSearchType(event.target.value);
+            setLocalSearchType(event.target.value as SearchType);
           }}
           {...field}
+          selectionMode="single"
+          selectedKeys={[field.value]}
         >
           <SelectItem key={SEARCH_TYPE_NAME} data-value={SEARCH_TYPE_NAME}>
             {t("name")}

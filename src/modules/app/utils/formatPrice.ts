@@ -1,5 +1,4 @@
 export const formatPrice = (priceObj: { price: number; currency: string }) => {
-  console.log(priceObj);
   if (!priceObj || !priceObj.price) return "N/A";
 
   // Convert from cents to whole units

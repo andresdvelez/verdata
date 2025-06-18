@@ -24,7 +24,7 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
           />
           Volver al home
         </Link>
-        <div className="my-auto mx-auto w-full flex items-center justify-center">
+        <div className="my-auto mx-auto w-full flex items-center justify-center animate-fade-up">
           {children}
         </div>
       </div>

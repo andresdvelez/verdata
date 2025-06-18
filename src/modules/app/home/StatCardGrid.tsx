@@ -2,50 +2,42 @@
 
 import React from "react";
 import { StatCard } from "./stat-cards/StatCard";
+import { useTranslations } from "next-intl";
+import { PlanUsage } from "../common/components/PlanUsage";
+import { FeatureFlag } from "../common/features/flags";
+import { useRouter } from "@/modules/translations/i18n/routing";
 
 export const StatCardGrid = () => {
+  const t = useTranslations("stat-cards");
+
+  const router = useRouter();
+
   return (
     <aside className="grid-cols-1 xl:grid-cols-3 gap-6 hidden md:grid">
+      {/* Search Credits Card */}
+      <PlanUsage
+        featureFlag={FeatureFlag.MONTHLY_REQUESTS}
+        title={t("search-credits")}
+        description={t("credits-to-do-searches")}
+      />
       {/* Database Stats Card */}
       <StatCard
         icon={<span className="text-3xl">%</span>}
-        title="Bases de datos actualizadas"
+        title={t("updated-databases")}
         value={100}
         maxValue={100}
         progressSuffix="%"
         variant="purple"
         action={{
-          text: "Realizar búsqueda",
-          onClick: () => console.log("Search database"),
+          text: t("search"),
+          onClick: () => router.push("/app/search"),
         }}
-        subtitle="Se ha actualizado el 100% satisfactoriamente"
+        subtitle={t("successful-update")}
         animationDelay={0}
       />
 
-      {/* Search Credits Card */}
-      <StatCard
-        icon={
-          <i
-            className="icon-[tdesign--search] size-8"
-            role="img"
-            aria-hidden="true"
-          />
-        }
-        title="Créditos de búsqueda"
-        value={5}
-        maxValue={100}
-        variant="lime"
-        progressSuffix="/100"
-        action={{
-          text: "Recargar ahora",
-          onClick: () => console.log("Reload credits"),
-        }}
-        subtitle="Tienes 5 de 100 créditos"
-        animationDelay={0.2}
-      />
-
       {/* Promotion Card */}
-      <StatCard
+      {/* <StatCard
         icon={
           <i
             className="icon-[lucide--calendar] size-8"
@@ -60,17 +52,17 @@ export const StatCardGrid = () => {
             aria-hidden="true"
           />
         }
-        title="¡Promoción!"
+        title={t("for-sale")}
         subtitle="Solo por hoy 2x1"
         value={0}
         showProgress={false}
-        variant="white"
+        variant="lime"
         action={{
-          text: "Recargar ahora",
+          text: t("get-more-credits"),
           onClick: () => console.log("Use promotion"),
         }}
         animationDelay={0.4}
-      />
+      /> */}
     </aside>
   );
 };

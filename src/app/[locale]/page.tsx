@@ -15,7 +15,7 @@ export default function Home() {
       <MobileMenu />
       <section className="w-full h-full overflow-hidden">
         <Header />
-        <aside className="p-4 md:p-8 w-full max-h-[calc(100vh-102px)] flex flex-col xl:flex-row gap-8 bg-white overflow-y-auto">
+        <aside className="p-4 md:p-8 w-full max-h-[calc(100vh-102px)] flex flex-col xl:flex-row gap-8 bg-white overflow-y-auto animate-fade-up">
           <div className="xl:w-2/3 h-full flex-1 flex flex-col gap-6">
             <DescriptionText />
             <StaticPricing />

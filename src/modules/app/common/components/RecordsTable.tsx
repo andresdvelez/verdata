@@ -1,5 +1,8 @@
+"use client";
+
 import { useUserStore } from "@/modules/store/user-store";
 import {
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -8,22 +11,20 @@ import {
   TableRow,
 } from "@heroui/react";
 import { recordsTableColumns } from "../data/reports-table-columns";
-import { Report } from "@prisma/client";
 import { RenderCell } from "./RecordsTableCell";
 import { useTranslations } from "next-intl";
 import { RecordsTableEmpty } from "./RecordsTableEmpty";
+import { KYCReport } from "@/types/app/reports";
 
 export const RecordsTable = () => {
   const t = useTranslations("records-table");
 
-  const user = useUserStore((state) => state.user);
+  const reports = useUserStore((state) => state.searchedReports) as KYCReport[];
   const isLoading = useUserStore((state) => state.isLoading);
 
   const { cell } = RenderCell();
 
   const columns = recordsTableColumns(t);
-
-  const reports = user?.searched_reports;
 
   return (
     <Table
@@ -31,19 +32,6 @@ export const RecordsTable = () => {
         wrapper: "border-none shadow-none p-0",
       }}
       aria-label="Records from user's search"
-      bottomContent={
-        <div className="flex w-full justify-center">
-          {/* <Pagination
-            isCompact
-            showControls
-            showShadow
-            color="primary"
-            page={page}
-            total={pages}
-            onChange={(page) => setPage(page)}
-          /> */}
-        </div>
-      }
     >
       <TableHeader columns={columns}>
         {(column) => (
@@ -56,8 +44,9 @@ export const RecordsTable = () => {
         )}
       </TableHeader>
       <TableBody
+        loadingContent={<Spinner />}
         isLoading={isLoading}
-        items={(reports as Report[]) || []}
+        items={reports || []}
         emptyContent={<RecordsTableEmpty />}
       >
         {(item) => (

@@ -1,31 +1,24 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
 import { useSchematicEvents } from "@schematichq/schematic-react";
 import { ReactNode, useEffect } from "react";
+import { useUserStore } from "@/modules/store/user-store";
 
 export const SchematicWrapped = ({ children }: { children: ReactNode }) => {
   const { identify } = useSchematicEvents();
-  const { user } = useUser();
+  const user = useUserStore((state) => state.user);
 
   useEffect(() => {
-    const userName =
-      user?.username ?? user?.fullName ?? user?.emailAddresses[0] ?? user?.id;
+    if (!user) return;
 
-    if (user?.id) {
-      identify({
-        company: {
-          keys: {
-            id: user.id,
-          },
-          name: userName as string,
-        },
-        keys: {
-          id: user.id,
-        },
-        name: userName as string,
-      });
-    }
+    const userName =
+      [user.firstName, user.lastName].filter(Boolean).join(" ") || user.email;
+
+    identify({
+      company: { keys: { id: user.clerk_id }, name: userName },
+      keys: { id: user.clerk_id },
+      name: userName,
+    });
   }, [user, identify]);
 
   return <>{children}</>;

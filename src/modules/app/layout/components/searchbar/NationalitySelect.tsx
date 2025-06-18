@@ -11,13 +11,10 @@ export const NationalitySelect = ({
   control: Control<SearchFormInterface>;
 }) => {
   const t = useTranslations("nationality-select");
+  const tError = useTranslations("searchbar.errors");
 
   const setSearchDocumentLabel = useSearchReportStore(
     (state) => state.setSearchDocumentLabel
-  );
-
-  const setSearchWarning = useSearchReportStore(
-    (state) => state.setSearchWarning
   );
 
   return (
@@ -28,7 +25,7 @@ export const NationalitySelect = ({
       render={({ field: { onChange, ...field }, fieldState: { error } }) => (
         <Select
           isInvalid={!!error}
-          errorMessage={error?.message}
+          errorMessage={tError("nationalityRequired")}
           radius="full"
           label={t("label")}
           variant="flat"
@@ -40,26 +37,22 @@ export const NationalitySelect = ({
             errorMessage: "absolute bottom-0",
           }}
           {...field}
+          selectionMode="single"
+          selectedKeys={[field.value]}
         >
-          {COUNTRIES?.map(
-            ({ Country, Country_Code, Document_Type, Warning }) => (
-              <SelectItem
-                key={Country}
-                data-value={Country_Code}
-                onPress={() => {
-                  const updatedDocumentType = Document_Type.replace(
-                    /[()]/g,
-                    ""
-                  );
-                  setSearchDocumentLabel(updatedDocumentType);
-                  setSearchWarning(Warning);
-                  onChange(Country_Code);
-                }}
-              >
-                {Country}
-              </SelectItem>
-            )
-          )}
+          {COUNTRIES?.map(({ Country, Country_Code, Document_Type }) => (
+            <SelectItem
+              key={Country_Code}
+              data-value={Country_Code}
+              onPress={() => {
+                const updatedDocumentType = Document_Type.replace(/[()]/g, "");
+                setSearchDocumentLabel(updatedDocumentType);
+                onChange(Country_Code);
+              }}
+            >
+              {Country}
+            </SelectItem>
+          ))}
         </Select>
       )}
     />

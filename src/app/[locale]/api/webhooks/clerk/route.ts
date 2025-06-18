@@ -1,5 +1,5 @@
 import { generateUniqueReferralCode } from "@/modules/core/lib/generateUniqueReferralCode";
-import { createUser, updateUser } from "@/modules/prisma/lib/users";
+import { createUser, deleteUser, updateUser } from "@/modules/prisma/lib/users";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { User } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   const svix_signature = (await headerPayload).get("svix-signature");
 
   if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response("Error ocurred -- no svix headers", {
+    return new Response("Error occurred -- no svix headers", {
       status: 400,
     });
   }
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
     }) as WebhookEvent;
   } catch (error) {
     console.error("Error verifying webhook:", error);
-    return new Response("Error ocurred", {
+    return new Response("Error occurred", {
       status: 400,
     });
   }
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     const { id, email_addresses, first_name, last_name, image_url } = evt.data;
 
     if (!id || !email_addresses || !email_addresses.length) {
-      return new Response("Error ocurred -- missing data", {
+      return new Response("Error occurred -- missing data", {
         status: 400,
       });
     }
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
       if (error) throw error;
       revalidatePath("/");
     } catch {
-      return new Response("Error ocurred", {
+      return new Response("Error occurred", {
         status: 400,
       });
     }
@@ -83,7 +83,7 @@ export async function POST(req: Request) {
     const { id, first_name, last_name, image_url } = evt.data;
 
     if (!id) {
-      return new Response("Error ocurred -- missing data", {
+      return new Response("Error occurred -- missing data", {
         status: 400,
       });
     }
@@ -97,13 +97,52 @@ export async function POST(req: Request) {
     try {
       await updateUser(id, data);
     } catch {
-      return new Response("Error ocurred", {
+      return new Response("Error occurred", {
         status: 400,
       });
     }
   }
 
-  // TODO: implement the user:deleted event
+  // if (eventType === "session.created") {
+  //   const { id } = evt.data;
+
+  //   if (!id) {
+  //     return new Response("Error occurred -- missing data", {
+  //       status: 400,
+  //     });
+  //   }
+
+  //   try {
+  //     const userFromDB = await getUserByClerkId(id);
+  //     console.log(userFromDB);
+  //     useUserStore.getState().setUser(userFromDB);
+  //     useUserStore.getState().setIsLoading(false);
+  //   } catch {
+  //     return new Response("Error occurred", {
+  //       status: 400,
+  //     });
+  //   }
+  // }
+
+  if (eventType === "user.deleted") {
+    const { id } = evt.data;
+
+    if (!id) {
+      return new Response("Error occurred -- missing data", {
+        status: 400,
+      });
+    }
+
+    try {
+      const { error } = await deleteUser(id);
+      if (error) throw error;
+      revalidatePath("/");
+    } catch {
+      return new Response("Error occurred while deleting user", {
+        status: 400,
+      });
+    }
+  }
 
   return new Response("", { status: 200 });
 }

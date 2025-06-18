@@ -22,7 +22,7 @@ export const Sidebar: React.FC = () => {
     if (path === "/app") {
       return pathname === "/app";
     }
-    return pathname.startsWith(path);
+    return pathname === path;
   };
 
   return (
@@ -54,8 +54,9 @@ export const Sidebar: React.FC = () => {
           }
           text={t("general")}
           to="/app"
-          isActive={isActive("/app") || isActive("/")}
+          isActive={isActive("/app")}
         />
+
         <SidebarItem
           icon={
             <i
@@ -128,11 +129,13 @@ export const Sidebar: React.FC = () => {
               variant="light"
               isLoading={isLoading}
               startContent={
-                <i
-                  className="icon-[mynaui--logout-solid] size-5"
-                  role="img"
-                  aria-hidden="true"
-                />
+                !isLoading && (
+                  <i
+                    className="icon-[mynaui--logout-solid] size-5"
+                    role="img"
+                    aria-hidden="true"
+                  />
+                )
               }
             >
               {t("sign-out")}

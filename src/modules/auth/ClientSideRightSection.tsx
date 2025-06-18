@@ -105,7 +105,7 @@ export const ClientSideRightSection = () => {
         </div>
 
         <div
-          className="absolute bottom-12 xl:bottom-10 lg:left-32 xl:left-36 2xl:left-48 text-center text-black  floating-tag"
+          className="absolute bottom-12 xl:bottom-8 lg:left-32 xl:left-36 2xl:left-52 text-center text-black  floating-tag"
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           style={{ "--index": "2" } as any}
         >

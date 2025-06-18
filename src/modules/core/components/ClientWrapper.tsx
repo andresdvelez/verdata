@@ -1,20 +1,30 @@
 "use client";
 
-import { HeroUIProvider } from "@heroui/react";
-import { ReactNode } from "react";
+import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { SchematicProvider } from "@schematichq/schematic-react";
 import { SchematicWrapped } from "./SchematicWrapped";
 import { UserProvider } from "./UserProvider";
-import { esES } from "@clerk/localizations";
-import { enUS } from "@clerk/localizations";
 import { useLocale } from "next-intl";
+import { enUS, esES } from "@clerk/localizations";
+import { UserType } from "@/types/app/users";
 
-export const ClientWrapper = ({ children }: { children: ReactNode }) => {
+interface ClientWrapperProps {
+  children: React.ReactNode;
+  serverUser: UserType | null;
+  serverToken: string;
+}
+
+export const ClientWrapper = ({
+  children,
+  serverUser,
+  serverToken,
+}: ClientWrapperProps) => {
   const locale = useLocale();
 
   return (
     <HeroUIProvider>
+      <ToastProvider />
       <ClerkProvider
         localization={locale === "en" ? enUS : esES}
         afterSignOutUrl={"/auth/sign-in"}
@@ -24,9 +34,9 @@ export const ClientWrapper = ({ children }: { children: ReactNode }) => {
         <SchematicProvider
           publishableKey={process.env.NEXT_PUBLIC_SCHEMATIC_PUBLISHABLE_KEY!}
         >
-          <SchematicWrapped>
-            <UserProvider>{children}</UserProvider>
-          </SchematicWrapped>
+          <UserProvider serverUser={serverUser} serverToken={serverToken}>
+            <SchematicWrapped>{children}</SchematicWrapped>
+          </UserProvider>
         </SchematicProvider>
       </ClerkProvider>
     </HeroUIProvider>

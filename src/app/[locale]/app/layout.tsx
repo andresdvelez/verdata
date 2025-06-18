@@ -24,7 +24,7 @@ export default async function AppLayout({
         <MobileMenu />
         <section className="w-full overflow-hidden">
           <Header />
-          <aside className="bg-white overflow-auto w-full max-h-[calc(100vh-102px)] overflow-y-auto p-8">
+          <aside className="bg-white overflow-auto w-full max-h-[calc(100vh-102px)] overflow-y-auto p-8 animate-fade-up">
             {children}
             <SentryFeedbackWidget />
           </aside>

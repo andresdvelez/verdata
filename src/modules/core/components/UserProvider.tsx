@@ -1,18 +1,28 @@
 "use client";
 
-import { useUserStore } from "@/modules/store/user-store";
-import { useAuth } from "@clerk/nextjs";
 import { useEffect } from "react";
+import { useUserStore } from "@/modules/store/user-store";
+import { useSearchReportStore } from "@/modules/store/search-report-store";
+import { UserType } from "@/types/app/users";
 
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const { userId: clerkId, isLoaded: isClerkLoaded } = useAuth();
-  const fetchUser = useUserStore((state) => state.fetchUser);
+interface Props {
+  serverUser: UserType | null;
+  serverToken: string;
+  children: React.ReactNode;
+}
+
+export const UserProvider = ({ serverUser, serverToken, children }: Props) => {
+  const setUser = useUserStore((s) => s.setUser);
+  const setSearchedReports = useUserStore((s) => s.setSearchedReports);
+  const setToken = useSearchReportStore((s) => s.setToken);
 
   useEffect(() => {
-    if (isClerkLoaded && clerkId) {
-      fetchUser(clerkId);
+    if (serverUser) {
+      setUser(serverUser);
+      setSearchedReports(serverUser.searched_reports);
+      setToken(serverToken);
     }
-  }, [isClerkLoaded, clerkId, fetchUser]);
+  }, [serverUser, serverToken, setUser, setToken, setSearchedReports]);
 
   return <>{children}</>;
 };

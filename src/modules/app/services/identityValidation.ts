@@ -1,35 +1,31 @@
-import axios from "axios";
+import { axiosInstance } from "@/modules/core/lib/axios";
+import { SearchType } from "@/types/app/search";
 
 export const getIdentityByDocument = async ({
-  country,
+  nationality,
   identification,
+  token,
 }: {
-  country: string;
+  nationality: string;
   identification: string;
+  token: string;
 }) => {
   try {
-    const response = await axios.get(
-      `identity_validation/${country}/query_by_document/${identification}`
+    const response = await axiosInstance.post(
+      `/searched-identities`,
+      {
+        identityData: identification,
+        countryCode: nationality,
+        searchType: SearchType.DOCUMENT,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     return response.data;
   } catch (error) {
-    console.error(error);
-  }
-};
-
-export const getIdentityByName = async ({
-  country,
-  name,
-}: {
-  country: string;
-  name: string;
-}) => {
-  try {
-    const response = await axios.get(
-      `identity_validation/${country}/query_by_name/${name}`
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
+    return { error };
   }
 };

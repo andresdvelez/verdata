@@ -1,72 +1,88 @@
-import type { Metadata } from "next";
-import { redirect, routing } from "@/modules/translations/i18n/routing";
-import { AbstractIntlMessages, NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
-import { bricolageGrotesque } from "@/config/fonts.config";
+// app/[locale]/layout.tsx
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { ClientWrapper } from "@/modules/core/components/ClientWrapper";
-import "../../styles/globals.css";
+import { generateUniqueReferralCode } from "@/modules/core/lib/generateUniqueReferralCode";
+import { generateToken } from "@/modules/core/utils/generateJwtToken";
+import { client } from "@/modules/app/lib/schematic";
+import { FeatureFlag } from "@/modules/app/common/features/flags";
+import prisma from "@/modules/prisma/lib/prisma";
+import { redirect, routing } from "@/modules/translations/i18n/routing";
+import { notFound } from "next/navigation";
+import { ReactNode } from "react";
+import { CheckFlagResponse } from "@schematichq/schematic-typescript-node/api";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-const OPEN_GRAPH_IMAGE_URL = `${BASE_URL}/brand/thumbnail.jpg`;
-
-export const metadata: Metadata = {
-  metadataBase: new URL(BASE_URL),
-  title: "Verdata | Inicio",
-  description: "Inicio - Verifica y valida antecedentes penales | Verdata",
-  alternates: {
-    canonical: "https://app.verdata.co/en",
-  },
-  openGraph: {
-    title: "Verdata | Inicio",
-    description: "Inicio - Verifica y valida antecedentes penales | Verdata",
-    url: BASE_URL,
-    siteName: "Verdata | Inicio",
-    images: [
-      {
-        url: OPEN_GRAPH_IMAGE_URL,
-        width: 1200,
-        height: 630,
-        alt: "Verdata | Inicio",
-      },
-    ],
-    locale: "es_ES",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Verdata | Inicio",
-    description: "Inicio - Verifica y valida antecedentes penales | Verdata",
-    images: [OPEN_GRAPH_IMAGE_URL],
-  },
-};
-
-export default async function RootLayout({
+export default async function LocaleLayout({
   children,
   params,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
+  const locale = (await params).locale;
+  const supportedLocales = ["en", "es"];
   if (!routing.locales.includes(locale as "en" | "es")) {
-    redirect({ locale, href: "/app" });
+    redirect({ href: `/${locale}/app`, locale });
+  }
+  if (!supportedLocales.includes(locale)) {
+    notFound();
   }
 
-  const messages = await getMessages();
+  const { userId: clerkId } = await auth();
+  const clerkUser = await currentUser();
+
+  let serverUser = null;
+  let serverToken = "";
+
+  if (clerkId && clerkUser) {
+    serverUser = await prisma.user.upsert({
+      where: { clerk_id: clerkId },
+      create: {
+        clerk_id: clerkId,
+        email: clerkUser.emailAddresses[0].emailAddress,
+        firstName: clerkUser.firstName,
+        lastName: clerkUser.lastName,
+        imageUrl: clerkUser.imageUrl,
+        referral_code: generateUniqueReferralCode(),
+      },
+      include: {
+        searched_reports: true,
+      },
+      update: {},
+    });
+
+    await client.identify({
+      company: {
+        keys: { id: clerkId },
+        name: `${clerkUser.firstName} ${clerkUser.lastName}`,
+      },
+      keys: { id: clerkId },
+      name: `${clerkUser.firstName} ${clerkUser.lastName}`,
+    });
+
+    const monthly_requests: CheckFlagResponse = await client.features.checkFlag(
+      FeatureFlag.MONTHLY_REQUESTS,
+      { company: { id: clerkId } }
+    );
+    const national_lists_search: CheckFlagResponse =
+      await client.features.checkFlag(FeatureFlag.NATIONAL_LISTS_SEARCH, {
+        company: { id: clerkId },
+      });
+    const international_lists_search: CheckFlagResponse =
+      await client.features.checkFlag(FeatureFlag.INTERNATIONAL_LISTS_SEARCH, {
+        company: { id: clerkId },
+      });
+
+    serverToken = await generateToken({
+      id: serverUser.id,
+      monthly_requests,
+      national_lists_search,
+      international_lists_search,
+    });
+  }
 
   return (
-    <html lang={locale}>
-      <body
-        className={`${bricolageGrotesque.variable} font-bricolage antialiased bg-background`}
-      >
-        <ClientWrapper>
-          <NextIntlClientProvider
-            messages={messages.default as AbstractIntlMessages}
-          >
-            {children}
-          </NextIntlClientProvider>
-        </ClientWrapper>
-      </body>
-    </html>
+    <ClientWrapper serverUser={serverUser} serverToken={serverToken}>
+      {children}
+    </ClientWrapper>
   );
 }

@@ -118,3 +118,32 @@
     color: black;
     border: 1px solid #e2e2e2;
 }
+
+/* PEP-specific styling for ListItem wrapper */
+.pep-match-wrapper>div {
+    border-color: rgb(251 146 60);
+    /* orange-400 */
+    background-color: rgb(255 251 235);
+    /* orange-50 */
+}
+
+.pep-match-wrapper h4 {
+    color: rgb(194 65 12);
+    /* orange-800 */
+}
+
+.pep-match-wrapper .text-gray-600 {
+    color: rgb(217 119 6);
+    /* orange-600 */
+}
+
+/* Override link color for PEP matches */
+.pep-match-wrapper a {
+    color: rgb(217 119 6);
+    /* orange-600 */
+}
+
+.pep-match-wrapper a:hover {
+    color: rgb(194 65 12);
+    /* orange-800 */
+}
