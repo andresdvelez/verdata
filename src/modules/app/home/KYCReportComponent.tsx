@@ -4,9 +4,7 @@ import { Button, cn } from "@heroui/react";
 import { useRouter } from "@/modules/translations/i18n/routing";
 import { useTranslations } from "next-intl";
 import { KYCReport } from "@/types/app/reports";
-
-// Custom hook
-import { useKYCReport } from "../hooks/useKYCReport";
+import { useState } from "react";
 
 // Components
 import { IdentityCard } from "./kyc-report/IdentityCard";
@@ -28,15 +26,43 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
 }) => {
   const setIsEmpty = useSearchReportStore((state) => state.setIsEmpty);
 
-  const {
-    showFullReport,
-    setShowFullReport,
-    isLoading,
-    isFullReportAvailable,
-  } = useKYCReport({ initialReport: report });
+  // State for expanded sections
+  const [expandedSections, setExpandedSections] = useState({
+    international: false,
+    national: false,
+    peps: false,
+  });
+
+  const [isLoading] = useState(false);
+  const [isFullReportAvailable] = useState(report.isRealData !== false);
 
   const t = useTranslations("report.content");
   const router = useRouter();
+
+  const toggleSection = (section: "international" | "national" | "peps") => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
+
+  const toggleAllSections = () => {
+    const anyExpanded =
+      expandedSections.international ||
+      expandedSections.national ||
+      expandedSections.peps;
+    setExpandedSections({
+      international: !anyExpanded,
+      national: !anyExpanded,
+      peps: !anyExpanded && !!report.peps_lists,
+    });
+  };
+
+  // Check if any section is expanded
+  const showFullReport =
+    expandedSections.international ||
+    expandedSections.national ||
+    expandedSections.peps;
 
   // Early return for loading state
   if (isLoading) {
@@ -68,7 +94,7 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
 
           <ReportActions
             showFullReport={showFullReport}
-            setShowFullReport={setShowFullReport}
+            setShowFullReport={toggleAllSections}
             reportId={report.id}
           />
         </div>
@@ -82,14 +108,19 @@ export const KYCReportComponent: React.FC<KYCReportComponentProps> = ({
           )}
 
           <DetailedRightSection
-            showFullReport={showFullReport}
-            setShowFullReport={setShowFullReport}
+            expandedSections={expandedSections}
+            toggleSection={toggleSection}
             virtualizedReport={report}
             isBlurred={!isFullReportAvailable}
           />
 
           {/* Detailed Sections */}
-          {showFullReport && <FullReport virtualizedReport={report} />}
+          {showFullReport && (
+            <FullReport
+              virtualizedReport={report}
+              expandedSections={expandedSections}
+            />
+          )}
         </div>
       </div>
     </div>

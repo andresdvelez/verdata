@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -21,13 +15,13 @@ model User {
   lastName         String?
   imageUrl         String?
   balance_id       String?
-  balance          Balance?
   referral_code    String   @unique
   referred_by_id   String?
+  created_at       DateTime @updatedAt
+  balance          Balance?
+  searched_reports Report[]
   referred_by      User?    @relation("Referrals", fields: [referred_by_id], references: [id])
   referred_users   User[]   @relation("Referrals")
-  created_at       DateTime @updatedAt
-  searched_reports Report[]
 }
 
 model Balance {
@@ -40,9 +34,7 @@ model Balance {
 model Report {
   id                  String             @id @default(cuid())
   user_id             String
-  user                User               @relation(fields: [user_id], references: [id])
   related_identity_id String             @unique
-  related_identity    SearchedIdentities @relation(fields: [related_identity_id], references: [id])
   is_identity_matched Boolean
   risk_score          Int
   sanctions_lists     Json
@@ -53,6 +45,9 @@ model Report {
   search_data         String
   search_type         String
   created_at          DateTime           @default(now())
+  peps_lists          Json
+  related_identity    SearchedIdentities @relation(fields: [related_identity_id], references: [id])
+  user                User               @relation(fields: [user_id], references: [id])
 }
 
 model SearchedIdentities {
@@ -61,23 +56,863 @@ model SearchedIdentities {
   name          String
   nationality   String
   document_type String?
-  report        Report?
   created_at    DateTime @default(now())
+  report        Report?
 }
 
-model InternationalEndpoint {
-  id         String   @id @default(cuid())
-  source     String
-  url        String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}
-
-model NationalEndpoint {
-  id          String   @id @default(cuid())
-  source      String
+model ADBSanctionList {
+  id          String   @unique
+  name        String
+  description String?
   url         String
-  countryCode String
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model AFDBList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model ALESANList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model ANLA1List {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model ARIZINSList {
+  id        Int      @id @default(autoincrement())
+  name      String
+  naic      Int
+  type      String
+  createdAt DateTime @default(now())
+}
+
+model ATF2List {
+  id          Int      @id @default(autoincrement())
+  description String?
+  name        String
+  url         String   @unique
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+}
+
+model ATFList {
+  id          Int      @id @default(autoincrement())
+  description String?
+  name        String
+  url         String   @unique
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+}
+
+model AUSTList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model BIDList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model BMAWarningList {
+  id          Int      @id @default(autoincrement())
+  description String
+  name        String
+  createdAt   DateTime @default(now())
+}
+
+model BOE2List {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model CADSINList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model CEISList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model CEPIMList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model CFTCList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model CGRList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model CHICNBVList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model CHIMS1List {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  file        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model CHIMS2List {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+  file        String?
+}
+
+model CIASECUList {
+  id          Int      @unique
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model CIMAList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model CNEPList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model CSLList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model CVMWEBList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model DEAList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String   @unique
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model DESAPList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model DIANJCCList {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model DIANList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model DNRECList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model EBRDList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model ESPMVList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model EUList {
+  id          Int      @id @default(autoincrement())
+  description String?
+  name        String
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+}
+
+model EXTRAList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model EuropList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String   @unique
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model FBIList {
+  id          Int      @id @default(autoincrement())
+  description String?
+  name        String
+  url         String   @unique
+  imageUrl    String?
+  screenshots String[]
+  file        String?
+  createdAt   DateTime @default(now())
+}
+
+model FCA1List {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String   @unique
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model FCA2List {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model FCA3List {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String   @unique
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model FDA1List {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model FDA2List {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model FDA4List {
+  id                  Int       @id @default(autoincrement())
+  lastName            String
+  firstAndMiddleNames String
+  effectiveDate       DateTime?
+  endTermDebarment    String?
+  fr_date             DateTime?
+  volumePage          String?
+  createdAt           DateTime  @default(now())
+}
+
+model FSA2List {
+  id          Int      @id @default(autoincrement())
+  description String?
+  name        String
+  url         String   @unique
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+}
+
+model FSMAList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model GCCCASLList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model GELSList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model HHSList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String   @unique
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model ICEList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model INHAPERList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model IOSCOList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model ISRAUTList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model JCC2List {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String   @unique
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model JUSTUSAList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String   @unique
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model METIList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model MEUList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model MarshalsList {
+  id          Int      @id @default(autoincrement())
+  description String?
+  name        String
+  url         String
+  imageUrl    String   @unique
+  screenshots String[]
+  createdAt   DateTime @default(now())
+}
+
+model NBCTFINISList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model OFACList {
+  id        Int      @id @default(autoincrement())
+  reportId  Int
+  name      String
+  createdAt DateTime @default(now())
+}
+
+model OSIWantedList {
+  id          Int      @id @default(autoincrement())
+  description String?
+  name        String
+  url         String
+  imageUrl    String   @unique
+  screenshots String[]
+  createdAt   DateTime @default(now())
+}
+
+model PROCUList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model PepsList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model RUESList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model SECOP1List {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model SECOP2List {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model SFCCOList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model SICList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  file        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model SIEVCACList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model SIRIList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model SRFINList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  file        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model STATERList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model SUISANList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model SUPERSOC1List {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model UIRARGList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model UNTRIBList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String   @unique
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model USDS2List {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model USDS3List {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model USPISList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model USSECSERList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model adres_list {
+  id              String   @id
+  name            String
+  description     String
+  url             String
+  imageUrl        String
+  screenshots     String[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime
+  document_number String   @unique
+}
+
+model cBIRLList {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  url         String   @unique
+  imageUrl    String?
+  screenshots String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
 }

@@ -19,6 +19,7 @@ const ReportPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   if (!report) {
     return <ReportNotFound />;
   }
+
   return <KYCReportComponent report={report as KYCReport} />;
 };
 

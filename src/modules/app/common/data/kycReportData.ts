@@ -96,6 +96,18 @@ export const sampleKYCReport: KYCReport = {
       ],
     },
   },
+  peps_lists: {
+    lists: [
+      {
+        items: [],
+        isMatch: false,
+        listCode: "PEPS",
+        listName: "Politically Exposed Persons (PEPs)",
+        screenshots: [],
+      },
+    ],
+    overall: false,
+  },
   peps_verification: false,
   criminal_records: true,
   news_media: true,
@@ -103,4 +115,5 @@ export const sampleKYCReport: KYCReport = {
   search_data: "1015555510",
   search_type: "CC",
   created_at: new Date("2025-04-26"),
+  isRealData: false,
 };

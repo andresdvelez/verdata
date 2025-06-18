@@ -1,16 +1,17 @@
-import {
-  InternationalEndpoint,
-  NationalEndpoint,
-  Report,
-  SearchedIdentities,
-} from "@prisma/client";
+import { Report, SearchedIdentities } from "@prisma/client";
 
 export type VerificationResult = boolean;
 
 export interface ReportData {
   identity: SearchedIdentities;
-  nationals: NationalEndpoint;
-  internationals: InternationalEndpoint;
+  nationals: {
+    overall: VerificationResult;
+    lists: RestrictiveListResult[];
+  };
+  internationals: {
+    overall: VerificationResult;
+    lists: RestrictiveListResult[];
+  };
 }
 
 export type KYCReport = Report & {
@@ -24,7 +25,12 @@ export type KYCReport = Report & {
       lists: RestrictiveListResult[];
     };
   };
+  peps_lists?: {
+    overall: VerificationResult;
+    lists: RestrictiveListResult[];
+  };
   related_identity: SearchedIdentities;
+  isRealData: boolean;
 };
 
 export interface RestrictiveListItem {
@@ -51,6 +57,10 @@ export interface RestrictiveListsData {
     overall: boolean;
   };
   international: {
+    lists: RestrictiveListResult[];
+    overall: boolean;
+  };
+  peps?: {
     lists: RestrictiveListResult[];
     overall: boolean;
   };

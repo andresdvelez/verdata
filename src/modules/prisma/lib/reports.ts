@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReportData } from "@/types/app/reports";
 import prisma from "./prisma";
 import { Prisma } from "@prisma/client";
@@ -25,7 +26,6 @@ export async function createReport({
       related_identity: {
         connect: { id: identityId },
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       sanctions_lists: reportData as any,
       nationality,
       search_data,
@@ -34,7 +34,8 @@ export async function createReport({
       risk_score: 0, // Default value, update as needed
       peps_verification: false, // Default value, update as needed
       criminal_records: false, // Default value, update as needed
-      news_media: false, // Default value, update as needed
+      news_media: false,
+      peps_lists: "",
     };
 
     const report = await prisma.report.create({ data });
@@ -70,7 +71,7 @@ export async function getReportByReportIdAndUserId(
   reportId: string,
   userId: string
 ) {
-  return await prisma.report.findUnique({
+  const report = await prisma.report.findUnique({
     where: {
       id: reportId,
       user: {
@@ -81,6 +82,19 @@ export async function getReportByReportIdAndUserId(
       related_identity: true,
     },
   });
+
+  if (!report) {
+    return null;
+  }
+
+  // Parse the JSON fields to ensure proper structure
+  const parsedReport = {
+    ...report,
+    sanctions_lists: report.sanctions_lists as any,
+    peps_lists: report.peps_lists as any,
+  };
+
+  return parsedReport;
 }
 
 export async function getReportsByUserId(userId?: string, limit?: number) {

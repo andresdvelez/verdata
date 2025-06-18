@@ -8,15 +8,19 @@ import { VerificationList } from "./VerificationList";
 type DetailedRightSectionProps = {
   virtualizedReport: KYCReport;
   isBlurred?: boolean;
-  showFullReport: boolean;
-  setShowFullReport: (value: boolean) => void;
+  expandedSections: {
+    international: boolean;
+    national: boolean;
+    peps: boolean;
+  };
+  toggleSection: (section: "international" | "national" | "peps") => void;
 };
 
 export const DetailedRightSection = ({
   virtualizedReport,
   isBlurred = false,
-  showFullReport,
-  setShowFullReport,
+  expandedSections,
+  toggleSection,
 }: DetailedRightSectionProps) => {
   const t = useTranslations("report.content");
 
@@ -38,8 +42,8 @@ export const DetailedRightSection = ({
       <Divider className="my-4" />
 
       <VerificationList
-        showFullReport={showFullReport}
-        setShowFullReport={setShowFullReport}
+        expandedSections={expandedSections}
+        toggleSection={toggleSection}
         virtualizedReport={virtualizedReport}
       />
     </Card>
