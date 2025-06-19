@@ -33,8 +33,6 @@ export default async function LocaleLayout({
   let serverUser = null;
   let serverToken = "";
 
-  console.log(clerkUser, clerkId);
-
   if (clerkId && clerkUser) {
     const email = clerkUser.emailAddresses[0].emailAddress;
 
