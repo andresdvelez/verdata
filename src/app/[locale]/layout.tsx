@@ -33,22 +33,47 @@ export default async function LocaleLayout({
   let serverUser = null;
   let serverToken = "";
 
+  console.log(clerkUser, clerkId);
+
   if (clerkId && clerkUser) {
-    serverUser = await prisma.user.upsert({
-      where: { clerk_id: clerkId },
-      create: {
-        clerk_id: clerkId,
-        email: clerkUser.emailAddresses[0].emailAddress,
-        firstName: clerkUser.firstName,
-        lastName: clerkUser.lastName,
-        imageUrl: clerkUser.imageUrl,
-        referral_code: generateUniqueReferralCode(),
-      },
-      include: {
-        searched_reports: true,
-      },
-      update: {},
+    const email = clerkUser.emailAddresses[0].emailAddress;
+
+    // First, check if a user with this email already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+      include: { searched_reports: true },
     });
+
+    if (existingUser) {
+      // If user exists with this email, update their clerk_id if needed
+      serverUser = await prisma.user.update({
+        where: { email },
+        data: {
+          clerk_id: clerkId,
+          firstName: clerkUser.firstName || existingUser.firstName,
+          lastName: clerkUser.lastName || existingUser.lastName,
+          imageUrl: clerkUser.imageUrl || existingUser.imageUrl,
+        },
+        include: {
+          searched_reports: true,
+        },
+      });
+    } else {
+      // If no user with this email exists, create a new one
+      serverUser = await prisma.user.create({
+        data: {
+          clerk_id: clerkId,
+          email,
+          firstName: clerkUser.firstName,
+          lastName: clerkUser.lastName,
+          imageUrl: clerkUser.imageUrl,
+          referral_code: generateUniqueReferralCode(),
+        },
+        include: {
+          searched_reports: true,
+        },
+      });
+    }
 
     await client.identify({
       company: {
