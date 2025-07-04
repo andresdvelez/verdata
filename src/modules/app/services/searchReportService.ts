@@ -23,8 +23,6 @@ export const searchReportService = async ({
       identityData: searchInput,
     };
 
-
-
     const { data: searchReport } = await axiosInstance.post(
       "/reports",
       payload,
@@ -34,7 +32,6 @@ export const searchReportService = async ({
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        timeout: 30000, // 30 second timeout
       }
     );
 
