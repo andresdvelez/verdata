@@ -3,6 +3,7 @@ import { AbstractIntlMessages, NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { bricolageGrotesque } from "@/config/fonts.config";
 import "../styles/globals.css";
+import { Hotjar } from "@/modules/app/layout/components/Hotjar";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 const OPEN_GRAPH_IMAGE_URL = `${BASE_URL}/brand/thumbnail.jpg`;
@@ -58,6 +59,7 @@ export default async function RootLayout({
           messages={messages.default as AbstractIntlMessages}
         >
           {children}
+          <Hotjar />
         </NextIntlClientProvider>
       </body>
     </html>
